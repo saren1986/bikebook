@@ -8,6 +8,9 @@ const BikeListControls = ( { modalOpenAddBike } ) => {
       <Button variant="outlined" color="primary" onClick={modalOpenAddBike}>
         Add new bike
       </Button>
+      {/* <Button variant="outlined" color="primary">
+        Import from Strava
+      </Button> */}
     </div>
   )
 }

@@ -7,6 +7,7 @@
     "@material-ui/icons": "^4.5.1",
     "@material-ui/styles": "^4.5.0",
     "@trendmicro/react-sidenav": "^0.4.5",
+    "material-table": "^1.54.1",
     "prop-types": "^15.7.2",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",

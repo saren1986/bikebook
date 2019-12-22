@@ -1,0 +1,36 @@
+.wrapper{
+  padding: 20px;
+  background: #eee;
+  display: flex;
+  flex-wrap: wrap;
+}
+.wrapper ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.wrapper ul li span {
+  font-weight: bold;
+}
+
+.left{
+  width: 35%;
+
+}
+.right{
+  width: 65%;
+  padding: 0 15px;
+
+}
+.barProgressWrapper{
+  text-align: center;
+}
+.noAlert{
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.description{
+  padding: 15px 0;
+}

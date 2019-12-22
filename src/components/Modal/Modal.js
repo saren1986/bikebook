@@ -1,54 +1,62 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-
-import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
+import classes from './Modal.module.css'
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 
+import { withStyles } from '@material-ui/core/styles';
+import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
-import { blue } from '@material-ui/core/colors';
 
 
-const useStyles = makeStyles({
-  avatar: {
-    backgroundColor: blue[100],
-    color: blue[600],
+const styles = theme => ({
+  root: {
+    margin: 0,
+    padding: theme.spacing(2),
+    textAlign: "center"
+  },
+  closeButton: {
+    position: 'absolute',
+    right: theme.spacing(1),
+    top: theme.spacing(1),
+    color: theme.palette.grey[500],
   },
 });
 
-// function SimpleDialog(props) {
-//   const classes = useStyles();
-//   const { onClose, selectedValue, open } = props;
-
-//   const handleClose = () => {
-//     onClose(selectedValue);
-//   };
-
-//   const handleListItemClick = value => {
-//     onClose(value);
-//   };
-
-//   return (
- 
-//   );
-// }
-
-// SimpleDialog.propTypes = {
-//   onClose: PropTypes.func.isRequired,
-//   open: PropTypes.bool.isRequired,
-//   selectedValue: PropTypes.string.isRequired,
-// };
-
-export default function Modal( { open, handleClose, title, children } ) {
-
-console.log('modal', open)
+const DialogTitle = withStyles(styles)(props => {
+  const { children, classes, onClose, ...other } = props;
   return (
-    <div>
-      <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
-      <DialogTitle id="simple-dialog-title">{title}</DialogTitle>
-        {children}
-      </Dialog>
-    </div>
+    <MuiDialogTitle disableTypography className={classes.root} {...other}>
+      <Typography variant="h6">{children}</Typography>
+      {onClose ? (
+        <IconButton aria-label="close" className={classes.closeButton} onClick={onClose}>
+          <CloseIcon />
+        </IconButton>
+      ) : null}
+    </MuiDialogTitle>
   );
+});
+
+const Modal = ( { open, handleClose, title, children } ) => {
+  return (
+    <React.Fragment>
+      <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
+      <DialogTitle id="simple-dialog-title" onClose={handleClose}>
+        {title}
+      </DialogTitle>
+      <div className={classes.dialogContent}>
+      {children}
+      </div>
+       
+      </Dialog>
+    </React.Fragment>
+  )
 }
+
+export default Modal
+
+Modal.propTypes = {
+  handleClose: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+};

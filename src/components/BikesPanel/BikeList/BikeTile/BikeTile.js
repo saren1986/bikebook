@@ -12,7 +12,7 @@ const BikeTile = ( { bike } ) => {
         <li>Distance: {bike.distance}</li>
         <li>Brand: {bike.brand_name}</li>
         <li>Model: {bike.model_name}</li>
-        <li>Description: {bike.description}</li>
+
       </ul>
     </div>
     </Link>

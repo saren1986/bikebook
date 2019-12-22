@@ -1,0 +1,50 @@
+.progressBar{
+  width: 70%;
+  height: 12px;  /* Can be anything */
+	position: relative;
+	background: #ccc;
+	-moz-border-radius: 25px;
+	-webkit-border-radius: 25px;
+	border-radius: 25px;
+	padding: 4px;
+
+}
+.progressBar > .bar {
+  display: block;
+  height: 100%;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  background-color: #fc4c02;
+
+  position: relative;
+  overflow: hidden;
+}
+
+.orange > .bar {
+  background-color: #fc4c02;
+  background-image: linear-gradient(to bottom, #f1a165, #fc4c02);
+}
+.redBar{
+  background: red!important;
+}
+
+.redColor{
+  color: red!important;
+}
+.barLabels{
+  display: block;
+  width: 15%;
+  text-align: left;
+}
+.barLabelsRight{
+
+  text-align: right;
+}
+.wrapper{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 5px;
+}

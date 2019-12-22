@@ -1,0 +1,53 @@
+.wrapper{
+
+}
+.title{
+ text-align: left; 
+
+
+}
+.bikeItemHeader{
+  display: flex;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+}
+.bikeItemHeader > *{
+  width: 50%;
+
+}
+.bikeItemControls{
+text-align: right;
+}
+.bikeItemContent{
+  display: flex;
+}
+.bikeItemContent > div{
+  width: 50%;
+}
+.right{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+}
+.imgPlaceholder{
+  border: 1px dashed #ccc;
+  width: 70%;
+  height: 70%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 250px;
+}
+.table{
+  margin: 30px 0;
+}
+.tableCellA{
+  width: 30%;
+}
+.tableCellB{
+  width: 70%;
+}
+.currentComponents{
+  margin-bottom: 30px;
+}

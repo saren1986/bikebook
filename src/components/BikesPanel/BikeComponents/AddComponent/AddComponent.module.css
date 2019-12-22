@@ -1,0 +1,12 @@
+.input{
+  width: 100%;
+}
+.buttonWrapper{
+  text-align: right;
+  margin: 15px 0 ;
+}
+.alertRow{
+  display: flex;
+  align-items: center;
+  min-height: 100px;
+}

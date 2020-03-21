@@ -1,0 +1,16 @@
+.input{
+  width: 100%;
+}
+.buttonWrapper{
+ display: flex;
+ align-items: center;
+ justify-content: center;
+}
+.alertRow{
+  display: flex;
+  align-items: center;
+  /* min-height: 100px; */
+}
+.labelPlacementStart{
+  margin: 0;
+}

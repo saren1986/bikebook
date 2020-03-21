@@ -1,4 +1,26 @@
 .wrapper{
-  background: #ccc;
-  border: 1px solid red;
+border: 1px solid #ccc;
+padding: 15px;
+min-height: 200px;
+display: block;
+text-decoration: none;
+text-align: center;
+width: 100%;
+cursor: pointer;
+}
+.wrapper:active{
+color: inherit;
+
+}
+.name{
+  font-weight: bold;
+}
+.top{
+  display: flex;
+  justify-content: center;
+  flex-flow: column;
+}
+.top > span{
+  display: block;
+  margin: 10px 0;
 }

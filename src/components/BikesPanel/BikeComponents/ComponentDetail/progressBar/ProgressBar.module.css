@@ -43,6 +43,9 @@
   text-align: right;
 }
 .wrapper{
+  text-align: center;
+}
+.barWrapper{
   display: flex;
   align-items: center;
   justify-content: flex-start;

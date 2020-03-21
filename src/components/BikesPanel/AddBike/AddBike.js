@@ -11,7 +11,7 @@ const AddBike = ( { addBike, bikeTypes } ) => {
     type: 'Road',
     name: '',
     brand: '',
-    distance: 0,
+    distance: '',
     description: '', 
   });
   

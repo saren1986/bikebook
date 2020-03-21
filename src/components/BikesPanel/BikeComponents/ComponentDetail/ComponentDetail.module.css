@@ -3,7 +3,18 @@
   background: #eee;
   display: flex;
   flex-wrap: wrap;
+  position: relative;
 }
+.componentControls{
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 15px;
+  position: absolute;
+  top: 10px;
+  right: 15px;
+} 
+
 .wrapper ul {
   list-style-type: none;
   margin: 0;
@@ -13,24 +24,10 @@
   font-weight: bold;
 }
 
-.left{
-  width: 35%;
-
-}
-.right{
-  width: 65%;
-  padding: 0 15px;
-
-}
-.barProgressWrapper{
-  text-align: center;
-}
 .noAlert{
   height: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
-}
-.description{
-  padding: 15px 0;
+  align-items: flex-start;
+  flex-direction: column;
 }

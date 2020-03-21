@@ -1,0 +1,13 @@
+.control{
+  margin: 0 5px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+}
+.control:hover{
+background: #ccc;
+}

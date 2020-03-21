@@ -1,8 +1,9 @@
-import React from 'react'
+import React from 'react';
+import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
-import classes from './BikeListControls.module.css'
+import classes from './BikeListControls.module.css';
 
-const BikeListControls = ( { modalOpenAddBike } ) => {
+const BikeListControls = ({ modalOpenAddBike }) => {
   return (
     <div className={classes.wrapper}>
       <Button variant="outlined" color="primary" onClick={modalOpenAddBike}>
@@ -13,6 +14,10 @@ const BikeListControls = ( { modalOpenAddBike } ) => {
       </Button> */}
     </div>
   )
-}
+};
 
-export default BikeListControls
+BikeListControls.propTypes = {
+  modalOpenAddBike: PropTypes.func.isRequired,
+};
+
+export default BikeListControls;

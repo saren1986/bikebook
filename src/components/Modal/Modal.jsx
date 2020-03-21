@@ -1,20 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Dialog from '@material-ui/core/Dialog';
-import classes from './Modal.module.css'
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 
 import { withStyles } from '@material-ui/core/styles';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import Typography from '@material-ui/core/Typography';
+import classes from './Modal.module.css';
 
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     margin: 0,
     padding: theme.spacing(2),
-    textAlign: "center"
+    textAlign: 'center',
   },
   closeButton: {
     position: 'absolute',
@@ -24,8 +24,10 @@ const styles = theme => ({
   },
 });
 
-const DialogTitle = withStyles(styles)(props => {
-  const { children, classes, onClose, ...other } = props;
+const DialogTitle = withStyles(styles)((props) => {
+  const {
+    children, classes, onClose, ...other
+  } = props;
   return (
     <MuiDialogTitle disableTypography className={classes.root} {...other}>
       <Typography variant="h6">{children}</Typography>
@@ -38,23 +40,22 @@ const DialogTitle = withStyles(styles)(props => {
   );
 });
 
-const Modal = ( { open, handleClose, title, children } ) => {
-  return (
-    <React.Fragment>
-      <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
+const Modal = ({
+  open, handleClose, title, children,
+}) => (
+  <>
+    <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
       <DialogTitle id="simple-dialog-title" onClose={handleClose}>
         {title}
       </DialogTitle>
       <div className={classes.dialogContent}>
-      {children}
+        {children}
       </div>
-       
-      </Dialog>
-    </React.Fragment>
-  )
-}
+    </Dialog>
+  </>
+);
 
-export default Modal
+export default Modal;
 
 Modal.propTypes = {
   handleClose: PropTypes.func.isRequired,

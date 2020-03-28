@@ -1,22 +1,22 @@
 import React, { useEffect } from 'react';
 import { Route, withRouter, Redirect } from 'react-router-dom';
 import { Typography } from '@material-ui/core';
+import { useSelector, useDispatch } from 'react-redux';
 import BikeComponents from '../BikeComponents/BikeComponents';
 import classes from './BikeItem.module.css';
 import { meterToKm, format } from '../../../utils/distanceFormatters';
+import * as actions from '../../../store/actions/index';
 
 
-const BikeItem = ({
-  bike, addComponent, setActiveBikeId, setDistanceAlert, location, match,
-}) => {
+const BikeItem = ({ addComponent, match }) => {
 
-  if (bike) {
-    setActiveBikeId(bike.id);
-  }
-  useEffect(() => () => {
-    setActiveBikeId(null);
-  }, []);
-  const renderBikeItem = bike ? (
+  const dispatch = useDispatch();
+  const bikeId = useSelector((state) => state.bikes.activeBike);
+  const bike = useSelector((state) => state.bikes.list.find((elem) => elem.id === bikeId));
+
+  useEffect(() => () => dispatch(actions.setActiveBike(null)), []);
+
+  const renderBikeItem = bikeId ? (
     <div className={classes.wrapper}>
       <div className={classes.bikeItemHeader}>
         <Typography
@@ -43,7 +43,6 @@ const BikeItem = ({
           <BikeComponents
             components={bike.components}
             addComponent={addComponent}
-            setDistanceAlert={setDistanceAlert}
           />
         </Route>
       </div>

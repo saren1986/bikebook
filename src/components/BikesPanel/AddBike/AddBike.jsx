@@ -1,21 +1,20 @@
-import React from 'react'
+import React from 'react';
 import { MenuItem, TextField, Button } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import Grid from '@material-ui/core/Grid';
 import classes from './AddBike.module.css';
 
-const AddBike = ( { addBike, bikeTypes } ) => {
-
+const AddBike = ({ addBike, bikeTypes }) => {
   const [newBikeValues, setNewBikeValues] = React.useState({
     id: '25',
     type: 'Road',
     name: '',
     brand: '',
     distance: '',
-    description: '', 
+    description: '',
   });
-  
-  const handleBikeFormChange = name => event => {
+
+  const handleBikeFormChange = (name) => (event) => {
     setNewBikeValues({ ...newBikeValues, [name]: event.target.value });
   };
 
@@ -23,7 +22,7 @@ const AddBike = ( { addBike, bikeTypes } ) => {
     <form className={classes.container} noValidate autoComplete="off">
       <Grid container spacing={1}>
         <Grid item xs={6}>
-          <TextField 
+          <TextField
             id="bike-name"
             label="Bike name"
             className={classes.input}
@@ -47,30 +46,30 @@ const AddBike = ( { addBike, bikeTypes } ) => {
           />
         </Grid>
         <Grid item xs={6}>
-        <TextField
-          id="bike-distance"
-          label="Distance"
-          className={classes.input}
-          margin="normal"
-          variant="outlined"
-          value={newBikeValues.distance}
-          type="number"
-          onChange={handleBikeFormChange('distance')}
-          required
-        />
+          <TextField
+            id="bike-distance"
+            label="Distance"
+            className={classes.input}
+            margin="normal"
+            variant="outlined"
+            value={newBikeValues.distance}
+            type="number"
+            onChange={handleBikeFormChange('distance')}
+            required
+          />
         </Grid>
         <Grid item xs={6}>
           <TextField
             id="bike-type"
             select
             label="Bike type"
-            value = {newBikeValues.type}
+            value={newBikeValues.type}
             onChange={handleBikeFormChange('type')}
             className={classes.input}
             margin="normal"
             variant="outlined"
-            >
-            {bikeTypes.map(type => (
+          >
+            {bikeTypes.map((type) => (
               <MenuItem key={type} value={type}>
                 {type}
               </MenuItem>
@@ -94,8 +93,8 @@ const AddBike = ( { addBike, bikeTypes } ) => {
               variant="contained"
               color="primary"
               className={classes.button}
-              startIcon={<AddIcon/>}
-              onClick={()=>addBike(newBikeValues)}
+              startIcon={<AddIcon />}
+              onClick={() => addBike(newBikeValues)}
             >
               Add bike
             </Button>
@@ -104,6 +103,6 @@ const AddBike = ( { addBike, bikeTypes } ) => {
       </Grid>
     </form>
   );
-}
+};
 
-export default AddBike
+export default AddBike;

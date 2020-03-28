@@ -1,14 +1,16 @@
-import React from 'react'
+import React from 'react';
 import { MenuItem, TextField, Button } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import classes from './AddComponent.module.css'
 import Grid from '@material-ui/core/Grid';
+import { useDispatch } from 'react-redux';
+import classes from './AddComponent.module.css';
+import { addComponent } from '../../../../store/actions/index';
 
 
-const AddComponent = ( { addComponent, componentsTypes, componentStartDate } ) => {
-
+const AddComponent = ({ componentsTypes, componentStartDate }) => {
+  const dispatch = useDispatch();
   const [newComponentValue, setNewComponentValue] = React.useState({
     id: 'c1',
     type: '',
@@ -18,22 +20,23 @@ const AddComponent = ( { addComponent, componentsTypes, componentStartDate } ) =
     startDate: 'today',
     initialDistance: '0',
     description: '',
-    distanceAlert: 0, 
+    distanceAlert: 0,
   });
+
   const [alertSwitch, setAlertSwitch] = React.useState(false);
 
   const alertSwitchHandle = () => {
-    setAlertSwitch( alertSwitch => !alertSwitch);
-  }
-  
-  const handleComponentFormChange = name => event => {
+    setAlertSwitch((alertSwitch) => !alertSwitch);
+  };
+
+  const handleComponentFormChange = (name) => (event) => {
     setNewComponentValue({ ...newComponentValue, [name]: event.target.value });
   };
 
   let alarmElement = null;
 
-  if(alertSwitch){
-    alarmElement = 
+  if (alertSwitch) {
+    alarmElement = (
       <Grid item xs={6}>
         <TextField
           id="distanceAlert"
@@ -47,7 +50,7 @@ const AddComponent = ( { addComponent, componentsTypes, componentStartDate } ) =
           required
         />
       </Grid>
-    
+    );
   }
 
   return (
@@ -58,13 +61,13 @@ const AddComponent = ( { addComponent, componentsTypes, componentStartDate } ) =
             id="component-type"
             select
             label="Component type"
-            value = {newComponentValue.type}
+            value={newComponentValue.type}
             onChange={handleComponentFormChange('type')}
             className={classes.input}
             margin="normal"
             variant="outlined"
-            >
-            {componentsTypes.map(type => (
+          >
+            {componentsTypes.map((type) => (
               <MenuItem key={type} value={type}>
                 {type}
               </MenuItem>
@@ -80,17 +83,17 @@ const AddComponent = ( { addComponent, componentsTypes, componentStartDate } ) =
             onChange={handleComponentFormChange('brand')}
             margin="normal"
             variant="outlined"
-            />
+          />
         </Grid>
         <Grid item xs={6}>
           <TextField
-          id="model"
-          label="Model"
-          className={classes.input}
-          value={newComponentValue.model}
-          onChange={handleComponentFormChange('model')}
-          margin="normal"
-          variant="outlined"
+            id="model"
+            label="Model"
+            className={classes.input}
+            value={newComponentValue.model}
+            onChange={handleComponentFormChange('model')}
+            margin="normal"
+            variant="outlined"
           />
         </Grid>
         <Grid item xs={6}>
@@ -114,12 +117,12 @@ const AddComponent = ( { addComponent, componentsTypes, componentStartDate } ) =
             onChange={handleComponentFormChange('startDate')}
             margin="normal"
             variant="outlined"
-            select       
+            select
           >
-            {componentStartDate.map(type => (
-            <MenuItem key={type} value={type}>
-              {type}
-            </MenuItem>
+            {componentStartDate.map((type) => (
+              <MenuItem key={type} value={type}>
+                {type}
+              </MenuItem>
             ))}
           </TextField>
         </Grid>
@@ -150,41 +153,40 @@ const AddComponent = ( { addComponent, componentsTypes, componentStartDate } ) =
         <Grid item xs={12}>
           <Grid container spacing={1}>
             <Grid item xs={6} className={classes.alertRow}>
-              <FormControlLabel control={
-                <Switch
-                color="primary"
-                checked={alertSwitch}
-                onChange={alertSwitchHandle}
-                value={alertSwitch}
-                //  inputProps={{ 'aria-label': 'secondary checkbox' }}
-              />    
-              }
-              labelPlacement="start"
-              label="Set distance alert"  
-              /> 
+              <FormControlLabel
+                control={(
+                  <Switch
+                    color="primary"
+                    checked={alertSwitch}
+                    onChange={alertSwitchHandle}
+                    value={alertSwitch}
+                  />
+              )}
+                labelPlacement="start"
+                label="Set distance alert"
+              />
             </Grid>
             {alarmElement}
           </Grid>
         </Grid>
         <Grid item xs={12} className={classes.buttonWrapper}>
           <Button
-          variant="contained"
-          color="primary"
-          className={classes.button}
-          startIcon={<AddIcon/>}
-          onClick={()=>addComponent(newComponentValue)}
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            startIcon={<AddIcon />}
+            onClick={() => dispatch(addComponent(newComponentValue))}
           >
-          Add component
+            Add component
           </Button>
         </Grid>
 
-      {/* <div className={classes.buttonWrapper}> */}
-      
-      {/* </div> */}
+        {/* <div className={classes.buttonWrapper}> */}
+
+        {/* </div> */}
       </Grid>
     </form>
   );
-}
+};
 
-export default AddComponent
-
+export default AddComponent;

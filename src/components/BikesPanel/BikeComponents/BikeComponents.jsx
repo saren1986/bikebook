@@ -43,7 +43,9 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-const BikeComponents = ({ components, addComponent, history, match, location }) => {
+const BikeComponents = ({
+  components, addComponent, history, match, location,
+}) => {
   const getActiveComponents = (components, active) => components.filter((comp) => comp.retired !== active);
   const formatDistanceComponents = (components) => components.map((comp) => ({
     ...comp,
@@ -59,7 +61,7 @@ const BikeComponents = ({ components, addComponent, history, match, location }) 
       { field: 'alert', title: 'alert' },
     ],
     data: formatDistanceComponents(activeComponents),
-  } : null;
+  } : {};
   const retiredComponents = getActiveComponents(components, false);
   const retiredComponentsTable = retiredComponents.length ? {
     columns: [
@@ -72,18 +74,17 @@ const BikeComponents = ({ components, addComponent, history, match, location }) 
     data: formatDistanceComponents(retiredComponents),
   } : null;
   const onRowClick = (event, rowData) => {
-    console.log(match, location)
+    console.log(match, location);
     history.push(`${location.pathname}/${rowData.id}`);
   };
   return (
     <>
-      {activeComponents.length ? (
-        <MaterialTable
-          isFreeAction="true"
-          title="Active components"
-          icons={tableIcons}
-          onRowClick={onRowClick}
-          options={
+      <MaterialTable
+        isFreeAction="true"
+        title="Active components"
+        icons={tableIcons}
+        onRowClick={onRowClick}
+        options={
           {
             search: false,
             paging: false,
@@ -91,9 +92,9 @@ const BikeComponents = ({ components, addComponent, history, match, location }) 
             actionsColumnIndex: -1,
           }
         }
-          columns={activeComponentsTable.columns}
-          data={activeComponentsTable.data}
-          actions={
+        columns={activeComponentsTable.columns}
+        data={activeComponentsTable.data}
+        actions={
           [
             {
               icon: () => <AddBox />,
@@ -103,8 +104,7 @@ const BikeComponents = ({ components, addComponent, history, match, location }) 
             },
           ]
         }
-        />
-      ) : null}
+      />
       {retiredComponents.length ? (
         <MaterialTable
           title="Retired components"
@@ -128,7 +128,7 @@ const BikeComponents = ({ components, addComponent, history, match, location }) 
 BikeComponents.propTypes = {
   match: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
-  history: PropTypes.object.isRequired
+  history: PropTypes.object.isRequired,
 };
 
 export default withRouter(BikeComponents);

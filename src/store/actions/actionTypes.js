@@ -1,0 +1,5 @@
+export const ADD_BIKE = 'ADD_BIKE';
+export const ADD_COMPONENT = 'ADD_COMPONENT';
+export const SET_ACTIVE_BIKE = 'SET_ACTIVE_BIKE';
+export const ADD_DISTANCE = 'ADD_DISTANCE';
+export const SET_DISTANCE_ALERT = 'SET_DISTANCE_ALERT';

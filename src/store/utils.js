@@ -1,0 +1,1 @@
+export const getArrayIndexById = (array, id) => array.findIndex((elem) => elem.id === id);

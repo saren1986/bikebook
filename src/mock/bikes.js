@@ -1,4 +1,4 @@
-const bikePanel = [
+const bikes = [
   {
     id: '1',
     StravaID: 'b1145059',
@@ -130,4 +130,4 @@ const bikePanel = [
   },
 ];
 
-export default bikePanel;
+export default bikes;

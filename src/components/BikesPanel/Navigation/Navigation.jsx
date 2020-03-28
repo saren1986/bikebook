@@ -15,11 +15,13 @@ import { Link, withRouter } from 'react-router-dom';
 // import ExpandMore from '@material-ui/icons/ExpandMore';
 // import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 // import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
+import { useSelector } from 'react-redux';
 import classes from './BikesNav.module.css';
 
 const BikeNavigation = ({
-  activeBike, addDistance, handleOpenAddBikeModal, location,
+  addDistance, handleOpenAddBikeModal, location,
 }) => {
+  const activeBike = useSelector((state) => state.bikes.activeBike);
   const [open, setOpen] = React.useState(true);
 
   const handleClick = () => {

@@ -71,7 +71,7 @@ const BikeComponents = ({ components, history, location}) => {
     data: formatComponentsData(retiredComponents),
   } : null;
   const onRowClick = (event, rowData) => {
-    history.push(`${location.pathname}/${rowData.id}`);
+    history.push(`${location.pathname}/item`);
   };
   const addNewComponentHandle = () => {
     history.push(`${location.pathname}/add`);

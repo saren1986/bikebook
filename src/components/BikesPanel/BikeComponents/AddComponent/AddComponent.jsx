@@ -57,7 +57,7 @@ const AddComponent = ({ componentsTypes, componentStartDate, history }) => {
   return (
     <>
       <Styled.Header>Add new component</Styled.Header>
-      <form className={classes.container} noValidate autoComplete="off">
+      <form noValidate autoComplete="off">
         <Grid container spacing={1}>
           <Grid item xs={12} sm={6}>
             <Styled.Input
@@ -165,15 +165,17 @@ const AddComponent = ({ componentsTypes, componentStartDate, history }) => {
               {alarmElement}
             </Grid>
           </Grid>
-          <Grid item xs={12} className={classes.buttonWrapper}>
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={<AddIcon />}
-              onClick={addComponentHandler}
-            >
-              Add component
-            </Button>
+          <Grid item xs={12}>
+            <Styled.BtnWrapper>
+              <Styled.Btn
+                variant="contained"
+                color="primary"
+                startIcon={<AddIcon />}
+                onClick={addComponentHandler}
+              >
+                Add component
+              </Styled.Btn>
+            </Styled.BtnWrapper>
           </Grid>
         </Grid>
       </form>

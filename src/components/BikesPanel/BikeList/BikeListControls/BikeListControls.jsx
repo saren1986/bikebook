@@ -1,23 +1,23 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
-import classes from './BikeListControls.module.css';
+import { withRouter } from 'react-router-dom';
+import { BtnWrapper } from '../../../../styled/styled';
 
-const BikeListControls = ({ modalOpenAddBike }) => {
+
+const BikeListControls = ({ history }) => {
+  const addNewBikeClickHandler = () => {
+    history.push('/bike/add');
+  };
   return (
-    <div className={classes.wrapper}>
-      <Button variant="outlined" color="primary" onClick={modalOpenAddBike}>
+    <BtnWrapper>
+      <Button variant="outlined" color="primary" onClick={addNewBikeClickHandler}>
         Add new bike
       </Button>
       {/* <Button variant="outlined" color="primary">
         Import from Strava
       </Button> */}
-    </div>
-  )
+    </BtnWrapper>
+  );
 };
 
-BikeListControls.propTypes = {
-  modalOpenAddBike: PropTypes.func.isRequired,
-};
-
-export default BikeListControls;
+export default withRouter(BikeListControls);

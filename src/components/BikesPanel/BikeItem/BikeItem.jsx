@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
-import {
-  Switch, Route, withRouter, Redirect,
-} from 'react-router-dom';
+import { Route, withRouter, Redirect, Switch } from 'react-router-dom';
 import { Typography } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import BikeComponents from '../BikeComponents/BikeComponents';
@@ -10,6 +8,7 @@ import classes from './BikeItem.module.css';
 import { meterToKm, format } from '../../../utils/distanceFormatters';
 import * as actions from '../../../store/actions/index';
 import * as data from '../../../mock/constans';
+import AddDistance from '../AddDistance/AddDistance';
 
 
 const BikeItem = ({ match }) => {
@@ -51,6 +50,9 @@ const BikeItem = ({ match }) => {
             <BikeComponents
               components={bike.components}
             />
+          </Route>
+          <Route exact path={`${match.path}/add-distance`}>
+            <AddDistance />
           </Route>
           <Redirect exact from="/bike" to={`${match.path}/components`} />
         </Switch>

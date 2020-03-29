@@ -8,7 +8,7 @@ import BikeListControls from './BikeListControls/BikeListControls';
 import Spinner from '../../../UX/Spinner/Spinner';
 import * as actions from '../../../store/actions/index';
 
-const BikeList = ({ modalOpenAddBike }) => {
+const BikeList = () => {
   const dispatch = useDispatch();
   const bikeList = useSelector((state) => state.bikes.list);
   const renderedBikeList = bikeList ? bikeList
@@ -28,13 +28,13 @@ const BikeList = ({ modalOpenAddBike }) => {
           {renderedBikeList}
         </Grid>
       </div>
-      <BikeListControls modalOpenAddBike={modalOpenAddBike} />
+      <BikeListControls />
     </>
   );
 };
 
 BikeList.propTypes = {
-  modalOpenAddBike: PropTypes.func.isRequired,
+  // modalOpenAddBike: PropTypes.func.isRequired,
 };
 
 

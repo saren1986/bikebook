@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   List, ListItem, ListItemIcon, ListItemText,
 } from '@material-ui/core';
@@ -13,26 +13,21 @@ import { Link, withRouter } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import classes from './BikesNav.module.css';
 
-const BikeNavigation = ({
-  addDistance, handleOpenAddBikeModal, location, history, match,
-}) => {
+const BikeNavigation = ({ location, history, match }) => {
   const activeBike = useSelector((state) => state.bikes.activeBike);
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = useState(true);
   const handleClick = () => {
     setOpen(!open);
   };
+  const addDistanceClickHandler = () => {
+    history.push('/bike/add-distance');
+  }
 
   let menuBikeControls = null;
   if (activeBike) {
     menuBikeControls = (
       <>
         <hr />
-        <ListItem button onClick={addDistance}>
-          <ListItemIcon>
-            <AddIcon />
-          </ListItemIcon>
-          <ListItemText primary="Add distance" />
-        </ListItem>
         <Link to="/bike/info">
           <ListItem button>
             <ListItemIcon>
@@ -49,12 +44,18 @@ const BikeNavigation = ({
             <ListItemText primary="Components" />
           </ListItem>
         </Link>
-        <ListItem button>
+        <ListItem button onClick={addDistanceClickHandler}>
+          <ListItemIcon>
+            <AddIcon />
+          </ListItemIcon>
+          <ListItemText primary="Add distance" />
+        </ListItem>
+        {/* <ListItem button>
           <ListItemIcon>
             <TimelineIcon />
           </ListItemIcon>
           <ListItemText primary="History" />
-        </ListItem>
+        </ListItem> */}
       </>
     );
   }
@@ -69,12 +70,12 @@ const BikeNavigation = ({
           <ListItemText primary="Your bikes" />
         </ListItem>
       </Link>
-      <ListItem button onClick={handleOpenAddBikeModal}>
+      {/* <ListItem button onClick={handleOpenAddBikeModal}>
         <ListItemIcon>
           <AddIcon />
         </ListItemIcon>
         <ListItemText primary="Add new bike" />
-      </ListItem>
+      </ListItem> */}
       {menuBikeControls}
     </List>
   );

@@ -12,7 +12,7 @@ const ControlLayout = ({ children }) => {
           {child1}
         </div>
       </Grid>
-      <Grid item md={9}>
+      <Grid item xs={12} md={9}>
         <div className={`placeholder ${classes.content}`}>
           {child2}
           {restChildren}

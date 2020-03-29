@@ -1,192 +1,190 @@
-import React from 'react';
-import { MenuItem, TextField, Button } from '@material-ui/core';
+import React, { useState } from 'react';
+import { MenuItem, Button } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
 import { useDispatch } from 'react-redux';
-import classes from './AddComponent.module.css';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
+import useStyle from './addComponentStyle';
 import { addComponent } from '../../../../store/actions/index';
+import * as Styled from '../../../../styled/styled';
 
-
-const AddComponent = ({ componentsTypes, componentStartDate }) => {
+const AddComponent = ({ componentsTypes, componentStartDate, history }) => {
+  const classes = useStyle();
   const dispatch = useDispatch();
-  const [newComponentValue, setNewComponentValue] = React.useState({
+  const [newComponentValue, setNewComponentValue] = useState({
     id: 'c1',
     type: '',
     brand: '',
     model: '',
     weight: '',
-    startDate: 'today',
+    startDate: componentStartDate.find((item) => item.default === true).id,
     initialDistance: '0',
     description: '',
     distanceAlert: 0,
   });
 
-  const [alertSwitch, setAlertSwitch] = React.useState(false);
+  const [alertSwitch, setAlertSwitch] = useState(false);
 
   const alertSwitchHandle = () => {
-    setAlertSwitch((alertSwitch) => !alertSwitch);
+    setAlertSwitch((alert) => !alert);
   };
-
   const handleComponentFormChange = (name) => (event) => {
     setNewComponentValue({ ...newComponentValue, [name]: event.target.value });
   };
+  const addComponentHandler = () => {
+    dispatch(addComponent(newComponentValue));
+    history.push('/bike/components');
+  };
 
-  let alarmElement = null;
-
-  if (alertSwitch) {
-    alarmElement = (
-      <Grid item xs={6}>
-        <TextField
-          id="distanceAlert"
-          label="Alarm on KM"
-          className={classes.input}
-          margin="normal"
-          variant="outlined"
-          value={newComponentValue.distanceAlert}
-          type="number"
-          onChange={handleComponentFormChange('distanceAlert')}
-          required
-        />
-      </Grid>
-    );
-  }
+  const alarmElement = alertSwitch ? (
+    <Grid item xs={12} sm={6} className={classes.alertRow}>
+      <Styled.Input
+        id="distanceAlert"
+        label="Alarm on KM"
+        margin="normal"
+        variant="outlined"
+        value={newComponentValue.distanceAlert}
+        type="number"
+        onChange={handleComponentFormChange('distanceAlert')}
+        required
+      />
+    </Grid>
+  ) : null;
 
   return (
-    <form className={classes.container} noValidate autoComplete="off">
-      <Grid container spacing={1}>
-        <Grid item xs={6}>
-          <TextField
-            id="component-type"
-            select
-            label="Component type"
-            value={newComponentValue.type}
-            onChange={handleComponentFormChange('type')}
-            className={classes.input}
-            margin="normal"
-            variant="outlined"
-          >
-            {componentsTypes.map((type) => (
-              <MenuItem key={type} value={type}>
-                {type}
-              </MenuItem>
-            ))}
-          </TextField>
-        </Grid>
-        <Grid item xs={6}>
-          <TextField
-            id="brand-name"
-            label="Brand"
-            className={classes.input}
-            value={newComponentValue.brand}
-            onChange={handleComponentFormChange('brand')}
-            margin="normal"
-            variant="outlined"
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <TextField
-            id="model"
-            label="Model"
-            className={classes.input}
-            value={newComponentValue.model}
-            onChange={handleComponentFormChange('model')}
-            margin="normal"
-            variant="outlined"
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <TextField
-            id="weight"
-            label="Weight / KG"
-            className={classes.input}
-            value={newComponentValue.weight}
-            onChange={handleComponentFormChange('weight')}
-            margin="normal"
-            variant="outlined"
-            type="number"
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <TextField
-            id="startDate"
-            label="On bike since"
-            className={classes.input}
-            value={newComponentValue.startDate}
-            onChange={handleComponentFormChange('startDate')}
-            margin="normal"
-            variant="outlined"
-            select
-          >
-            {componentStartDate.map((type) => (
-              <MenuItem key={type} value={type}>
-                {type}
-              </MenuItem>
-            ))}
-          </TextField>
-        </Grid>
-        <Grid item xs={6}>
-          <TextField
-            id="initialDistance"
-            label="Initial Distance"
-            className={classes.input}
-            margin="normal"
-            variant="outlined"
-            value={newComponentValue.initialDistance}
-            type="number"
-            onChange={handleComponentFormChange('initialDistance')}
-            required
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            id="bike-description"
-            label="Description"
-            onChange={handleComponentFormChange('description')}
-            margin="normal"
-            variant="outlined"
-            helperText="You can add description"
-            className={classes.input}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Grid container spacing={1}>
-            <Grid item xs={6} className={classes.alertRow}>
-              <FormControlLabel
-                control={(
-                  <Switch
-                    color="primary"
-                    checked={alertSwitch}
-                    onChange={alertSwitchHandle}
-                    value={alertSwitch}
-                  />
+    <>
+      <Styled.Header>Add new component</Styled.Header>
+      <form className={classes.container} noValidate autoComplete="off">
+        <Grid container spacing={1}>
+          <Grid item xs={12} sm={6}>
+            <Styled.Input
+              id="component-type"
+              select
+              label="Component type"
+              value={newComponentValue.type}
+              onChange={handleComponentFormChange('type')}
+              margin="normal"
+              variant="outlined"
+            >
+              {componentsTypes.map((type) => (
+                <MenuItem key={type} value={type}>
+                  {type}
+                </MenuItem>
+              ))}
+            </Styled.Input>
+          </Grid>
+          <Grid item xs={6}>
+            <Styled.Input
+              id="brand-name"
+              label="Brand"
+              value={newComponentValue.brand}
+              onChange={handleComponentFormChange('brand')}
+              margin="normal"
+              variant="outlined"
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Styled.Input
+              id="model"
+              label="Model"
+              value={newComponentValue.model}
+              onChange={handleComponentFormChange('model')}
+              margin="normal"
+              variant="outlined"
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Styled.Input
+              id="weight"
+              label="Weight / KG"
+              value={newComponentValue.weight}
+              onChange={handleComponentFormChange('weight')}
+              margin="normal"
+              variant="outlined"
+              type="number"
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Styled.Input
+              id="startDate"
+              label="On bike since"
+              value={newComponentValue.startDate}
+              onChange={handleComponentFormChange('startDate')}
+              margin="normal"
+              variant="outlined"
+              select
+            >
+              {componentStartDate.map((type) => (
+                <MenuItem key={type.name} value={type.id}>
+                  {type.name}
+                </MenuItem>
+              ))}
+            </Styled.Input>
+          </Grid>
+          <Grid item xs={6}>
+            <Styled.Input
+              id="initialDistance"
+              label="Initial Distance"
+              margin="normal"
+              variant="outlined"
+              value={newComponentValue.initialDistance}
+              type="number"
+              onChange={handleComponentFormChange('initialDistance')}
+              required
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Styled.Input
+              id="bike-description"
+              label="Description"
+              onChange={handleComponentFormChange('description')}
+              margin="normal"
+              variant="outlined"
+              helperText="You can add description"
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Grid container spacing={1}>
+              <Grid item sm={6} xs={12} className={classes.alertRow}>
+                <FormControlLabel
+                  control={(
+                    <Switch
+                      color="primary"
+                      checked={alertSwitch}
+                      onChange={alertSwitchHandle}
+                      value={alertSwitch}
+                    />
               )}
-                labelPlacement="start"
-                label="Set distance alert"
-              />
+                  labelPlacement="start"
+                  label="Set distance alert"
+                />
+              </Grid>
+              {alarmElement}
             </Grid>
-            {alarmElement}
+          </Grid>
+          <Grid item xs={12} className={classes.buttonWrapper}>
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<AddIcon />}
+              onClick={addComponentHandler}
+            >
+              Add component
+            </Button>
           </Grid>
         </Grid>
-        <Grid item xs={12} className={classes.buttonWrapper}>
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.button}
-            startIcon={<AddIcon />}
-            onClick={() => dispatch(addComponent(newComponentValue))}
-          >
-            Add component
-          </Button>
-        </Grid>
-
-        {/* <div className={classes.buttonWrapper}> */}
-
-        {/* </div> */}
-      </Grid>
-    </form>
+      </form>
+    </>
   );
 };
 
-export default AddComponent;
+AddComponent.propTypes = {
+  componentsTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
+  componentStartDate: PropTypes.arrayOf(PropTypes.object).isRequired,
+  history: PropTypes.object.isRequired,
+};
+
+export default withRouter(AddComponent);

@@ -1,7 +1,5 @@
-import React, { forwardRef, useState } from 'react';
-
+import React, { forwardRef } from 'react';
 import MaterialTable from 'material-table';
-
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -21,7 +19,6 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import { meterToKm, format } from '../../../utils/distanceFormatters';
-import classes from './BikeComponents.module.css';
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -43,13 +40,13 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-const BikeComponents = ({
-  components, addComponent, history, match, location,
-}) => {
-  const getActiveComponents = (components, active) => components.filter((comp) => comp.retired !== active);
-  const formatDistanceComponents = (components) => components.map((comp) => ({
-    ...comp,
-    distanceFormatted: format(meterToKm(comp.distance), 'KM'),
+const BikeComponents = ({ components, history, location}) => {
+
+  const getActiveComponents = (compArr, active) => compArr.filter((c) => c.retired !== active);
+  const formatComponentsData = (compArr) => compArr.map((c) => ({
+    ...c,
+    distanceFormatted: format(meterToKm(c.distance), 'KM'),
+    startDate: c.startDate === '1' ? 'begining' : c.startDate,
   }));
   const activeComponents = getActiveComponents(components, true);
   const activeComponentsTable = activeComponents.length ? {
@@ -60,7 +57,7 @@ const BikeComponents = ({
       { field: 'startDate', title: 'On bike since' },
       { field: 'alert', title: 'alert' },
     ],
-    data: formatDistanceComponents(activeComponents),
+    data: formatComponentsData(activeComponents),
   } : {};
   const retiredComponents = getActiveComponents(components, false);
   const retiredComponentsTable = retiredComponents.length ? {
@@ -71,12 +68,15 @@ const BikeComponents = ({
       { field: 'startDate', title: 'On bike since' },
       { field: 'retiredDate', title: 'Retired on' },
     ],
-    data: formatDistanceComponents(retiredComponents),
+    data: formatComponentsData(retiredComponents),
   } : null;
   const onRowClick = (event, rowData) => {
-    console.log(match, location);
     history.push(`${location.pathname}/${rowData.id}`);
   };
+  const addNewComponentHandle = () => {
+    history.push(`${location.pathname}/add`);
+  };
+
   return (
     <>
       <MaterialTable
@@ -100,7 +100,7 @@ const BikeComponents = ({
               icon: () => <AddBox />,
               tooltip: 'Add Component',
               isFreeAction: true,
-              onClick: addComponent,
+              onClick: addNewComponentHandle,
             },
           ]
         }
@@ -126,7 +126,7 @@ const BikeComponents = ({
 };
 
 BikeComponents.propTypes = {
-  match: PropTypes.object.isRequired,
+  components: PropTypes.arrayOf(PropTypes.object).isRequired,
   location: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
 };

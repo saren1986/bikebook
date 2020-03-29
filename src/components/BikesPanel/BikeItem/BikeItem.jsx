@@ -1,15 +1,18 @@
 import React, { useEffect } from 'react';
-import { Route, withRouter, Redirect } from 'react-router-dom';
+import {
+  Switch, Route, withRouter, Redirect,
+} from 'react-router-dom';
 import { Typography } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import BikeComponents from '../BikeComponents/BikeComponents';
+import AddComponent from '../BikeComponents/AddComponent/AddComponent';
 import classes from './BikeItem.module.css';
 import { meterToKm, format } from '../../../utils/distanceFormatters';
 import * as actions from '../../../store/actions/index';
+import * as data from '../../../mock/constans';
 
 
-const BikeItem = ({ addComponent, match }) => {
-
+const BikeItem = ({ match }) => {
   const dispatch = useDispatch();
   const bikeId = useSelector((state) => state.bikes.activeBike);
   const bike = useSelector((state) => state.bikes.list.find((elem) => elem.id === bikeId));
@@ -37,14 +40,20 @@ const BikeItem = ({ addComponent, match }) => {
       </div>
 
       <div className={classes.bikeItemView}>
-        <Route
-          path={`${match.path}/components`}
-        >
-          <BikeComponents
-            components={bike.components}
-            addComponent={addComponent}
-          />
-        </Route>
+        <Switch>
+          <Route path={`${match.path}/components/add`}>
+            <AddComponent
+              componentsTypes={data.COMPONENT_TYPES}
+              componentStartDate={data.COMPONENT_START_DATE}
+            />
+          </Route>
+          <Route path={`${match.path}/components`}>
+            <BikeComponents
+              components={bike.components}
+            />
+          </Route>
+          <Redirect exact from="/bike" to={`${match.path}/components`} />
+        </Switch>
       </div>
     </div>
   ) : <Redirect to="/" />;

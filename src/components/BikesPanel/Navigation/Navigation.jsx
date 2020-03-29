@@ -10,20 +10,14 @@ import InfoIcon from '@material-ui/icons/Info';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { Link, withRouter } from 'react-router-dom';
 
-// import NotificationsNoneIcon from '@material-ui/icons/NotificationsNone';
-// import ExpandLess from '@material-ui/icons/ExpandLess';
-// import ExpandMore from '@material-ui/icons/ExpandMore';
-// import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-// import ArrowRightAltIcon from '@material-ui/icons/ArrowRightAlt';
 import { useSelector } from 'react-redux';
 import classes from './BikesNav.module.css';
 
 const BikeNavigation = ({
-  addDistance, handleOpenAddBikeModal, location,
+  addDistance, handleOpenAddBikeModal, location, history, match,
 }) => {
   const activeBike = useSelector((state) => state.bikes.activeBike);
   const [open, setOpen] = React.useState(true);
-
   const handleClick = () => {
     setOpen(!open);
   };
@@ -39,7 +33,7 @@ const BikeNavigation = ({
           </ListItemIcon>
           <ListItemText primary="Add distance" />
         </ListItem>
-        <Link to={`${location.pathname}/info`}>
+        <Link to="/bike/info">
           <ListItem button>
             <ListItemIcon>
               <InfoIcon />
@@ -47,7 +41,7 @@ const BikeNavigation = ({
             <ListItemText primary="Info" />
           </ListItem>
         </Link>
-        <Link to={`${location.pathname}/components`}>
+        <Link to="/bike/components">
           <ListItem button>
             <ListItemIcon>
               <SettingsIcon />

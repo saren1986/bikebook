@@ -7,7 +7,7 @@ import { kmToMeter } from '../../utils/distanceFormatters';
 
 const defaultState = {
   list: bikes,
-  activeBike: null,
+  activeBike: '1',
 };
 const setActiveBike = (state, action) => ({
   ...state,
@@ -53,13 +53,14 @@ const addComponent = (state, action) => {
   const currentBikeData = { ...state.list[i] };
   let { distanceAlert } = { ...action.data };
   let distance = null;
-  let date = 'begining';
+  let date = null;
   if (distanceAlert) {
     distanceAlert = kmToMeter(action.data.distanceAlert);
   }
-  if (startDate === 'begining') {
+  if (startDate === '1') {
     distance = currentBikeData.distance + kmToMeter(initialDistance);
-  } else if (startDate === 'today') {
+    date = '1';
+  } else if (startDate === '2') {
     distance += kmToMeter(initialDistance);
     date = new Date().toJSON().slice(0, 10);
   }

@@ -9,20 +9,18 @@ import BikesNav from './Navigation/Navigation';
 import AddBike from './AddBike/AddBike';
 import BikeItem from './BikeItem/BikeItem';
 import ControlLayout from '../Layouts/ControlLayout/ControlLayout';
-import AddComponent from './BikeComponents/AddComponent/AddComponent';
 import Modal from '../Modal/Modal';
 import * as actions from '../../store/actions/index';
 import BikeList from './BikeList/BikeList';
 import AddDistance from './AddDistance/AddDistance';
 import Spinner from '../../UX/Spinner/Spinner';
-import * as bikesData from '../../mock/bikesData';
+import * as bikesData from '../../mock/constans';
 
 
 const BikesPanel = () => {
   const dispatch = useDispatch();
   const bikeList = useSelector((state) => state.bikes.list);
   const [modalAddBike, setShowModalAddBike] = useState(false);
-  const [modalAddComponent, setModalAddComponent] = useState(false);
   const [modalAddDistance, setModalAddDistance] = useState(false);
 
   const handleOpenAddBikeModal = () => {
@@ -30,12 +28,6 @@ const BikesPanel = () => {
   };
   const handleCloseAddBikeModal = () => {
     setShowModalAddBike(false);
-  };
-  const handleOpenAddComponentModal = () => {
-    setModalAddComponent(true);
-  };
-  const handleCloseAddComponentModal = () => {
-    setModalAddComponent(false);
   };
   const handleOpenAddDistanceModal = () => {
     setModalAddDistance(true);
@@ -46,11 +38,6 @@ const BikesPanel = () => {
   const addBike = (data) => {
     dispatch(actions.addBike(data));
     setShowModalAddBike(false);
-  };
-
-  const addComponent = (data) => {
-    dispatch(actions.addComponent(data));
-    setModalAddComponent(false);
   };
 
   const addDistance = (distance) => {
@@ -72,9 +59,7 @@ const BikesPanel = () => {
             />
           </Route>
           <Route path="/bike">
-            <BikeItem
-              addComponent={handleOpenAddComponentModal}
-            />
+            <BikeItem />
           </Route>
           <Redirect exact from="/" to="/bike-list" />
         </Switch>
@@ -87,16 +72,6 @@ const BikesPanel = () => {
         <AddBike
           addBike={addBike}
           bikeTypes={bikesData.BIKE_TYPES}
-        />
-      </Modal>
-      <Modal
-        title="Add component"
-        open={modalAddComponent}
-        handleClose={handleCloseAddComponentModal}
-      >
-        <AddComponent
-          componentsTypes={bikesData.COMPONENT_TYPES}
-          componentStartDate={bikesData.COMPONENT_START_DATE}
         />
       </Modal>
       <Modal

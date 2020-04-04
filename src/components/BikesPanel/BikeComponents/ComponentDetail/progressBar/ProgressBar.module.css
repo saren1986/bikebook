@@ -1,13 +1,12 @@
 .progressBar{
   width: 70%;
-  height: 12px;  /* Can be anything */
+  height: 12px;
 	position: relative;
 	background: #ccc;
 	-moz-border-radius: 25px;
 	-webkit-border-radius: 25px;
 	border-radius: 25px;
 	padding: 4px;
-
 }
 .progressBar > .bar {
   display: block;
@@ -27,11 +26,11 @@
   background-image: linear-gradient(to bottom, #f1a165, #fc4c02);
 }
 .redBar{
-  background: red!important;
+  background: red;
 }
 
 .redColor{
-  color: red!important;
+  color: red;
 }
 .barLabels{
   display: block;

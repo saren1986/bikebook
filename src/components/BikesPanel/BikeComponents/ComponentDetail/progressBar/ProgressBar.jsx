@@ -1,36 +1,54 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classes from './ProgressBar.module.css';
+import ProgressLine from '../../../../../UX/ProgressLine/ProgressLine';
 import { format, meterToKm } from '../../../../../utils/distanceFormatters';
 
-const ProgressBar = ( { initialDistance, currentDistance, alertDistance } ) => {
-
-  const classesBar = [classes.bar];
-  const classesLabelLeft = [classes.barLabels, classes.barLabelsRight];
-  let progress = (currentDistance / (alertDistance - initialDistance)) * 100;
-  const remainingDistance = format(meterToKm(alertDistance - currentDistance), 'KM');
-
-  if (progress >= 100) {
-    progress = 100;
-    classesBar.push(classes.redBar)
-    classesLabelLeft.push(classes.redColor)
+const ProgressBar = ({ startDistance, currentDistance, alertDistance }) => {
+  const progress = (currentDistance / (alertDistance - startDistance)) * 100;
+  const distanceLeft = alertDistance - currentDistance;
+  let alertDescription = null;
+  if (distanceLeft > 0) {
+    alertDescription = (
+      <strong>
+        {format(meterToKm(distanceLeft), 'KM')}
+        {' '}
+        left
+      </strong>
+    );
+  } else if (distanceLeft === 0) {
+    alertDescription = (
+      <strong>
+        Alert is active!
+      </strong>
+    );
+  } else {
+    alertDescription = (
+      <span>
+        Alert was activated
+        {' '}
+        <strong>
+          {format(meterToKm(Math.abs(distanceLeft)), 'KM')}
+        </strong>
+        {' '}
+        ago!
+      </span>
+    );
   }
-  initialDistance = format(meterToKm(initialDistance), 'KM');
-  alertDistance = format(meterToKm(alertDistance, 'KM'));
   return (
     <div className={classes.wrapper}>
-      <span>
-        {remainingDistance} 
-        left
-      </span>
+      {alertDescription}
       <div className={classes.barWrapper}>
-        <span className={classes.barLabels}>{initialDistance}</span>
-        <div className={[classes.progressBar, classes.red].join(' ')}>
-          <span className={classesBar.join(' ')} style={ {width: progress + '%' }}></span>
-        </div>
-        <span className={classesLabelLeft.join(' ')}>{alertDistance}</span>
+        <ProgressLine progress={progress} />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ProgressBar
+ProgressBar.propTypes = {
+  startDistance: PropTypes.number.isRequired,
+  currentDistance: PropTypes.number.isRequired,
+  alertDistance: PropTypes.number.isRequired,
+};
+
+export default ProgressBar;

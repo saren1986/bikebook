@@ -7,7 +7,7 @@ import { kmToMeter } from '../../utils/distanceFormatters';
 
 const defaultState = {
   list: bikes,
-  activeBike: null,
+  activeBike: '1',
 };
 const setActiveBike = (state, action) => ({
   ...state,

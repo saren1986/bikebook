@@ -1,22 +1,32 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
-import classes from './ControlLayout.module.css';
+import { makeStyles } from '@material-ui/core/styles';
+import { Placeholder } from '../../../styled/styled';
+
+const useStyles = makeStyles((theme) => ({
+  content: {
+    minHeight: '100px',
+    position: 'relative',
+    overflow: 'hidden',
+  },
+}));
 
 const ControlLayout = ({ children }) => {
+  const classes = useStyles();
   const [child1, child2, ...restChildren] = children;
   return (
     <>
       <Grid item md={3}>
-        <div className="placeholder">
+        <Placeholder>
           {child1}
-        </div>
+        </Placeholder>
       </Grid>
       <Grid item xs={12} md={9}>
-        <div className={`placeholder ${classes.content}`}>
+        <Placeholder className={classes.content}>
           {child2}
           {restChildren}
-        </div>
+        </Placeholder>
       </Grid>
     </>
   );
@@ -25,5 +35,6 @@ const ControlLayout = ({ children }) => {
 ControlLayout.propTypes = {
   children: PropTypes.node.isRequired,
 };
+
 
 export default ControlLayout;

@@ -7,6 +7,14 @@ import Layout from './components/Layouts/MainLayout/Layout';
 import BikesPanel from './components/BikesPanel/BikesPanel';
 
 const theme = createMuiTheme({
+  hovers: {
+    icon: '#ccc',
+  },
+  backdropZindex: 999,
+  backgroundColor: {
+    box: '#eee',
+    backdrop: 'rgba(0, 0, 0, 0.5)',
+  },
   typography: {
     h2: {
       fontSize: '1.5rem',

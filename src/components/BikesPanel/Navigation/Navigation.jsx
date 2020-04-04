@@ -3,7 +3,6 @@ import {
   List, ListItem, ListItemIcon, ListItemText,
 } from '@material-ui/core';
 
-import TimelineIcon from '@material-ui/icons/Timeline';
 import DirectionsBikeIcon from '@material-ui/icons/DirectionsBike';
 import AddIcon from '@material-ui/icons/Add';
 import InfoIcon from '@material-ui/icons/Info';

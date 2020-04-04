@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MenuItem, Button } from '@material-ui/core';
+import { MenuItem } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';

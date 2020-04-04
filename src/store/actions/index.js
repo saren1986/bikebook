@@ -3,4 +3,5 @@ export {
   setActiveBike,
   addComponent,
   addDistance,
+  setDistanceAlert,
 } from './bikes';

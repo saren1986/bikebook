@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import { useSelector, useDispatch } from 'react-redux';
 import classes from './BikeList.module.css';
@@ -32,10 +31,5 @@ const BikeList = () => {
     </>
   );
 };
-
-BikeList.propTypes = {
-  // modalOpenAddBike: PropTypes.func.isRequired,
-};
-
 
 export default BikeList;

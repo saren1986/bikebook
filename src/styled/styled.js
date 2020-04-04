@@ -19,7 +19,15 @@ export const BtnWrapper = styled('div')({
   textAlign: 'right',
   marginTop: '30px',
 });
-
+export const Placeholder = styled('div')(({ theme }) => ({
+  background: '#fff',
+  padding: '10px',
+  boxShadow: '0px 8px 24px rgba(13,13,18,0.04)',
+  borderRadius: '5px',
+  [theme.breakpoints.up('sm')]: {
+    padding: '15px',
+  },
+}));
 export const Btn = styled(Button)({
   width: '100%',
   '@media(min-width: 600px)': {

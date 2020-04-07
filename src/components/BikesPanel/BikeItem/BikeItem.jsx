@@ -9,7 +9,6 @@ import AddComponent from '../BikeComponents/AddComponent/AddComponent';
 import classes from './BikeItem.module.css';
 import { meterToKm, format } from '../../../utils/distanceFormatters';
 import * as actions from '../../../store/actions/index';
-import * as data from '../../../mock/constans';
 import AddDistance from '../AddDistance/AddDistance';
 import ComponentDetail from '../BikeComponents/ComponentDetail/ComponentDetail';
 
@@ -17,7 +16,11 @@ import ComponentDetail from '../BikeComponents/ComponentDetail/ComponentDetail';
 const BikeItem = ({ match }) => {
   const dispatch = useDispatch();
   const bikeId = useSelector((state) => state.bikes.activeBike);
+
   const bike = useSelector((state) => state.bikes.list.find((elem) => elem.id === bikeId));
+
+  const components = useSelector((state) => state.components
+    .filter((comp) => comp.bikeId === bikeId));
   useEffect(() => () => dispatch(actions.setActiveBike(null)), []);
 
   const renderBikeItem = bikeId ? (
@@ -44,22 +47,23 @@ const BikeItem = ({ match }) => {
         <Switch>
           <Route path={`${match.path}/components/add`}>
             <AddComponent
-              componentsTypes={data.COMPONENT_TYPES}
-              componentStartDate={data.COMPONENT_START_DATE}
+              bikeId={bikeId}
             />
           </Route>
           <Route path={`${match.path}/components/detail`}>
             <ComponentDetail
-              components={bike.components}
+              components={components}
             />
           </Route>
           <Route path={`${match.path}/components`}>
             <BikeComponents
-              components={bike.components}
+              components={components}
             />
           </Route>
           <Route exact path={`${match.path}/add-distance`}>
-            <AddDistance />
+            <AddDistance
+              bikeId={bikeId}
+            />
           </Route>
           <Redirect exact from="/bike" to={`${match.path}/components`} />
         </Switch>

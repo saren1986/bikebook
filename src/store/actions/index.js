@@ -1,7 +1,10 @@
 export {
   addBike,
   setActiveBike,
-  addComponent,
   addDistance,
-  setDistanceAlert,
 } from './bikes';
+export {
+  addComponent,
+  setDistanceAlert,
+  disableServiceAlert,
+} from './bikeComponents';

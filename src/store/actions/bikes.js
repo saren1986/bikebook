@@ -1,4 +1,5 @@
 import * as actionTypes from './actionTypes';
+import { updateComponentsDistance } from './bikeComponents';
 
 export const setActiveBike = (bikeId) => ({
   type: actionTypes.SET_ACTIVE_BIKE,
@@ -10,22 +11,15 @@ export const addBike = (bikeData) => ({
   data: bikeData,
 });
 
-export const addComponent = (componentData) => ({
-  type: actionTypes.ADD_COMPONENT,
-  data: componentData,
-});
-
-export const addDistance = (distance) => ({
-  type: actionTypes.ADD_DISTANCE,
+export const addBikeDistance = (bikeId, distance) => ({
+  type: actionTypes.ADD_BIKE_DISTANCE,
   data: {
     distance,
+    bikeId,
   },
 });
 
-export const setDistanceAlert = (compId, distance) => ({
-  type: actionTypes.SET_DISTANCE_ALERT,
-  data: {
-    compId,
-    distance,
-  },
-});
+export const addDistance = (bikeId, distance) => (dispatch) => {
+  dispatch(addBikeDistance(bikeId, distance));
+  dispatch(updateComponentsDistance(bikeId, distance));
+};

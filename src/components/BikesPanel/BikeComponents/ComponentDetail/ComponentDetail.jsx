@@ -6,37 +6,40 @@ import PropTypes from 'prop-types';
 import ProgressBar from './progressBar/ProgressBar';
 import ComponentControls from './ComponentControls/ComponentControls';
 import SetAlert from '../SetAlert/SetAlert';
-import { setDistanceAlert } from '../../../../store/actions/index';
+import { setDistanceAlert, disableServiceAlert } from '../../../../store/actions/index';
 import useStyles from './componentDetailStyle';
 import DrawerSmall from '../../../../UX/DrawerSmall/DrawerSmall';
 import { meterToKm, format } from '../../../../utils/distanceFormatters';
+import { COMPONENT_TYPES } from '../../../../mock/constans';
 
 const ComponentDetail = ({ components, location }) => {
   const [drawer, setDrawer] = useState(false);
   const classes = useStyles();
   const dispatch = useDispatch();
   const component = components.find((comp) => comp.id === location.state.id);
-  const setDistanceAlertHandler = (distance) => {
+  const setAlertHandler = (distance) => {
     dispatch(setDistanceAlert(component.id, distance));
     setDrawer(false);
   };
-
-  const distanceAlert = component.distanceAlert ? (
+  const disableAlertHandler = () => {
+    dispatch(disableServiceAlert(component.id));
+  }
+  const componentType = COMPONENT_TYPES.find((type)=> type.id === component.type).label.eng;
+  const distanceAlert = component.alert.on ? (
     <ProgressBar
-      startDistance={component.initialDistance} // TODO po zmianie struktury danych wstawić prawdziwy dystans
+      startDistance={component.alert.startDistance}
       currentDistance={component.distance}
-      alertDistance={component.distanceAlert}
+      endDistance={component.alert.endDistance}
     />
   ) : null;
   return (
     <>
-      {/* <Styled.Header></Styled.Header> */}
       <div className={classes.wrapper}>
         <Grid container spacing={1}>
           <Grid item xs={12}>
             <div className={classes.topBar}>
               <div className={classes.compTypeLabel}>
-                <strong>{component.type}</strong>
+                <strong>{componentType}</strong>
               </div>
               <div className={classes.label}>
                 <span><strong>{component.brand}</strong></span>
@@ -44,14 +47,12 @@ const ComponentDetail = ({ components, location }) => {
                 <span>{component.model}</span>
                 {' '}
               </div>
-
-
               <div className={classes.componentControls}>
                 <ComponentControls
                   openAlertDrawer={setDrawer}
-                  activeAlert={!!component.distanceAlert}
+                  activeAlert={component.alert.on}
                   retired={component.retired}
-                  alertOff={() => (alert('off?'))}
+                  alertOff={() => disableAlertHandler()}
                 />
               </div>
             </div>
@@ -89,9 +90,9 @@ const ComponentDetail = ({ components, location }) => {
           closeHandle={() => setDrawer(false)}
         >
           <SetAlert
-            active={!!component.distanceAlert}
+            active={component.alert.on}
             id={component.id}
-            setAlert={(distance) => setDistanceAlertHandler(distance)}
+            setAlert={(distance) => setAlertHandler(distance)}
           />
         </DrawerSmall>
       </div>
@@ -101,6 +102,10 @@ const ComponentDetail = ({ components, location }) => {
 ComponentDetail.propTypes = {
   components: PropTypes.arrayOf(PropTypes.object).isRequired,
   location: PropTypes.object.isRequired,
+  // bike: PropTypes.object,
 };
+// ComponentDetail.defaultProps = {
+//   bike: null,
+// };
 
 export default withRouter(ComponentDetail);

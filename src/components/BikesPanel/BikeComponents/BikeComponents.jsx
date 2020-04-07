@@ -18,7 +18,9 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+// import { useSelector } from 'react-redux';
 import { meterToKm, format } from '../../../utils/distanceFormatters';
+import { COMPONENT_TYPES } from '../../../mock/constans';
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -40,13 +42,16 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-const BikeComponents = ({ components, history, location}) => {
-
+const BikeComponents = ({
+  components, history, location,
+}) => {
   const getActiveComponents = (compArr, active) => compArr.filter((c) => c.retired !== active);
   const formatComponentsData = (compArr) => compArr.map((c) => ({
     ...c,
     distanceFormatted: format(meterToKm(c.distance), 'KM'),
     startDate: c.startDate === '1' ? 'begining' : c.startDate,
+    alert: c.alert.on ? 'on' : 'off',
+    type: COMPONENT_TYPES.find((type) => type.id === c.type).label.eng,
   }));
   const activeComponents = getActiveComponents(components, true);
   const activeComponentsTable = activeComponents.length ? {
@@ -66,7 +71,7 @@ const BikeComponents = ({ components, history, location}) => {
       { field: 'brand', title: 'Brand' },
       { field: 'distanceFormatted', title: 'Distance' },
       { field: 'startDate', title: 'On bike since' },
-      { field: 'retiredDate', title: 'Retired on' },
+      // { field: 'retiredDate', title: 'Retired on' },
     ],
     data: formatComponentsData(retiredComponents),
   } : null;
@@ -134,6 +139,7 @@ BikeComponents.propTypes = {
   components: PropTypes.arrayOf(PropTypes.object).isRequired,
   location: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
+  // bikeId: PropTypes.string.isRequired,
 };
 
 export default withRouter(BikeComponents);

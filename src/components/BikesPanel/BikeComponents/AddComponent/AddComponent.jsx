@@ -4,26 +4,29 @@ import AddIcon from '@material-ui/icons/Add';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import useStyle from './addComponentStyle';
 import { addComponent } from '../../../../store/actions/index';
 import * as Styled from '../../../../styled/styled';
+import { COMPONENT_TYPES, COMPONENT_START_DATE} from '../../../../mock/constans';
 
-const AddComponent = ({ componentsTypes, componentStartDate, history }) => {
+const AddComponent = ({ bikeId, history }) => {
   const classes = useStyle();
   const dispatch = useDispatch();
+  const bikes = useSelector((state) => state.bikes.list);
   const [newComponentValue, setNewComponentValue] = useState({
     id: 'c1',
     type: '',
     brand: '',
     model: '',
     weight: '',
-    startDate: componentStartDate.find((item) => item.default === true).id,
+    startDate: COMPONENT_START_DATE.find((item) => item.default === true).id,
     initialDistance: '0',
     description: '',
     distanceAlert: 0,
+    bikeId,
   });
 
   const [alertSwitch, setAlertSwitch] = useState(false);
@@ -35,7 +38,7 @@ const AddComponent = ({ componentsTypes, componentStartDate, history }) => {
     setNewComponentValue({ ...newComponentValue, [name]: event.target.value });
   };
   const addComponentHandler = () => {
-    dispatch(addComponent(newComponentValue));
+    dispatch(addComponent(newComponentValue, bikes.find((bike) => bike.id === newComponentValue.bikeId)));
     history.push('/bike/components');
   };
 
@@ -61,6 +64,23 @@ const AddComponent = ({ componentsTypes, componentStartDate, history }) => {
         <Grid container spacing={1}>
           <Grid item xs={12} sm={6}>
             <Styled.Input
+              id="bikes-list"
+              select
+              label="Bike"
+              value={newComponentValue.bikeId}
+              onChange={handleComponentFormChange('bikeId')}
+              margin="normal"
+              variant="outlined"
+            >
+              {bikes.map((bike) => (
+                <MenuItem key={bike.id} value={bike.id}>
+                  {bike.name}
+                </MenuItem>
+              ))}
+            </Styled.Input>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Styled.Input
               id="component-type"
               select
               label="Component type"
@@ -69,9 +89,9 @@ const AddComponent = ({ componentsTypes, componentStartDate, history }) => {
               margin="normal"
               variant="outlined"
             >
-              {componentsTypes.map((type) => (
-                <MenuItem key={type} value={type}>
-                  {type}
+              {COMPONENT_TYPES.map((type) => (
+                <MenuItem key={type.id} value={type.id}>
+                  {type.label.eng}
                 </MenuItem>
               ))}
             </Styled.Input>
@@ -117,7 +137,7 @@ const AddComponent = ({ componentsTypes, componentStartDate, history }) => {
               variant="outlined"
               select
             >
-              {componentStartDate.map((type) => (
+              {COMPONENT_START_DATE.map((type) => (
                 <MenuItem key={type.name} value={type.id}>
                   {type.name}
                 </MenuItem>
@@ -184,9 +204,8 @@ const AddComponent = ({ componentsTypes, componentStartDate, history }) => {
 };
 
 AddComponent.propTypes = {
-  componentsTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
-  componentStartDate: PropTypes.arrayOf(PropTypes.object).isRequired,
   history: PropTypes.object.isRequired,
+  bikeId: PropTypes.string,
 };
 
 export default withRouter(AddComponent);

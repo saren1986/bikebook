@@ -45,7 +45,7 @@ const SetAlert = ({ setAlert, active }) => {
 
   return (
     <div className={classes.wrapper}>
-      <Styled.Header>Add distance alert</Styled.Header>
+      <Styled.Header>Set alert</Styled.Header>
       {toRender}
     </div>
   );

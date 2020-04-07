@@ -1,22 +1,21 @@
 import React, { useState } from 'react';
 import AddIcon from '@material-ui/icons/Add';
 import Grid from '@material-ui/core/Grid';
-import { useDispatch, useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 import { withRouter, Redirect } from 'react-router-dom';
 import * as Styled from '../../../styled/styled';
 import { addDistance } from '../../../store/actions/index';
 
-const AddDistance = ({ history }) => {
+const AddDistance = ({ history, bikeId }) => {
   const dispatch = useDispatch();
-  const bikeId = useSelector((state) => state.bikes.activeBike);
-
   const [newDistance, setNewDistance] = useState('');
 
   const handleDistanceFormChange = (event) => {
     setNewDistance(event.target.value);
   };
   const addDistanceHandler = (distance) => {
-    dispatch(addDistance(distance));
+    dispatch(addDistance(bikeId, distance));
     history.push('/bike');
   };
   return (
@@ -55,5 +54,10 @@ const AddDistance = ({ history }) => {
     ) : <Redirect to="/" />
   );
 };
+AddDistance.propTypes = {
+  history: PropTypes.object.isRequired,
+  bikeId: PropTypes.string.isRequired,
+};
+
 
 export default withRouter(AddDistance);

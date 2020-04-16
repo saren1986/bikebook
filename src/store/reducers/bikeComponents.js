@@ -57,6 +57,9 @@ const updateComponentsDistance = (state, action) => state.map((component) => {
   if (action.data.bikeId === component.bikeId) {
     return {
       ...component,
+      alert: {
+        ...component.alert,
+      },
       distance: component.distance + kmToMeter(action.data.distance),
     };
   }
@@ -75,6 +78,35 @@ const disableServiceAlert = (state, action) => state.map((component) => {
   }
   return component;
 });
+const switchToBike = (state, action) => state.map((component) => {
+  if (component.id === action.data.compId) {
+    return {
+      ...component,
+      alert: {
+        ...component.alert,
+      },
+      bikeId: action.data.bikeId,
+    };
+  }
+  return component;
+});
+const retireComponent = (state, action) => state.map((component) => {
+  if (component.id === action.data.compId) {
+    return {
+      ...component,
+      alert: {
+        ...component.alert,
+        on: false,
+        startDistance: null,
+        endDistance: null,
+      },
+      retired: true,
+    };
+  }
+  return component;
+});
+const deleteComponent = (state, action) => state
+  .filter((component) => component.id !== action.data.compId);
 
 const reducer = (state = defaultState, action) => {
   switch (action.type) {
@@ -82,6 +114,9 @@ const reducer = (state = defaultState, action) => {
     case actionTypes.SET_DISTANCE_ALERT: return setDistanceAlert(state, action);
     case actionTypes.UPDATE_COMPONENTS_DISTANCE: return updateComponentsDistance(state, action);
     case actionTypes.DISABLE_SERVICE_ALERT: return disableServiceAlert(state, action);
+    case actionTypes.SWITCH_TO_BIKE: return switchToBike(state, action);
+    case actionTypes.RETIRE_COMPONENT: return retireComponent(state, action);
+    case actionTypes.DELETE_COMPONENT: return deleteComponent(state, action);
     default: return state;
   }
 };

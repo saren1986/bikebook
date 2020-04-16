@@ -3,6 +3,9 @@ import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme) => ({
   wrapper: {
     position: 'relative',
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%',
   },
   controls: {
     display: 'flex',
@@ -22,6 +25,13 @@ const useStyles = makeStyles((theme) => ({
     outline: 'none',
     '&:hover': {
       background: theme.hovers.icon,
+    },
+  },
+  retired: {
+    color: '#f00',
+    width: '35%',
+    [theme.breakpoints.up('sm')]: {
+      order: '2',
     },
   },
 }

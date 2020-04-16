@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Grid, Container } from '@material-ui/core';
 import classes from './Layout.module.css';
+import ConfirmDialog from '../../../UX/Dialogs/AlertDialog';
 
 const Layout = ({ children }) => (
   <>
@@ -13,6 +14,7 @@ const Layout = ({ children }) => (
     <Container className={classes.MainContainer}>
       <Grid container spacing={2}>{children}</Grid>
     </Container>
+    <ConfirmDialog />
   </>
 );
 

@@ -2,14 +2,10 @@ import React, { useState } from 'react';
 import { Button } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import PropTypes from 'prop-types';
-import useStyles from './setAlertStyle';
 import * as Styled from '../../../../styled/styled';
 
 const SetAlert = ({ setAlert, active }) => {
-  const classes = useStyles();
-
   const [inputValue, setInputValue] = useState('');
-
   const distanceChangeHandler = (e) => {
     setInputValue(e.target.value);
   };
@@ -21,7 +17,6 @@ const SetAlert = ({ setAlert, active }) => {
       <Styled.Input
         id="distanceAlert"
         label="Distance in KM"
-        className={classes.input}
         margin="normal"
         variant="outlined"
         value={inputValue}
@@ -32,7 +27,6 @@ const SetAlert = ({ setAlert, active }) => {
       <Button
         variant="contained"
         color="primary"
-        className={classes.button}
         startIcon={<AddIcon />}
         onClick={clickHandler}
       >
@@ -44,10 +38,10 @@ const SetAlert = ({ setAlert, active }) => {
   );
 
   return (
-    <div className={classes.wrapper}>
+    <Styled.SmallForm>
       <Styled.Header>Set alert</Styled.Header>
       {toRender}
-    </div>
+    </Styled.SmallForm>
   );
 };
 

@@ -4,6 +4,7 @@ import {
 import thunk from 'redux-thunk';
 import bikes from './reducers/bikes';
 import components from './reducers/bikeComponents';
+import ux from './reducers/ux';
 
 const composeEnhancers = typeof window === 'object'
   && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
@@ -19,6 +20,7 @@ const enhancer = composeEnhancers(
 const reducer = combineReducers({
   bikes,
   components,
+  ux,
 });
 
 const store = createStore(reducer, enhancer);

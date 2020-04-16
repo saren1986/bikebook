@@ -19,6 +19,18 @@ export const BtnWrapper = styled('div')({
   textAlign: 'right',
   marginTop: '30px',
 });
+export const SmallForm = styled('div')({
+  display: 'flex',
+  flexWrap: 'wrap',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  width: '300px',
+  margin: '0 auto',
+  '& button': {
+    margin: '10px',
+  },
+});
 export const Placeholder = styled('div')(({ theme }) => ({
   background: '#fff',
   padding: '10px',

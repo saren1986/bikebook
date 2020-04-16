@@ -6,30 +6,76 @@ import PropTypes from 'prop-types';
 import ProgressBar from './progressBar/ProgressBar';
 import ComponentControls from './ComponentControls/ComponentControls';
 import SetAlert from '../SetAlert/SetAlert';
-import { setDistanceAlert, disableServiceAlert } from '../../../../store/actions/index';
+import * as actions from '../../../../store/actions/index';
 import useStyles from './componentDetailStyle';
 import DrawerSmall from '../../../../UX/DrawerSmall/DrawerSmall';
 import { meterToKm, format } from '../../../../utils/distanceFormatters';
 import { COMPONENT_TYPES } from '../../../../mock/constans';
+import SwitchToBike from '../SwitchToBike/SwitchToBike';
 
-const ComponentDetail = ({ components, location }) => {
+const ComponentDetail = ({ components, history, location }) => {
   const [drawer, setDrawer] = useState(false);
+  const [switchBikeMode, setSwitchBikeMode] = useState(false);
+  const [alertMode, setAlerteMode] = useState(false);
   const classes = useStyles();
   const dispatch = useDispatch();
   const component = components.find((comp) => comp.id === location.state.id);
   const setAlertHandler = (distance) => {
-    dispatch(setDistanceAlert(component.id, distance));
+    dispatch(actions.setDistanceAlert(component.id, distance));
     setDrawer(false);
+    setAlerteMode(false);
   };
   const disableAlertHandler = () => {
-    dispatch(disableServiceAlert(component.id));
-  }
-  const componentType = COMPONENT_TYPES.find((type)=> type.id === component.type).label.eng;
+    dispatch(actions.disableServiceAlert(component.id));
+  };
+  const drawerOnHandler = (elem) => {
+    if (elem === 'switch') {
+      setSwitchBikeMode(true);
+    } else if (elem === 'alert') {
+      setAlerteMode(true);
+    }
+    setDrawer(true);
+  };
+  const drawerOffHandler = () => {
+    setSwitchBikeMode(false);
+    setAlerteMode(false);
+    setDrawer(false);
+  };
+  const retireComponentHandler = () => {
+    dispatch(actions.openConfirmDialog(
+      'Retire component', 'The component will be retired. All service alerts will be deleted. Are you sure?', () => {
+        dispatch(actions.retireComponent(component.id));
+      },
+    ));
+  };
+  const deleteComponentHandler = () => {
+    dispatch(actions.openConfirmDialog(
+      'Delete component', 'The component will be deleted permanently. Are you sure?', () => {
+        dispatch(actions.deleteComponent(component.id));
+        history.push('/bike/components');
+      },
+    ));
+  };
+  const componentType = COMPONENT_TYPES.find((type) => type.id === component.type).label.eng;
   const distanceAlert = component.alert.on ? (
     <ProgressBar
       startDistance={component.alert.startDistance}
       currentDistance={component.distance}
       endDistance={component.alert.endDistance}
+    />
+  ) : null;
+  const switchBikeContent = switchBikeMode ? (
+    <SwitchToBike
+      bikeId={component.bikeId}
+      compId={component.id}
+      clb={() => setDrawer(false)}
+    />
+  ) : null;
+  const alertContent = alertMode ? (
+    <SetAlert
+      active={component.alert.on}
+      id={component.id}
+      setAlert={(distance) => setAlertHandler(distance)}
     />
   ) : null;
   return (
@@ -49,10 +95,12 @@ const ComponentDetail = ({ components, location }) => {
               </div>
               <div className={classes.componentControls}>
                 <ComponentControls
-                  openAlertDrawer={setDrawer}
+                  openDrawer={drawerOnHandler}
                   activeAlert={component.alert.on}
                   retired={component.retired}
+                  retireComponent={retireComponentHandler}
                   alertOff={() => disableAlertHandler()}
+                  deleteComponent={deleteComponentHandler}
                 />
               </div>
             </div>
@@ -87,14 +135,18 @@ const ComponentDetail = ({ components, location }) => {
         </Grid>
         <DrawerSmall
           open={drawer}
-          closeHandle={() => setDrawer(false)}
+          closeHandle={drawerOffHandler}
         >
-          <SetAlert
-            active={component.alert.on}
-            id={component.id}
-            setAlert={(distance) => setAlertHandler(distance)}
-          />
+
+          {switchBikeContent}
+          {alertContent}
         </DrawerSmall>
+        {/* <AlertDialog
+          open
+          title="test test test test test"
+          description="test2"
+          confirm={() => { alert('confirmed'); }}
+        /> */}
       </div>
     </>
   );
@@ -102,7 +154,7 @@ const ComponentDetail = ({ components, location }) => {
 ComponentDetail.propTypes = {
   components: PropTypes.arrayOf(PropTypes.object).isRequired,
   location: PropTypes.object.isRequired,
-  // bike: PropTypes.object,
+  history: PropTypes.object.isRequired,
 };
 // ComponentDetail.defaultProps = {
 //   bike: null,

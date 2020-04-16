@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import BuildIcon from '@material-ui/icons/Build';
 import classes from './ProgressBar.module.css';
 import ProgressLine from '../../../../../UX/ProgressLine/ProgressLine';
 import { format, meterToKm } from '../../../../../utils/distanceFormatters';
@@ -10,13 +11,17 @@ const ProgressBar = ({ startDistance, currentDistance, endDistance }) => {
   let alertDescription = null;
   if (distanceLeft > 0) {
     alertDescription = (
-      <span>
-        <strong>
-          {format(meterToKm(distanceLeft), 'KM')}
-          {' '}
-        </strong>
-        left to service alert.
-      </span>
+      <>
+        <span>
+          <BuildIcon />
+          <strong>
+            {format(meterToKm(distanceLeft), 'KM')}
+            {' '}
+          </strong>
+          left to service alert.
+        </span>
+
+      </>
     );
   } else if (distanceLeft === 0) {
     alertDescription = (

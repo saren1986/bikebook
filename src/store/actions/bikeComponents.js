@@ -27,5 +27,25 @@ export const disableServiceAlert = (compId) => ({
   type: actionTypes.DISABLE_SERVICE_ALERT,
   data: {
     compId,
-  }
+  },
+});
+
+export const switchToBike = (compId, bikeId) => ({
+  type: actionTypes.SWITCH_TO_BIKE,
+  data: {
+    compId,
+    bikeId,
+  },
+});
+export const retireComponent = (compId) => ({
+  type: actionTypes.RETIRE_COMPONENT,
+  data: {
+    compId,
+  },
+});
+export const deleteComponent = (compId) => ({
+  type: actionTypes.DELETE_COMPONENT,
+  data: {
+    compId,
+  },
 });

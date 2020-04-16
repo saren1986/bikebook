@@ -11,17 +11,15 @@ import Edit from '@material-ui/icons/Edit';
 import useStyle from './componentControlsStyle';
 
 const ComponentControls = ({
-  openAlertDrawer, activeAlert, alertOff, retired,
+  openDrawer, activeAlert, alertOff, retired, retireComponent, deleteComponent,
 }) => {
   const classes = useStyle();
-  const handleClickAlert = () => {
-    openAlertDrawer(true);
-  };
+
   let alertSwitcher = null;
   if (!activeAlert) {
     alertSwitcher = (
       <Tooltip title="Set alert">
-        <IconButton type="button" onClick={handleClickAlert}>
+        <IconButton type="button" onClick={() => openDrawer('alert')}>
           <NotificationsIcon />
         </IconButton>
       </Tooltip>
@@ -39,7 +37,7 @@ const ComponentControls = ({
   if (!retired) {
     retireSwitcher = (
       <Tooltip title="Retire">
-        <IconButton type="button">
+        <IconButton type="button" onClick={retireComponent}>
           <RemoveCircleOutlineIcon />
         </IconButton>
       </Tooltip>
@@ -47,31 +45,36 @@ const ComponentControls = ({
   } else {
     retireSwitcher = (
       <Tooltip title="Delete">
-        <IconButton type="button">
+        <IconButton type="button" onClick={deleteComponent}>
           <DeleteIcon />
         </IconButton>
       </Tooltip>
     );
   }
+  const noRetiredButtons = retired ? null : (
+    <>
+      <Tooltip title="Switch bike">
+        <IconButton type="button" onClick={() => openDrawer('switch')}>
+          <AutorenewIcon />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="Edit">
+        <IconButton type="button">
+          <Edit />
+        </IconButton>
+      </Tooltip>
+    </>
+  );
 
   return (
     <>
       <div className={classes.wrapper}>
+        {!retired ? null
+          : (<strong className={classes.retired}>RETIRED</strong>)}
         <div className={classes.controls}>
-          {alertSwitcher}
-          <Tooltip title="Switch bike">
-            <IconButton type="button">
-              <AutorenewIcon />
-            </IconButton>
-          </Tooltip>
-          {
-            retireSwitcher
-          }
-          <Tooltip title="Edit">
-            <IconButton type="button">
-              <Edit />
-            </IconButton>
-          </Tooltip>
+          {retired ? null : alertSwitcher}
+          {retireSwitcher}
+          {noRetiredButtons}
         </div>
       </div>
     </>
@@ -80,9 +83,11 @@ const ComponentControls = ({
 };
 
 ComponentControls.propTypes = {
-  openAlertDrawer: PropTypes.func.isRequired,
+  openDrawer: PropTypes.func.isRequired,
   activeAlert: PropTypes.bool.isRequired,
   alertOff: PropTypes.func.isRequired,
+  retireComponent: PropTypes.func.isRequired,
+  deleteComponent: PropTypes.func.isRequired,
   retired: PropTypes.bool.isRequired,
 };
 

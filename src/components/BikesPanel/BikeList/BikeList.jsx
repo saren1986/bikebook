@@ -3,7 +3,6 @@ import Grid from '@material-ui/core/Grid';
 import { useSelector, useDispatch } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import classes from './BikeList.module.css';
 import BikeTile from './BikeTile/BikeTile';
 import BikeListControls from './BikeListControls/BikeListControls';
 import Spinner from '../../../UX/Spinner/Spinner';
@@ -29,7 +28,7 @@ const BikeList = ({ history }) => {
 
   return (
     <>
-      <div className={classes.wrapper}>
+      <div>
         <Grid container spacing={2}>
           {renderedBikeList}
         </Grid>

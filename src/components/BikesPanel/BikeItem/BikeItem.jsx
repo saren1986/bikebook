@@ -6,7 +6,7 @@ import { Typography } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import BikeComponents from '../BikeComponents/BikeComponents';
 import AddComponent from '../BikeComponents/AddComponent/AddComponent';
-import classes from './BikeItem.module.css';
+import useStyles from './bikeItem.style'
 import { meterToKm, format } from '../../../utils/distanceFormatters';
 import * as actions from '../../../store/actions/index';
 import AddDistance from '../AddDistance/AddDistance';
@@ -14,6 +14,7 @@ import ComponentDetail from '../BikeComponents/ComponentDetail/ComponentDetail';
 
 
 const BikeItem = ({ match }) => {
+  const classes = useStyles();
   const dispatch = useDispatch();
   const bikeId = useSelector((state) => state.bikes.activeBike);
 

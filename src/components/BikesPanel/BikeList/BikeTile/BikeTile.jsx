@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
-import classes from './BikeTile.module.css';
+import useStyles from './bikeTile.style';
 import { meterToKm, format } from '../../../../utils/distanceFormatters';
 
 
 const BikeTile = ({ bike, click }) => {
+  const classes = useStyles();
   return (
     <Grid item md={4}>
       <button type="button" className={classes.wrapper} onClick={click}>

@@ -8,9 +8,7 @@ import AddIcon from '@material-ui/icons/Add';
 import InfoIcon from '@material-ui/icons/Info';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { Link, withRouter } from 'react-router-dom';
-
 import { useSelector } from 'react-redux';
-import classes from './BikesNav.module.css';
 
 const BikeNavigation = ({ location, history, match }) => {
   const activeBike = useSelector((state) => state.bikes.activeBike);
@@ -60,7 +58,7 @@ const BikeNavigation = ({ location, history, match }) => {
   }
   return (
 
-    <List component="nav" aria-labelledby="nested-list-subheader" className={classes.root}>
+    <List component="nav" aria-labelledby="nested-list-subheader">
       <Link to="/bike-list">
         <ListItem button onClick={handleClick}>
           <ListItemIcon>

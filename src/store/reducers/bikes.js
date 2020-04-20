@@ -1,7 +1,6 @@
 import * as actionTypes from '../actions/actionTypes';
 import bikes from '../../mock/bikes';
-import * as convert from '../../utils/distanceFormatters';
-import { kmToMeter } from '../../utils/distanceFormatters';
+import * as format from '../../utils/distanceFormatters';
 
 const defaultState = {
   list: bikes,
@@ -13,23 +12,23 @@ const setActiveBike = (state, action) => ({
 });
 
 const addBike = (state, action) => {
-  const newBike = {
-    ...action.data,
-    components: [],
-    retired: false,
-    distance: convert.kmToMeter(action.data.distance),
-  };
+  const { bike, lengthUnit } = action.data;
   return {
     ...state,
     list: [
       ...state.list,
-      newBike,
+      {
+        id: 'b100', //TODO nowy bikeID z serwera
+        ...bike,
+        retired: false,
+        distance: format.distanceLargeToSmall(bike.distance, lengthUnit),
+      },
     ],
   };
 };
 
 const addDistance = (state, action) => {
-  const newDistance = kmToMeter(action.data.distance);
+  const newDistance = format.distanceLargeToSmall(action.data.distance, action.data.lengthUnit);
   const newBikeList = state.list.map((bike) => {
     if (bike.id === action.data.bikeId) {
       const resultDistance = bike.distance + newDistance;

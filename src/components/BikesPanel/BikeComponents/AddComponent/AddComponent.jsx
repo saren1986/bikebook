@@ -10,14 +10,14 @@ import { withRouter } from 'react-router-dom';
 import useStyle from './addComponentStyle';
 import { addComponent } from '../../../../store/actions/index';
 import * as Styled from '../../../../styled/styled';
-import { COMPONENT_TYPES, COMPONENT_START_DATE} from '../../../../mock/constans';
+import { COMPONENT_TYPES, COMPONENT_START_DATE } from '../../../../mock/constans';
 
 const AddComponent = ({ bikeId, history }) => {
   const classes = useStyle();
   const dispatch = useDispatch();
   const bikes = useSelector((state) => state.bikes.list);
+  const lengthUnit = useSelector((state) => state.user.lengthUnit);
   const [newComponentValue, setNewComponentValue] = useState({
-    id: 'c1',
     type: '',
     brand: '',
     model: '',
@@ -25,7 +25,8 @@ const AddComponent = ({ bikeId, history }) => {
     startDate: COMPONENT_START_DATE.find((item) => item.default === true).id,
     initialDistance: '0',
     description: '',
-    distanceAlert: 0,
+    alertOn: false,
+    endDistance: 0,
     bikeId,
   });
 
@@ -35,23 +36,40 @@ const AddComponent = ({ bikeId, history }) => {
     setAlertSwitch((alert) => !alert);
   };
   const handleComponentFormChange = (name) => (event) => {
-    setNewComponentValue({ ...newComponentValue, [name]: event.target.value });
+    if (name === 'alert') {
+      setNewComponentValue(
+        {
+          ...newComponentValue,
+          alertOn: true,
+          endDistance: event.target.value,
+        },
+      );
+    } else {
+      setNewComponentValue(
+        {
+          ...newComponentValue,
+          [name]: event.target.value,
+        },
+      );
+    }
   };
   const addComponentHandler = () => {
-    dispatch(addComponent(newComponentValue, bikes.find((bike) => bike.id === newComponentValue.bikeId)));
+    dispatch(addComponent(newComponentValue,
+      bikes.find((bike) => bike.id === newComponentValue.bikeId),
+      lengthUnit));
     history.push('/bike/components');
   };
 
   const alarmElement = alertSwitch ? (
     <Grid item xs={12} sm={6} className={classes.alertRow}>
       <Styled.Input
-        id="distanceAlert"
-        label="Alarm on KM"
+        id="alert"
+        label={`Service Alert Distance / ${lengthUnit}`}
         margin="normal"
         variant="outlined"
         value={newComponentValue.distanceAlert}
         type="number"
-        onChange={handleComponentFormChange('distanceAlert')}
+        onChange={handleComponentFormChange('alert')}
         required
       />
     </Grid>
@@ -147,7 +165,7 @@ const AddComponent = ({ bikeId, history }) => {
           <Grid item xs={6}>
             <Styled.Input
               id="initialDistance"
-              label="Initial Distance"
+              label={`Initial Distance / ${lengthUnit}`}
               margin="normal"
               variant="outlined"
               value={newComponentValue.initialDistance}

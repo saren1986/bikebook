@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { withRouter } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import ProgressBar from './progressBar/ProgressBar';
 import ComponentControls from './ComponentControls/ComponentControls';
@@ -9,7 +9,8 @@ import SetAlert from '../SetAlert/SetAlert';
 import * as actions from '../../../../store/actions/index';
 import useStyles from './componentDetailStyle';
 import DrawerSmall from '../../../../UX/DrawerSmall/DrawerSmall';
-import { meterToKm, format } from '../../../../utils/distanceFormatters';
+import { formatDistance } from '../../../../utils/distanceFormatters';
+import { formatMassDisplay } from '../../../../utils/massUnitsFormatter';
 import { COMPONENT_TYPES } from '../../../../mock/constans';
 import SwitchToBike from '../SwitchToBike/SwitchToBike';
 
@@ -19,9 +20,10 @@ const ComponentDetail = ({ components, history, location }) => {
   const [alertMode, setAlerteMode] = useState(false);
   const classes = useStyles();
   const dispatch = useDispatch();
+  const {lengthUnit, massUnit} = useSelector((state) => state.user.units);
   const component = components.find((comp) => comp.id === location.state.id);
   const setAlertHandler = (distance) => {
-    dispatch(actions.setDistanceAlert(component.id, distance));
+    dispatch(actions.setDistanceAlert(component.id, distance, lengthUnit));
     setDrawer(false);
     setAlerteMode(false);
   };
@@ -62,6 +64,7 @@ const ComponentDetail = ({ components, history, location }) => {
       startDistance={component.alert.startDistance}
       currentDistance={component.distance}
       endDistance={component.alert.endDistance}
+      lengthUnit={lengthUnit}
     />
   ) : null;
   const switchBikeContent = switchBikeMode ? (
@@ -76,6 +79,7 @@ const ComponentDetail = ({ components, history, location }) => {
       active={component.alert.on}
       id={component.id}
       setAlert={(distance) => setAlertHandler(distance)}
+      lengthUnit={lengthUnit}
     />
   ) : null;
   return (
@@ -108,12 +112,12 @@ const ComponentDetail = ({ components, history, location }) => {
               <div className={classes.compItem}>
                 Distance:
                 {' '}
-                <strong>{format(meterToKm(component.distance), 'KM')}</strong>
+                <strong>{formatDistance(component.distance, lengthUnit)}</strong>
               </div>
               <div className={classes.compItem}>
-                Weight:
+                Mass:
                 {' '}
-                <strong>{component.weight}</strong>
+                <strong>{formatMassDisplay(component.weight, massUnit)}</strong>
               </div>
               <div className={classes.compItem}>
                 Installed:
@@ -141,12 +145,6 @@ const ComponentDetail = ({ components, history, location }) => {
           {switchBikeContent}
           {alertContent}
         </DrawerSmall>
-        {/* <AlertDialog
-          open
-          title="test test test test test"
-          description="test2"
-          confirm={() => { alert('confirmed'); }}
-        /> */}
       </div>
     </>
   );
@@ -156,8 +154,5 @@ ComponentDetail.propTypes = {
   location: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
 };
-// ComponentDetail.defaultProps = {
-//   bike: null,
-// };
 
 export default withRouter(ComponentDetail);

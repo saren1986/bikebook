@@ -4,7 +4,7 @@ import AddIcon from '@material-ui/icons/Add';
 import PropTypes from 'prop-types';
 import * as Styled from '../../../../styled/styled';
 
-const SetAlert = ({ setAlert, active }) => {
+const SetAlert = ({ setAlert, active, lengthUnit }) => {
   const [inputValue, setInputValue] = useState('');
   const distanceChangeHandler = (e) => {
     setInputValue(e.target.value);
@@ -16,7 +16,7 @@ const SetAlert = ({ setAlert, active }) => {
     <>
       <Styled.Input
         id="distanceAlert"
-        label="Distance in KM"
+        label={`Distance / ${lengthUnit}`}
         margin="normal"
         variant="outlined"
         value={inputValue}
@@ -48,6 +48,7 @@ const SetAlert = ({ setAlert, active }) => {
 SetAlert.propTypes = {
   setAlert: PropTypes.func.isRequired,
   active: PropTypes.bool.isRequired,
+  lengthUnit: PropTypes.string.isRequired,
 };
 
 export default SetAlert;

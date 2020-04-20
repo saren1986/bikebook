@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { MenuItem } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import Grid from '@material-ui/core/Grid';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { addBike, setActiveBike } from '../../../store/actions/index';
@@ -11,24 +11,27 @@ import * as Styled from '../../../styled/styled';
 
 const AddBike = ({ bikeTypes, history }) => {
   const dispatch = useDispatch();
+  const { lengthUnit, massUnit } = useSelector((state) => state.user.units);
 
   const [newBikeValues, setNewBikeValues] = useState({
-    id: '25', //TODO nadawanie id dla nowych rowerów
     type: '',
     name: '',
     brand: '',
+    model: '',
     distance: '',
     description: '',
+    frameWeight: '',
   });
 
   const handleBikeFormChange = (name) => (event) => {
     setNewBikeValues({ ...newBikeValues, [name]: event.target.value });
   };
 
-  const addNewBikeHandler = (data) => {
-    dispatch(addBike(data));
+  const addNewBikeHandler = () => {
+    dispatch(addBike(newBikeValues, lengthUnit));
     dispatch(setActiveBike(newBikeValues.id));
     history.push('/bike');
+    //TODO ustawianie aktywnego bike'a po zwrotce z serwera
   };
 
   return (
@@ -50,28 +53,6 @@ const AddBike = ({ bikeTypes, history }) => {
           </Grid>
           <Grid item xs={12} sm={6}>
             <Styled.Input
-              id="brand-name"
-              label="Brand name"
-              value={newBikeValues.brand}
-              onChange={handleBikeFormChange('brand')}
-              margin="normal"
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <Styled.Input
-              id="bike-distance"
-              label="Distance"
-              margin="normal"
-              variant="outlined"
-              value={newBikeValues.distance}
-              type="number"
-              onChange={handleBikeFormChange('distance')}
-              required
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <Styled.Input
               id="bike-type"
               select
               label="Bike type"
@@ -86,6 +67,49 @@ const AddBike = ({ bikeTypes, history }) => {
                 </MenuItem>
               ))}
             </Styled.Input>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Styled.Input
+              id="brand-name"
+              label="Brand name"
+              value={newBikeValues.brand}
+              onChange={handleBikeFormChange('brand')}
+              margin="normal"
+              variant="outlined"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Styled.Input
+              id="model"
+              label="Brand name"
+              value={newBikeValues.model}
+              onChange={handleBikeFormChange('model')}
+              margin="normal"
+              variant="outlined"
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Styled.Input
+              id="bike-distance"
+              label={`Distance / ${lengthUnit}`}
+              margin="normal"
+              variant="outlined"
+              value={newBikeValues.distance}
+              type="number"
+              onChange={handleBikeFormChange('distance')}
+              required
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Styled.Input
+              id="frame-weight"
+              label={`Frame mass / ${massUnit}`}
+              margin="normal"
+              variant="outlined"
+              value={newBikeValues.frameWeight}
+              type="number"
+              onChange={handleBikeFormChange('frameWeight')}
+            />
           </Grid>
           <Grid item xs={12}>
             <Styled.Input
@@ -103,7 +127,7 @@ const AddBike = ({ bikeTypes, history }) => {
                 variant="contained"
                 color="primary"
                 startIcon={<AddIcon />}
-                onClick={() => { addNewBikeHandler(newBikeValues); }}
+                onClick={addNewBikeHandler}
               >
                 Add bike
               </Styled.Btn>

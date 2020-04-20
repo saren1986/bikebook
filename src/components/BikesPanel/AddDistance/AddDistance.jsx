@@ -7,7 +7,7 @@ import { withRouter, Redirect } from 'react-router-dom';
 import * as Styled from '../../../styled/styled';
 import { addDistance } from '../../../store/actions/index';
 
-const AddDistance = ({ history, bikeId }) => {
+const AddDistance = ({ history, bikeId, lengthUnit }) => {
   const dispatch = useDispatch();
   const [newDistance, setNewDistance] = useState('');
 
@@ -15,7 +15,7 @@ const AddDistance = ({ history, bikeId }) => {
     setNewDistance(event.target.value);
   };
   const addDistanceHandler = (distance) => {
-    dispatch(addDistance(bikeId, distance));
+    dispatch(addDistance(bikeId, distance, lengthUnit));
     history.push('/bike');
   };
   return (
@@ -27,7 +27,7 @@ const AddDistance = ({ history, bikeId }) => {
             <Grid item xs={12}>
               <Styled.Input
                 id="bike-distance"
-                label="Distance / KM"
+                label={`Distance / ${lengthUnit}`}
                 margin="normal"
                 variant="outlined"
                 value={newDistance}
@@ -57,6 +57,7 @@ const AddDistance = ({ history, bikeId }) => {
 AddDistance.propTypes = {
   history: PropTypes.object.isRequired,
   bikeId: PropTypes.string.isRequired,
+  lengthUnit: PropTypes.string.isRequired,
 };
 
 

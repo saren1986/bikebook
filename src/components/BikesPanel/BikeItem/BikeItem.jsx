@@ -6,8 +6,8 @@ import { Typography } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import BikeComponents from '../BikeComponents/BikeComponents';
 import AddComponent from '../BikeComponents/AddComponent/AddComponent';
-import useStyles from './bikeItem.style'
-import { meterToKm, format } from '../../../utils/distanceFormatters';
+import useStyles from './bikeItem.style';
+import { formatDistance } from '../../../utils/distanceFormatters';
 import * as actions from '../../../store/actions/index';
 import AddDistance from '../AddDistance/AddDistance';
 import ComponentDetail from '../BikeComponents/ComponentDetail/ComponentDetail';
@@ -16,10 +16,9 @@ import ComponentDetail from '../BikeComponents/ComponentDetail/ComponentDetail';
 const BikeItem = ({ match }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const { lengthUnit } = useSelector((state) => state.user.units);
   const bikeId = useSelector((state) => state.bikes.activeBike);
-
   const bike = useSelector((state) => state.bikes.list.find((elem) => elem.id === bikeId));
-
   const components = useSelector((state) => state.components
     .filter((comp) => comp.bikeId === bikeId));
   useEffect(() => () => dispatch(actions.setActiveBike(null)), []);
@@ -38,7 +37,8 @@ const BikeItem = ({ match }) => {
           <div className={classes.topInfoItem}>
             <span>
               Distance:
-              <strong>{format(meterToKm(bike.distance), 'km')}</strong>
+              {' '}
+              <strong>{formatDistance(bike.distance, lengthUnit)}</strong>
             </span>
           </div>
         </div>
@@ -64,6 +64,7 @@ const BikeItem = ({ match }) => {
           <Route exact path={`${match.path}/add-distance`}>
             <AddDistance
               bikeId={bikeId}
+              lengthUnit={lengthUnit}
             />
           </Route>
           <Redirect exact from="/bike" to={`${match.path}/components`} />

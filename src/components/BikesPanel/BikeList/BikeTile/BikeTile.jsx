@@ -1,18 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
+import { useSelector } from 'react-redux';
 import useStyles from './bikeTile.style';
-import { meterToKm, format } from '../../../../utils/distanceFormatters';
+import { formatDistance } from '../../../../utils/distanceFormatters';
 
 
 const BikeTile = ({ bike, click }) => {
   const classes = useStyles();
+  const { lengthUnit } = useSelector((state) => state.user.units);
   return (
     <Grid item md={4}>
       <button type="button" className={classes.wrapper} onClick={click}>
         <div className={classes.top}>
           <span className={classes.name}>{bike.name}</span>
-          <span>{format(meterToKm(bike.distance), 'KM')}</span>
+          <span>{formatDistance(bike.distance, lengthUnit)}</span>
         </div>
       </button>
     </Grid>

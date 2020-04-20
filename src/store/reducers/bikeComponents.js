@@ -1,42 +1,43 @@
 import * as actionTypes from '../actions/actionTypes';
 import bikeComponents from '../../mock/bikeComponents';
-import { kmToMeter } from '../../utils/distanceFormatters';
+import * as format from '../../utils/distanceFormatters';
 
 const defaultState = [
   ...bikeComponents,
 ];
 
 const addComponent = (state, action) => {
-  const { bike, component } = action.data;
+  const { bike, lengthUnit } = action.data;
+  const {
+    initialDistance, alertOn, endDistance, ...component
+  } = action.data.component;
 
-  let distance = null;
-  let date = null;
-  const compAlert = {
-    on: false,
-    note: '',
-  };
-  if (component.distanceAlert) {
-    compAlert.endDistance = kmToMeter(component.distanceAlert);
-    compAlert.startDistance = kmToMeter(bike.distance);
-    compAlert.on = true;
-  }
+  let distance = 0;
+  let date = '1';
+
   if (component.startDate === '1') {
-    distance = bike.distance + kmToMeter(component.initialDistance);
-    date = '1';
+    distance = bike.distance + format.distanceLargeToSmall(initialDistance, lengthUnit);
   } else if (component.startDate === '2') {
-    distance += kmToMeter(component.initialDistance);
+    distance += format.distanceLargeToSmall(initialDistance, lengthUnit);
     date = new Date().toJSON().slice(0, 10);
   }
+
   return [
     ...state,
     {
-      ...component,
       id: 'c111', // TODO
       bikeId: component.bikeId,
+      ...component,
       retired: false,
       startDate: date,
       distance,
-      alert: compAlert,
+      alert: {
+        on: alertOn,
+        note: '',
+        startDistance: 0 + format.distanceLargeToSmall(initialDistance, lengthUnit),
+        endDistance: distance
+        + format.distanceLargeToSmall(endDistance, action.data.lengthUnit),
+      },
     },
   ];
 };
@@ -47,7 +48,8 @@ const setDistanceAlert = (state, action) => state.map((component) => {
       alert: {
         on: true,
         startDistance: component.distance,
-        endDistance: kmToMeter(action.data.endDistance) + component.distance,
+        endDistance: component.distance
+        + format.distanceLargeToSmall(action.data.endDistance, action.data.lengthUnit),
       },
     };
   }
@@ -60,7 +62,8 @@ const updateComponentsDistance = (state, action) => state.map((component) => {
       alert: {
         ...component.alert,
       },
-      distance: component.distance + kmToMeter(action.data.distance),
+      distance: component.distance
+      + format.distanceLargeToSmall(action.data.distance, action.data.lengthUnit),
     };
   }
   return component;

@@ -6,20 +6,25 @@ export const setActiveBike = (bikeId) => ({
   id: bikeId,
 });
 
-export const addBike = (bikeData) => ({
+export const addBike = (bike, lengthUnit) => ({
   type: actionTypes.ADD_BIKE,
-  data: bikeData,
+  data: {
+    bike,
+    lengthUnit,
+  },
 });
 
-export const addBikeDistance = (bikeId, distance) => ({
+export const addBikeDistance = (bikeId, distance, lengthUnit) => ({
   type: actionTypes.ADD_BIKE_DISTANCE,
   data: {
     distance,
     bikeId,
+    lengthUnit,
   },
 });
 
-export const addDistance = (bikeId, distance) => (dispatch) => {
-  dispatch(addBikeDistance(bikeId, distance));
-  dispatch(updateComponentsDistance(bikeId, distance));
+
+export const addDistance = (bikeId, distance, lengthUnit) => (dispatch) => {
+  dispatch(addBikeDistance(bikeId, distance, lengthUnit));
+  dispatch(updateComponentsDistance(bikeId, distance, lengthUnit));
 };

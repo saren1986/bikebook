@@ -2,6 +2,7 @@ import React, { forwardRef } from 'react';
 import MaterialTable from 'material-table';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
@@ -19,7 +20,7 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 // import { useSelector } from 'react-redux';
-import { meterToKm, format } from '../../../utils/distanceFormatters';
+import { formatDistance } from '../../../utils/distanceFormatters';
 import { COMPONENT_TYPES } from '../../../mock/constans';
 
 const tableIcons = {
@@ -45,10 +46,11 @@ const tableIcons = {
 const BikeComponents = ({
   components, history, location,
 }) => {
+  const { lengthUnit } = useSelector((state) => state.user.units);
   const getActiveComponents = (compArr, active) => compArr.filter((c) => c.retired !== active);
   const formatComponentsData = (compArr) => compArr.map((c) => ({
     ...c,
-    distanceFormatted: format(meterToKm(c.distance), 'KM'),
+    distanceFormatted: formatDistance(c.distance, lengthUnit),
     startDate: c.startDate === '1' ? 'begining' : c.startDate,
     alert: c.alert.on ? 'on' : 'off',
     type: COMPONENT_TYPES.find((type) => type.id === c.type).label.eng,
@@ -139,7 +141,6 @@ BikeComponents.propTypes = {
   components: PropTypes.arrayOf(PropTypes.object).isRequired,
   location: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
-  // bikeId: PropTypes.string.isRequired,
 };
 
 export default withRouter(BikeComponents);

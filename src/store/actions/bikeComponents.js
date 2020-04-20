@@ -1,25 +1,28 @@
 import * as actionTypes from './actionTypes';
 
-export const setDistanceAlert = (compId, endDistance) => ({
+export const setDistanceAlert = (compId, endDistance, lengthUnit) => ({
   type: actionTypes.SET_DISTANCE_ALERT,
   data: {
     compId,
     endDistance,
+    lengthUnit,
   },
 });
-export const addComponent = (componentData, bikeData) => ({
+export const addComponent = (component, bike, lengthUnit) => ({
   type: actionTypes.ADD_COMPONENT,
   data: {
-    bike: bikeData,
-    component: componentData,
+    bike,
+    component,
+    lengthUnit,
   },
 });
 
-export const updateComponentsDistance = (bikeId, distance) => ({
+export const updateComponentsDistance = (bikeId, distance, lengthUnit) => ({
   type: actionTypes.UPDATE_COMPONENTS_DISTANCE,
   data: {
     bikeId,
     distance,
+    lengthUnit,
   },
 });
 

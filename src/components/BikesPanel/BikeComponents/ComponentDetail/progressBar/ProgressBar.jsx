@@ -3,9 +3,11 @@ import PropTypes from 'prop-types';
 import BuildIcon from '@material-ui/icons/Build';
 import useStyles from './progressBar.style';
 import ProgressLine from '../../../../../UX/ProgressLine/ProgressLine';
-import { format, meterToKm } from '../../../../../utils/distanceFormatters';
+import { formatDistance } from '../../../../../utils/distanceFormatters';
 
-const ProgressBar = ({ startDistance, currentDistance, endDistance }) => {
+const ProgressBar = ({
+  startDistance, currentDistance, endDistance, lengthUnit,
+}) => {
   const classes = useStyles();
   const progress = ((currentDistance - startDistance) / (endDistance - startDistance)) * 100;
   const distanceLeft = (endDistance - startDistance) - (currentDistance - startDistance);
@@ -14,7 +16,7 @@ const ProgressBar = ({ startDistance, currentDistance, endDistance }) => {
     alertDescription = (
       <>
         <strong>
-          {format(meterToKm(distanceLeft), 'KM')}
+          {formatDistance(distanceLeft, lengthUnit)}
           {' '}
         </strong>
         <span>left to service alert.</span>
@@ -32,7 +34,7 @@ const ProgressBar = ({ startDistance, currentDistance, endDistance }) => {
         <span>Alert was activated</span>
         {' '}
         <strong>
-          {format(meterToKm(Math.abs(distanceLeft)), 'KM')}
+          {formatDistance(Math.abs(distanceLeft), lengthUnit)}
         </strong>
         {' '}
         <span> ago!</span>
@@ -54,6 +56,7 @@ ProgressBar.propTypes = {
   startDistance: PropTypes.number.isRequired,
   currentDistance: PropTypes.number.isRequired,
   endDistance: PropTypes.number.isRequired,
+  lengthUnit: PropTypes.string.isRequired,
 };
 
 export default ProgressBar;

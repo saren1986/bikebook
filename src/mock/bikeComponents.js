@@ -6,7 +6,7 @@ const bikeComponents = [
     type: '1',
     brand: 'KMC',
     model: 'XC10',
-    weight: 1.01,
+    weight: 1000,
     startDate: '16-12-2019',
     distance: 30000,
     alert: {
@@ -26,7 +26,7 @@ const bikeComponents = [
     type: '2',
     brand: 'Shimano',
     model: '105',
-    weight: 2,
+    weight: 1200,
     startDate: '16-12-2019',
     distance: 30000,
     alert: {
@@ -45,7 +45,7 @@ const bikeComponents = [
     type: '3',
     brand: 'SRAM',
     model: 'DD',
-    weight: 2.05,
+    weight: 2050,
     startDate: '16-12-2019',
     distance: 13000,
     alert: {
@@ -64,7 +64,7 @@ const bikeComponents = [
     type: '4',
     brand: 'KMC',
     model: 'XC10',
-    weight: 3.01,
+    weight: 3010,
     startDate: '11-12-2019',
     distance: 200000,
     alert: {
@@ -83,7 +83,7 @@ const bikeComponents = [
     type: '5',
     brand: 'KMC',
     model: 'XC10',
-    weight: 1.01,
+    weight: 1010,
     startDate: '16-12-2019',
     distance: 2000,
     alert: {
@@ -102,7 +102,7 @@ const bikeComponents = [
     type: '6',
     brand: 'KMC',
     model: 'XC10',
-    weight: 1.01,
+    weight: 3201,
     startDate: '16-12-2019',
     distance: 2000,
     alert: {

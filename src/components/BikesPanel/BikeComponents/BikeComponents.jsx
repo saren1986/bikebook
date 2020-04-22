@@ -85,10 +85,6 @@ const BikeComponents = ({
       },
     });
   };
-  const addNewComponentHandle = () => {
-    history.push(`${location.pathname}/add`);
-  };
-
   return (
     <>
       <MaterialTable
@@ -106,16 +102,6 @@ const BikeComponents = ({
         }
         columns={activeComponentsTable.columns}
         data={activeComponentsTable.data}
-        actions={
-          [
-            {
-              icon: () => <AddBox />,
-              tooltip: 'Add Component',
-              isFreeAction: true,
-              onClick: addNewComponentHandle,
-            },
-          ]
-        }
       />
       {retiredComponents.length ? (
         <MaterialTable

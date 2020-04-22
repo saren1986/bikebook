@@ -20,13 +20,9 @@ const MobileDrawer = ({ open, closeHandler }) => {
         onClick={closeHandler}
         onKeyDown={closeHandler}
       >
-        <List component="nav" aria-labelledby="nested-list-subheader">
-          <BikePanelLinks />
-          <Divider />
-          <BikeItemLinks />
-        </List>
+        <BikePanelLinks />
+        <BikeItemLinks />
       </div>
-
     </Drawer>
 
   );

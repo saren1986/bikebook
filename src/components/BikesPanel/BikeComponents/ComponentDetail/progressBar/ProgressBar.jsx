@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import BuildIcon from '@material-ui/icons/Build';
 import useStyles from './progressBar.style';
 import ProgressLine from '../../../../../UX/ProgressLine/ProgressLine';
-import { formatDistance } from '../../../../../utils/distanceFormatters';
+import { formatDistance, remainDistance } from '../../../../../utils/distanceFormatters';
 
 const ProgressBar = ({
   startDistance, currentDistance, endDistance, lengthUnit,
 }) => {
   const classes = useStyles();
   const progress = ((currentDistance - startDistance) / (endDistance - startDistance)) * 100;
-  const distanceLeft = (endDistance - startDistance) - (currentDistance - startDistance);
+  const distanceLeft = remainDistance(startDistance, currentDistance, endDistance);
   let alertDescription = null;
   if (distanceLeft > 0) {
     alertDescription = (

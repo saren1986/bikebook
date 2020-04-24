@@ -26,7 +26,7 @@ import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import useStyles from './bikeComponents.style';
 // import { useSelector } from 'react-redux';
-import { formatDistance } from '../../../utils/distanceFormatters';
+import { formatDistance, remainDistance } from '../../../utils/distanceFormatters';
 import { COMPONENT_TYPES } from '../../../mock/constans';
 
 const tableIcons = {
@@ -86,7 +86,17 @@ const BikeComponents = ({
     ...c,
     distanceFormatted: formatDistance(c.distance, lengthUnit),
     startDate: c.startDate === '1' ? 'begining' : c.startDate,
-    alert: c.alert.on ? 'on' : 'off',
+    alert: c.alert.on ? (
+      <span>
+        {
+        formatDistance(
+          remainDistance(c.alert.startDistance, c.distance, c.alert.endDistance), lengthUnit,
+        )
+        }
+        {' '}
+        left
+      </span>
+    ) : 'no set',
     type: COMPONENT_TYPES.find((type) => type.id === c.type).label.eng,
   }));
   const activeComponents = getActiveComponents(components, true);
@@ -96,12 +106,11 @@ const BikeComponents = ({
       { field: 'brand', title: 'Brand' },
       { field: 'distanceFormatted', title: 'Distance' },
       { field: 'startDate', title: 'On bike since' },
-      { field: 'alert', title: 'alert' },
+      { field: 'alert', title: 'Service Alert' },
     ],
     data: formatComponentsData(activeComponents),
   } : {};
   const retiredComponents = getActiveComponents(components, false);
-  console.log(retiredComponents);
   const retiredComponentsTable = retiredComponents.length ? {
     columns: [
       { field: 'type', title: 'Type' },

@@ -10,7 +10,7 @@ const BikeTile = ({ bike, click }) => {
   const classes = useStyles();
   const { lengthUnit } = useSelector((state) => state.user.units);
   return (
-    <Grid item md={4}>
+    <Grid item md={4} xs={12}>
       <button type="button" className={classes.wrapper} onClick={click}>
         <div className={classes.top}>
           <span className={classes.name}>{bike.name}</span>

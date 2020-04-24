@@ -1,7 +1,5 @@
 import React from 'react';
 import Drawer from '@material-ui/core/Drawer';
-import Divider from '@material-ui/core/Divider';
-import List from '@material-ui/core/List';
 import useStyles from './mobileDrawer.style';
 import BikeItemLinks from '../../BikesPanel/BikeItem/BikeItemLinks/BikeItemLinks';
 import BikePanelLinks from '../../BikesPanel/Links/BikePanelLinks';

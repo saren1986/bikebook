@@ -11,7 +11,7 @@ import useStyles from './bikeItem.style';
 import * as actions from '../../../store/actions/index';
 import AddDistance from '../AddDistance/AddDistance';
 import ComponentDetail from '../BikeComponents/ComponentDetail/ComponentDetail';
-
+import BikeInfo from '../BikeInfo/BikeInfo';
 
 const BikeItem = ({ match }) => {
   const classes = useStyles();
@@ -41,6 +41,9 @@ const BikeItem = ({ match }) => {
             <BikeComponents
               components={components}
             />
+          </Route>
+          <Route path={`${match.path}/info`}>
+            <BikeInfo bike={bike} />
           </Route>
           <Route exact path={`${match.path}/add-distance`}>
             <AddDistance

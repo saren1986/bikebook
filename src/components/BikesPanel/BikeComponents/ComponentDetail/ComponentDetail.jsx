@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import ProgressBar from './progressBar/ProgressBar';
 import ComponentControls from './ComponentControls/ComponentControls';
-import SetAlert from '../SetAlert/SetAlert';
+import SetAlert from '../Alert/SetAlert/SetAlert';
 import * as actions from '../../../../store/actions/index';
 import useStyles from './componentDetailStyle';
 import DrawerSmall from '../../../../UX/DrawerSmall/DrawerSmall';

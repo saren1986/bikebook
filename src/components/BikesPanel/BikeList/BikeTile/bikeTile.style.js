@@ -4,7 +4,7 @@ const useStyles = makeStyles((theme) => ({
   wrapper: {
     border: '1px solid #ccc',
     padding: '15px',
-    minHeight: '200px',
+    minHeight: '100px',
     display: 'block',
     textDecoration: 'none',
     textAlign: 'center',

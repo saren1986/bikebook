@@ -16,7 +16,7 @@ const AddComponent = ({ bikeId, history }) => {
   const classes = useStyle();
   const dispatch = useDispatch();
   const bikes = useSelector((state) => state.bikes.list);
-  const lengthUnit = useSelector((state) => state.user.lengthUnit);
+  const { lengthUnit } = useSelector((state) => state.user.units);
   const [newComponentValue, setNewComponentValue] = useState({
     type: '',
     brand: '',
@@ -162,7 +162,7 @@ const AddComponent = ({ bikeId, history }) => {
               ))}
             </Styled.Input>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12}>
             <Styled.Input
               id="initialDistance"
               label={`Initial Distance / ${lengthUnit}`}

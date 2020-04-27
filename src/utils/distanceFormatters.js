@@ -32,3 +32,6 @@ export const formatDistance = (distance, units) => {
   }
   return distance;
 };
+
+
+export const remainDistance = (stDist, curDist, endDist) => (endDist - stDist) - (curDist - stDist);

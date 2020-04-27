@@ -2,16 +2,16 @@ import React, { useEffect } from 'react';
 import {
   Route, withRouter, Redirect, Switch,
 } from 'react-router-dom';
-import { Typography } from '@material-ui/core';
+
 import { useSelector, useDispatch } from 'react-redux';
 import BikeComponents from '../BikeComponents/BikeComponents';
 import AddComponent from '../BikeComponents/AddComponent/AddComponent';
 import useStyles from './bikeItem.style';
-import { formatDistance } from '../../../utils/distanceFormatters';
+
 import * as actions from '../../../store/actions/index';
 import AddDistance from '../AddDistance/AddDistance';
 import ComponentDetail from '../BikeComponents/ComponentDetail/ComponentDetail';
-
+import BikeInfo from '../BikeInfo/BikeInfo';
 
 const BikeItem = ({ match }) => {
   const classes = useStyles();
@@ -25,25 +25,6 @@ const BikeItem = ({ match }) => {
 
   const renderBikeItem = bikeId ? (
     <div className={classes.wrapper}>
-      <div className={classes.bikeItemHeader}>
-        <Typography
-          variant="h2"
-          component="h2"
-          className={classes.title}
-        >
-          {bike.name}
-        </Typography>
-        <div className={classes.topInfo}>
-          <div className={classes.topInfoItem}>
-            <span>
-              Distance:
-              {' '}
-              <strong>{formatDistance(bike.distance, lengthUnit)}</strong>
-            </span>
-          </div>
-        </div>
-      </div>
-
       <div className={classes.bikeItemView}>
         <Switch>
           <Route path={`${match.path}/components/add`}>
@@ -60,6 +41,9 @@ const BikeItem = ({ match }) => {
             <BikeComponents
               components={components}
             />
+          </Route>
+          <Route path={`${match.path}/info`}>
+            <BikeInfo bike={bike} />
           </Route>
           <Route exact path={`${match.path}/add-distance`}>
             <AddDistance

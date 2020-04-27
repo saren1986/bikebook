@@ -1,51 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import BuildIcon from '@material-ui/icons/Build';
 import useStyles from './progressBar.style';
 import ProgressLine from '../../../../../UX/ProgressLine/ProgressLine';
-import { formatDistance } from '../../../../../utils/distanceFormatters';
+import { remainDistance } from '../../../../../utils/distanceFormatters';
+import AlertMessage from '../../Alert/Message/Message';
 
 const ProgressBar = ({
   startDistance, currentDistance, endDistance, lengthUnit,
 }) => {
   const classes = useStyles();
   const progress = ((currentDistance - startDistance) / (endDistance - startDistance)) * 100;
-  const distanceLeft = (endDistance - startDistance) - (currentDistance - startDistance);
-  let alertDescription = null;
-  if (distanceLeft > 0) {
-    alertDescription = (
-      <>
-        <strong>
-          {formatDistance(distanceLeft, lengthUnit)}
-          {' '}
-        </strong>
-        <span>left to service alert.</span>
-      </>
-    );
-  } else if (distanceLeft === 0) {
-    alertDescription = (
-      <>
-        <strong>Alert is active!</strong>
-      </>
-    );
-  } else {
-    alertDescription = (
-      <>
-        <span>Alert was activated</span>
-        {' '}
-        <strong>
-          {formatDistance(Math.abs(distanceLeft), lengthUnit)}
-        </strong>
-        {' '}
-        <span> ago!</span>
-      </>
-    );
-  }
+  const distanceLeft = remainDistance(startDistance, currentDistance, endDistance);
   return (
     <div className={classes.wrapper}>
       <div className={classes.alertInfo}>
-        <BuildIcon />
-        {alertDescription}
+        <AlertMessage remainDistance={distanceLeft} lengthUnit={lengthUnit}/>
       </div>
       <ProgressLine progress={progress} />
     </div>

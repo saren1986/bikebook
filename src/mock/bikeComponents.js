@@ -8,7 +8,7 @@ const bikeComponents = [
     model: 'XC10',
     weight: 1000,
     startDate: '16-12-2019',
-    distance: 30000,
+    distance: 530000,
     alert: {
       on: true,
       startDistance: 20000,

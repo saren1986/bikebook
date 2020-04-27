@@ -25,6 +25,7 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import useStyles from './bikeComponents.style';
+import AlertMessage from './Alert/Message/Message';
 // import { useSelector } from 'react-redux';
 import { formatDistance, remainDistance } from '../../../utils/distanceFormatters';
 import { COMPONENT_TYPES } from '../../../mock/constans';
@@ -87,15 +88,11 @@ const BikeComponents = ({
     distanceFormatted: formatDistance(c.distance, lengthUnit),
     startDate: c.startDate === '1' ? 'begining' : c.startDate,
     alert: c.alert.on ? (
-      <span>
-        {
-        formatDistance(
-          remainDistance(c.alert.startDistance, c.distance, c.alert.endDistance), lengthUnit,
-        )
-        }
-        {' '}
-        left
-      </span>
+      <AlertMessage
+        remainDistance={remainDistance(c.alert.startDistance, c.distance, c.alert.endDistance)}
+        lengthUnit={lengthUnit}
+        short
+      />
     ) : 'no set',
     type: COMPONENT_TYPES.find((type) => type.id === c.type).label.eng,
   }));

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import PropTypes from 'prop-types';
-import * as Styled from '../../../../styled/styled';
+import * as Styled from '../../../../../styled/styled';
 
 const SetAlert = ({ setAlert, active, lengthUnit }) => {
   const [inputValue, setInputValue] = useState('');

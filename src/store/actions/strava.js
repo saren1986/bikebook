@@ -1,3 +1,4 @@
+
 import axios from 'axios';
 import stravaApi from 'strava-v3';
 import * as actionTypes from './actionTypes';
@@ -68,10 +69,10 @@ export const stravaGetAthlete = (token) => (dispatch) => {
     });
 };
 
-export const stravaSync = (code, scope) => (dispatch) => {
+export const stravaSync = (code) => (dispatch) => {
   const queryData = {
-    client_id: '',
-    client_secret: '',
+    client_id: process.env.REACT_APP_STRAVA_CLIENT_ID,
+    client_secret: process.env.REACT_APP_STRAVA_CLIENT_SECRET,
     code,
     grant_type: 'authorization_code',
   };
@@ -93,7 +94,7 @@ export const stravaSync = (code, scope) => (dispatch) => {
       dispatch(stravaSyncEnd());
     })
     .catch((error) => {
-      Console.log(error);
+      console.log(error);
       dispatch(stravaSyncFailed(error.response.data.message));
     });
 };

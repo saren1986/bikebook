@@ -19,6 +19,7 @@ import * as bikesData from '../../mock/constans';
 
 const BikesPanel = () => {
   const bikeList = useSelector((state) => state.bikes.list);
+  console.log('test', process.env.REACT_APP_STRAVA_CLIENT_ID)
   return (
     <ControlLayout>
       <BikesNav />

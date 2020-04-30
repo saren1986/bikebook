@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { addBike, setActiveBike } from '../../../store/actions/index';
 import * as Styled from '../../../styled/styled';
+import { distanceLargeToSmall } from '../../../utils/distanceFormatters';
 
 
 const AddBike = ({ bikeTypes, history }) => {
@@ -28,10 +29,17 @@ const AddBike = ({ bikeTypes, history }) => {
   };
 
   const addNewBikeHandler = () => {
-    dispatch(addBike(newBikeValues, lengthUnit));
+    dispatch(
+      addBike(
+        {
+          ...newBikeValues,
+          distance: distanceLargeToSmall(newBikeValues.distance, lengthUnit),
+        },
+      ),
+    );
     dispatch(setActiveBike(newBikeValues.id));
     history.push('/bike');
-    //TODO ustawianie aktywnego bike'a po zwrotce z serwera
+    // TODO ustawianie aktywnego bike'a po zwrotce z serwera
   };
 
   return (

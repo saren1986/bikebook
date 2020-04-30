@@ -14,3 +14,7 @@ export {
   openConfirmDialog,
   closeConfirmDialog,
 } from './ux';
+export {
+  stravaSync,
+  stravaSyncStart,
+} from './strava';

@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 
 import axios from 'axios';
 import stravaApi from 'strava-v3';
@@ -17,6 +18,12 @@ export const stravaUpdateAthlete = (athlete) => ({
     athlete,
   },
 });
+export const stravaUpdateBikes = (bikes) => ({
+  type: actionTypes.STRAVA_UPDATE_BIKES,
+  data: {
+    bikes,
+  },
+});
 export const stravaUpdateAuth = (auth) => ({
   type: actionTypes.STRAVA_UPDATE_AUTH,
   data: {
@@ -30,42 +37,50 @@ const stravaSyncFailed = (error) => ({
   },
 });
 
-
-export const stravaGetBike = (token, stravaBikeId) => (dispatch) => {
+export const stravaGetBike = (stravaBikesId, token, history) => async (dispatch) => {
   const strava = new stravaApi.client(token);
-  strava.gear.get({
-    id: stravaBikeId,
-  },
-  (err, payload, limits) => {
-    if (payload) {
+  const results = [];
+  for (const id of stravaBikesId) {
+    results.push(strava.gear.get({
+      id,
+    }));
+  }
+  const responses = await Promise.all(results)
+    .catch((err) => {
+      dispatch(stravaSyncFailed(err.error.message));
+    });
+  if (responses) {
+    for (const response of responses) {
       const bike = {
-        stravaID: payload.id,
-        name: payload.name,
-        distance: payload.distance,
-        brand: payload.brand_name,
-        model: payload.model_name,
-        type: `${payload.frame_type}`,
-        description: payload.description,
+        stravaId: response.id,
+        name: response.name,
+        distance: response.distance,
+        brand: response.brand_name,
+        model: response.model_name,
+        type: `${response.frame_type}`,
+        description: response.description,
         retired: false,
         frameWeight: null,
       };
       dispatch(addBike(bike, 'km'));
-    } else if (err) {
-      dispatch(stravaSyncFailed(err.error.message));
     }
-  });
+    history.push('/bike-list');
+  }
+  dispatch(stravaSyncEnd());
 };
 
-export const stravaGetAthlete = (token) => (dispatch) => {
+export const stravaGetAthlete = (token, onlyBikeList = false) => (dispatch) => {
   const strava = new stravaApi.client(token);
   strava.athlete.get({},
-    (err, payload, limits) => {
-      if (payload) {
+    (err, payload) => {
+      if (payload && onlyBikeList) {
+        dispatch(stravaUpdateBikes(payload.bikes));
+      } else if (payload) {
         dispatch(stravaUpdateAthlete(payload));
-        // dispatch(stravaGetBike(token, payload.bikes[0].id));
       } else if (err) {
         dispatch(stravaSyncFailed(err.error.message));
       }
+      dispatch(stravaSyncEnd());
     });
 };
 
@@ -88,7 +103,7 @@ export const stravaSync = (code) => (dispatch) => {
         refreshToken: refresh_token,
         tokenType: token_type,
       };
-      localStorage.setItem('b-auth', JSON.stringify(auth));
+      localStorage.setItem('s-auth', JSON.stringify(auth));
       dispatch(stravaGetAthlete(auth.accessToken));
       dispatch(stravaUpdateAuth(auth));
       dispatch(stravaSyncEnd());
@@ -97,4 +112,11 @@ export const stravaSync = (code) => (dispatch) => {
       console.log(error);
       dispatch(stravaSyncFailed(error.response.data.message));
     });
+};
+
+export const checkStravaAuth = () => (dispatch) => {
+  const sAuth = localStorage.getItem('s-auth');
+  if (sAuth) {
+    dispatch(stravaUpdateAuth(JSON.parse(sAuth)));
+  }
 };

@@ -1,16 +1,21 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
 import { withRouter } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { BtnWrapper, Btn } from '../../../../styled/styled';
 import { STRAVA_SYNC_URL } from '../../../../CONST';
 
 
 const BikeListControls = ({ history }) => {
+  const isStravaSync = useSelector((state) => state.strava.sync);
   const addNewBikeClickHandler = () => {
     history.push('/bike/add');
   };
   const stravaClickHandler = () => {
-    window.location = STRAVA_SYNC_URL;
+    if (isStravaSync) {
+      history.push('/strava');
+    } else {
+      window.location = STRAVA_SYNC_URL;
+    }
   };
   return (
     <BtnWrapper>

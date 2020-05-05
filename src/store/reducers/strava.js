@@ -53,7 +53,13 @@ const stravaUpdateAthlete = (state, action) => {
       measurementPreference: measurement_preference,
     },
     bikes: action.data.athlete.bikes,
+  };
+};
 
+const stravaUpdateBikes = (state, action) => {
+  return {
+    ...state,
+    bikes: action.data.bikes,
   };
 };
 
@@ -93,6 +99,7 @@ const stravaSyncFailed = (state, action) => ({
 const reducer = (state = defaultState, action) => {
   switch (action.type) {
     case actionTypes.STRAVA_UPDATE_ATHLETE: return stravaUpdateAthlete(state, action);
+    case actionTypes.STRAVA_UPDATE_BIKES: return stravaUpdateBikes(state, action);
     case actionTypes.STRAVA_UPDATE_AUTH: return stravaUpdateAuth(state, action);
     case actionTypes.STRAVA_SYNC_START: return stravaSyncStart(state);
     case actionTypes.STRAVA_SYNC_END: return stravaSyncEnd(state);

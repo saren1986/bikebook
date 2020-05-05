@@ -17,4 +17,7 @@ export {
 export {
   stravaSync,
   stravaSyncStart,
+  stravaGetBike,
+  checkStravaAuth,
+  stravaGetAthlete,
 } from './strava';

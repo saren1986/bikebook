@@ -1,9 +1,8 @@
 const bikes = [
   {
     id: 'b1',
-    StravaID: 'b1145059',
-    name: 'KTM',
-    // resource_state: 3,
+    stravaId: null,
+    name: 'rakieta',
     distance: 11058280,
     brand: 'KTM',
     model: 'Strada',
@@ -14,9 +13,8 @@ const bikes = [
   },
   {
     id: 'b2',
-    StravaID: 'b1145059',
+    stravaId: null,
     name: 'ROWEREK',
-    // resource_state: 3,
     distance: 0,
     brand: null,
     model: null,
@@ -27,9 +25,8 @@ const bikes = [
   },
   {
     id: 'b3',
-    StravaID: 'b1145059',
+    stravaId: null,
     name: 'STRZAŁA',
-    // resource_state: 3,
     distance: 10000,
     brand: 'KTM',
     model: null,

@@ -6,7 +6,6 @@ export const Header = styled('div')({
   justifyContent: 'center',
   alignItems: 'center',
   padding: '15px',
-  margin: '10px',
   fontSize: '18px',
   fontWeight: '600',
 });
@@ -15,10 +14,26 @@ export const Input = styled(TextField)({
   width: '100%',
 });
 
-export const BtnWrapper = styled('div')({
+export const BtnWrapper = styled('div')(({ theme }) => ({
   textAlign: 'right',
-  marginTop: '30px',
-});
+  marginTop: '15px',
+  margin: '10px 0',
+  [theme.breakpoints.up('sm')]: {
+    '& > button:not(:only-child)': {
+      marginLeft: '15px',
+      marginTop: '30px',
+    },
+  },
+}));
+export const Btn = styled(Button)(({ theme }) => ({
+  width: '100%',
+  marginBottom: '10px',
+  [theme.breakpoints.up('sm')]: {
+    marginBottom: '0px',
+    width: 'auto',
+  },
+
+}));
 export const SmallForm = styled('div')({
   display: 'flex',
   flexWrap: 'wrap',
@@ -40,9 +55,4 @@ export const Placeholder = styled('div')(({ theme }) => ({
     padding: '15px',
   },
 }));
-export const Btn = styled(Button)({
-  width: '100%',
-  '@media(min-width: 600px)': {
-    width: 'auto',
-  },
-});
+

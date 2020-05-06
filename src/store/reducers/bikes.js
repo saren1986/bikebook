@@ -4,7 +4,7 @@ import * as format from '../../utils/distanceFormatters';
 
 const defaultState = {
   list: bikes,
-  activeBike: 'b1',
+  activeBike: null,
 };
 const setActiveBike = (state, action) => ({
   ...state,
@@ -12,7 +12,7 @@ const setActiveBike = (state, action) => ({
 });
 
 const addBike = (state, action) => {
-  const { bike, lengthUnit } = action.data;
+  const { bike } = action.data;
   return {
     ...state,
     list: [
@@ -21,7 +21,7 @@ const addBike = (state, action) => {
         id: 'b100', //TODO nowy bikeID z serwera
         ...bike,
         retired: false,
-        distance: format.distanceLargeToSmall(bike.distance, lengthUnit),
+        distance: bike.distance,
       },
     ],
   };

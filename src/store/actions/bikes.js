@@ -6,11 +6,10 @@ export const setActiveBike = (bikeId) => ({
   id: bikeId,
 });
 
-export const addBike = (bike, lengthUnit) => ({
+export const addBike = (bike) => ({
   type: actionTypes.ADD_BIKE,
   data: {
     bike,
-    lengthUnit,
   },
 });
 

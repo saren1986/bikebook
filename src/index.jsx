@@ -5,6 +5,8 @@ import store from './store/store';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+require('dotenv').config();
+
 const BikeBookApp = (
   <Provider store={store}>
     <App />

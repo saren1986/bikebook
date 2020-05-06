@@ -29,6 +29,7 @@ const Strava = () => {
         && scopeArr.indexOf('profile:read_all') !== -1) {
         dispatch(stravaSyncStart());
         dispatch(stravaSync(code, scope));
+        setUpdateBox(false);
       } else {
         setReqScopes(<div>You have to give access to all require scopes</div>);
         dispatch(openConfirmDialog(

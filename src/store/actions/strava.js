@@ -84,6 +84,22 @@ export const stravaGetAthlete = (token, onlyBikeList = false) => (dispatch) => {
     });
 };
 
+export const updateStravaAuthData = (response, dispatch) => {
+  const {
+    access_token, expires_at, expires_in, refresh_token, token_type,
+  } = response.data;
+  const auth = {
+    accessToken: access_token,
+    expiresAt: expires_at * 1000,
+    expiresIn: expires_in,
+    refreshToken: refresh_token,
+    tokenType: token_type,
+  };
+  localStorage.setItem('s-auth', JSON.stringify(auth));
+  dispatch(stravaUpdateAuth(auth));
+  return auth;
+};
+
 export const stravaSync = (code) => (dispatch) => {
   const queryData = {
     client_id: process.env.REACT_APP_STRAVA_CLIENT_ID,
@@ -93,30 +109,36 @@ export const stravaSync = (code) => (dispatch) => {
   };
   axios.post('https://www.strava.com/oauth/token', queryData)
     .then((response) => {
-      const {
-        access_token, expires_at, expires_in, refresh_token, token_type,
-      } = response.data;
-      const auth = {
-        accessToken: access_token,
-        expiresAt: expires_at,
-        expiresIn: expires_in,
-        refreshToken: refresh_token,
-        tokenType: token_type,
-      };
-      localStorage.setItem('s-auth', JSON.stringify(auth));
+      const auth = updateStravaAuthData(response, dispatch);
       dispatch(stravaGetAthlete(auth.accessToken));
-      dispatch(stravaUpdateAuth(auth));
       dispatch(stravaSyncEnd());
     })
     .catch((error) => {
-      console.log(error);
       dispatch(stravaSyncFailed(error.response.data.message));
     });
 };
 
 export const checkStravaAuth = () => (dispatch) => {
-  const sAuth = localStorage.getItem('s-auth');
-  if (sAuth) {
-    dispatch(stravaUpdateAuth(JSON.parse(sAuth)));
+  const storageAuth = localStorage.getItem('s-auth');
+  if (storageAuth) {
+    const sAuth = JSON.parse(storageAuth);
+    const { expiresAt, refreshToken } = sAuth;
+    if (new Date().getTime() > expiresAt) {
+      const queryData = {
+        client_id: process.env.REACT_APP_STRAVA_CLIENT_ID,
+        client_secret: process.env.REACT_APP_STRAVA_CLIENT_SECRET,
+        refresh_token: refreshToken,
+        grant_type: 'refresh_token',
+      };
+      axios.post('https://www.strava.com/oauth/token', queryData)
+        .then((response) => {
+          updateStravaAuthData(response, dispatch);
+        })
+        .catch((error) => {
+          dispatch(stravaSyncFailed(error.response.data.message));
+        });
+    } else {
+      dispatch(stravaUpdateAuth(sAuth));
+    }
   }
 };

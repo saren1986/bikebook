@@ -14,6 +14,7 @@ import CheckIcon from '@material-ui/icons/Check';
 import { formatDistance } from '../../../../utils/distanceFormatters';
 import { BtnWrapper, Btn } from '../../../../styled/styled';
 import { stravaGetBike, stravaSyncStart } from '../../../../store/actions/index';
+import InfoBox from '../../../../UX/InfoBox/InfoBox';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -100,9 +101,9 @@ const BikesSync = ({ bikes, history }) => {
       >
         {stravaBikeList}
       </List>
-      <div className={classes.validateText}>
+      <InfoBox type={isValidate ? 'normal' : 'error'}>
         {isValidate ? null : 'You have to select at least one bike!'}
-      </div>
+      </InfoBox>
       <BtnWrapper>
         <Btn variant="outlined" color="primary" onClick={clickHandler}>
           Import

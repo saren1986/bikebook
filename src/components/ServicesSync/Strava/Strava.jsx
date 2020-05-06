@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Typography from '@material-ui/core/Typography';
+
 import {
   stravaSync, stravaSyncStart, openConfirmDialog, stravaGetAthlete,
 } from '../../../store/actions/index';
 import Spiner from '../../../UX/Spinner/Spinner';
+import InfoBox from '../../../UX/InfoBox/InfoBox';
 import { Header, BtnWrapper, Btn } from '../../../styled/styled';
 import BikeSync from './BikesSync/BikesSync';
 import { STRAVA_SYNC_URL } from '../../../CONST';
@@ -18,9 +19,10 @@ const Strava = () => {
   const { startSync, error } = useSelector(((state) => state.strava));
   const isStravaSync = useSelector(((state) => state.strava.sync));
   const { bikes } = useSelector(((state) => state.strava));
-
-  const [reqScopes, setReqScopes] = useState(null);
   const [updateBox, setUpdateBox] = useState(true);
+  const stravaSyncHandler = () => {
+    window.location = STRAVA_SYNC_URL;
+  };
   useEffect(() => {
     if (!isStravaSync && scope) {
       const scopeArr = scope.split(',');
@@ -31,16 +33,12 @@ const Strava = () => {
         dispatch(stravaSync(code, scope));
         setUpdateBox(false);
       } else {
-        setReqScopes(<div>You have to give access to all require scopes</div>);
         dispatch(openConfirmDialog(
-          'Insufficient permissions', 'You must grant all permissions. Try again?', () => {
-            window.location = STRAVA_SYNC_URL;
-          },
+          'Insufficient permissions', 'You must grant all permissions. Try again?', stravaSyncHandler
         ));
       }
     }
   }, [isStravaSync]);
-
   const updateClickHandler = () => {
     setUpdateBox(false);
     dispatch(stravaSyncStart());
@@ -54,13 +52,10 @@ const Strava = () => {
   if (isStravaSync && !startSync && updateBox) {
     content = (
       <div>
-        <Typography variant="subtitle1" component="div">
+        <InfoBox type="info">
           Your account is already synchronized with Strava
-        </Typography>
+        </InfoBox>
         <BtnWrapper>
-          {/* <Btn variant="outlined" color="warning">
-            Unlink
-          </Btn> */}
           <Btn variant="outlined" color="primary" onClick={updateClickHandler}>
             Check for update
           </Btn>
@@ -70,7 +65,9 @@ const Strava = () => {
   } else if (startSync) {
     content = (
       <div>
-        Fetching data from Strava... Please wait.
+        <InfoBox type="normal">
+          Fetching data from Strava... Please wait.
+        </InfoBox>
         <Spiner />
       </div>
     );
@@ -78,8 +75,20 @@ const Strava = () => {
     content = (
       <div>
         {bikesSelect}
-        {reqScopes}
       </div>
+    );
+  } else {
+    content = (
+      <>
+        <InfoBox type="warning">
+          Strava synchronization is not enabled
+        </InfoBox>
+        <BtnWrapper>
+          <Btn variant="outlined" color="primary" onClick={stravaSyncHandler}>
+            Sync with Strava
+          </Btn>
+        </BtnWrapper>
+      </>
     );
   }
   return (

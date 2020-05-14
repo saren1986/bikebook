@@ -59,7 +59,7 @@ const BikesSync = ({ bikes, history }) => {
   };
   const stravaBikeList = bikes.map((bike) => {
     const labelId = `checkbox-list-label-${bike.name}`;
-    const isBike = bikesList.findIndex((appBike) => appBike.stravaId === bike.id);
+    const isBike = bikesList.findIndex((appBike) => appBike.id === bike.id);
     if (isBike !== -1) {
       return (
         <ListItem key={bike.id} role={undefined}>

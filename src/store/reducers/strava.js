@@ -69,7 +69,6 @@ const stravaUpdateAuth = (state, action) => {
   } = action.data.auth;
   return {
     ...state,
-    sync: true,
     auth: {
       accessToken,
       expiresAt,

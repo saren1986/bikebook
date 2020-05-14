@@ -20,4 +20,6 @@ export {
   stravaGetBike,
   checkStravaAuth,
   stravaGetAthlete,
+  stravaGetActivities,
+  stravaCheckForUpdate,
 } from './strava';

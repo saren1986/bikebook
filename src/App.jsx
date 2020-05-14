@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import 'typeface-roboto';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -11,9 +11,7 @@ import theme from './theme';
 
 const App = () => {
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(checkStravaAuth());
-  }, []);
+  dispatch(checkStravaAuth());
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

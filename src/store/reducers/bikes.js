@@ -18,7 +18,7 @@ const addBike = (state, action) => {
     list: [
       ...state.list,
       {
-        id: 'b100', //TODO nowy bikeID z serwera
+        // id: 'b100', //TODO nowy bikeID z serwera
         ...bike,
         retired: false,
         distance: bike.distance,

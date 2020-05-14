@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import BikeTile from './BikeTile/BikeTile';
 import BikeListControls from './BikeListControls/BikeListControls';
 import Spinner from '../../../UX/Spinner/Spinner';
+import { Header } from '../../../styled/styled';
 import * as actions from '../../../store/actions/index';
 
 const BikeList = ({ history }) => {
@@ -28,6 +29,7 @@ const BikeList = ({ history }) => {
 
   return (
     <>
+      <Header>Your Bikes</Header>
       <div>
         <Grid container spacing={2}>
           {renderedBikeList}

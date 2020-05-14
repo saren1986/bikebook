@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
-  stravaSync, stravaSyncStart, openConfirmDialog, stravaGetAthlete,
+  stravaSync, stravaCheckForUpdate, stravaSyncStart, openConfirmDialog, stravaGetAthlete, checkStravaAuth,
 } from '../../../store/actions/index';
 import Spiner from '../../../UX/Spinner/Spinner';
 import InfoBox from '../../../UX/InfoBox/InfoBox';
@@ -11,45 +11,49 @@ import BikeSync from './BikesSync/BikesSync';
 import { STRAVA_SYNC_URL } from '../../../CONST';
 
 const Strava = () => {
+  const token = useSelector((state) => state.strava.auth.accessToken);
   const dispatch = useDispatch();
   const urlParams = new URLSearchParams(window.location.search);
   const code = urlParams.get('code');
   const scope = urlParams.get('scope');
-  const token = useSelector((state) => state.strava.auth.accessToken);
   const { startSync, error } = useSelector(((state) => state.strava));
-  const isStravaSync = useSelector(((state) => state.strava.sync));
+  const athlete = useSelector(((state) => !!state.strava.athlete.id));
+  const activities = useSelector(((state) => state.activities));
   const { bikes } = useSelector(((state) => state.strava));
+
   const [updateBox, setUpdateBox] = useState(true);
   const stravaSyncHandler = () => {
     window.location = STRAVA_SYNC_URL;
   };
   useEffect(() => {
-    if (!isStravaSync && scope) {
+    if (!token && scope) {
       const scopeArr = scope.split(',');
       if (scopeArr.indexOf('read') !== -1
         && scopeArr.indexOf('read_all') !== -1
-        && scopeArr.indexOf('profile:read_all') !== -1) {
-        dispatch(stravaSyncStart());
+        && scopeArr.indexOf('profile:read_all') !== -1
+        && scopeArr.indexOf('activity:read_all') !== -1) {
         dispatch(stravaSync(code, scope));
         setUpdateBox(false);
       } else {
         dispatch(openConfirmDialog(
-          'Insufficient permissions', 'You must grant all permissions. Try again?', stravaSyncHandler
+          'Insufficient permissions', 'You must grant all permissions. Try again?', stravaSyncHandler,
         ));
       }
+    } else if (!athlete && token) {
+      dispatch(stravaCheckForUpdate(token));
     }
-  }, [isStravaSync]);
+  }, []);
+
   const updateClickHandler = () => {
     setUpdateBox(false);
-    dispatch(stravaSyncStart());
-    dispatch(stravaGetAthlete(token, true));
+    dispatch(stravaCheckForUpdate(token, activities));
   };
   let bikesSelect = null;
   if (bikes && !error && !startSync) {
     bikesSelect = <BikeSync bikes={bikes} />;
   }
   let content = null;
-  if (isStravaSync && !startSync && updateBox) {
+  if (athlete && !startSync && updateBox) {
     content = (
       <div>
         <InfoBox type="info">
@@ -80,9 +84,16 @@ const Strava = () => {
   } else {
     content = (
       <>
-        <InfoBox type="warning">
-          Strava synchronization is not enabled
-        </InfoBox>
+        {error ? (
+          <InfoBox type="error">
+            {error}
+          </InfoBox>
+        ) : (
+          <InfoBox type="warning">
+            Strava synchronization is not enabled
+          </InfoBox>
+        )}
+
         <BtnWrapper>
           <Btn variant="outlined" color="primary" onClick={stravaSyncHandler}>
             Sync with Strava

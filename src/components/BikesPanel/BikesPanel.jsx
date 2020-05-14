@@ -11,6 +11,8 @@ import ControlLayout from '../Layouts/ControlLayout/ControlLayout';
 import BikeList from './BikeList/BikeList';
 import Spinner from '../../UX/Spinner/Spinner';
 import Strava from '../ServicesSync/Strava/Strava';
+import Activities from './Activities/Activities';
+
 import * as bikesData from '../../mock/constans';
 
 
@@ -21,6 +23,9 @@ const BikesPanel = () => {
       <BikesNav />
       {bikeList ? (
         <Switch>
+          <Route path="/activities">
+            <Activities />
+          </Route>
           <Route path="/bike-list">
             <BikeList />
           </Route>

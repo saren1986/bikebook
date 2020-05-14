@@ -6,12 +6,12 @@ import { STRAVA_SYNC_URL } from '../../../../CONST';
 
 
 const BikeListControls = ({ history }) => {
-  const isStravaSync = useSelector((state) => state.strava.sync);
+  const isStravaAuth = useSelector((state) => !!state.strava.auth.accessToken);
   const addNewBikeClickHandler = () => {
     history.push('/bike/add');
   };
   const stravaClickHandler = () => {
-    if (isStravaSync) {
+    if (isStravaAuth) {
       history.push('/strava');
     } else {
       window.location = STRAVA_SYNC_URL;

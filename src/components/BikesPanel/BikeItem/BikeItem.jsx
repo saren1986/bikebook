@@ -42,7 +42,7 @@ const BikeItem = ({ match }) => {
               components={components}
             />
           </Route>
-          <Route path={`${match.path}/info`}>
+          <Route path={[`${match.path}/info`, `${match.path}`]}>
             <BikeInfo bike={bike} />
           </Route>
           <Route exact path={`${match.path}/add-distance`}>
@@ -51,7 +51,7 @@ const BikeItem = ({ match }) => {
               lengthUnit={lengthUnit}
             />
           </Route>
-          <Redirect exact from="/bike" to={`${match.path}/components`} />
+          {/* <Redirect exact from="/bike" to={`${match.path}/components`} /> */}
         </Switch>
       </div>
     </div>

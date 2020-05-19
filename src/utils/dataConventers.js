@@ -27,5 +27,5 @@ export const convertStravaBike = (bike) => ({
   type: `${bike.frame_type}`,
   description: bike.description,
   retired: false,
-  frameWeight: null,
+  frameWeight: '',
 });

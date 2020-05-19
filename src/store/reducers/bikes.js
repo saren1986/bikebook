@@ -27,6 +27,24 @@ const addBike = (state, action) => {
   };
 };
 
+const editBike = (state, action) => {
+  const { bike } = action.data;
+  const bikeList = state.list.map((b) => {
+    if (b.id === bike.id) {
+      return {
+        ...bike,
+        retired: false,
+        distance: b.distance,
+      };
+    }
+    return b;
+  });
+  return {
+    ...state,
+    list: bikeList,
+  };
+};
+
 const addDistance = (state, action) => {
   const newDistance = format.distanceLargeToSmall(action.data.distance, action.data.lengthUnit);
   const newBikeList = state.list.map((bike) => {
@@ -48,7 +66,10 @@ const addDistance = (state, action) => {
 const reducer = (state = defaultState, action) => {
   switch (action.type) {
     case actionTypes.ADD_BIKE: return addBike(state, action);
-    case actionTypes.SET_ACTIVE_BIKE: return setActiveBike(state, action);
+    case actionTypes.EDIT_BIKE: return editBike(state, action);
+    case actionTypes.SET_ACTIVE_BIKE: {
+      return setActiveBike(state, action);
+    }
     case actionTypes.ADD_BIKE_DISTANCE: return addDistance(state, action);
     default: return state;
   }

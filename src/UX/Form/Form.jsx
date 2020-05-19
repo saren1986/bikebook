@@ -10,10 +10,10 @@ import * as Styled from '../../styled/styled';
 import createYup from '../../utils/createYup';
 
 
-const Form = ({ formData, onSubmitHandler }) => {
+const Form = ({
+  inputs, header, buttonName, onSubmitHandler, editMode
+}) => {
   const initialValues = {};
-  const { inputs } = formData;
-
   const yupSchema = inputs.reduce(createYup, {});
   const validateSchema = Yup.object().shape(yupSchema);
   for (const f of inputs) {
@@ -21,7 +21,7 @@ const Form = ({ formData, onSubmitHandler }) => {
   }
   return (
     <>
-      <Styled.Header>{formData.form.label}</Styled.Header>
+      <Styled.Header>{header}</Styled.Header>
       <Formik
         initialValues={initialValues}
         onSubmit={(values) => onSubmitHandler(values)}
@@ -71,6 +71,7 @@ const Form = ({ formData, onSubmitHandler }) => {
                         helperText={touched[input.id] ? errors[input.id] : ''}
                         {...input.uiStyle.inputDesign}
                         select={select}
+                        disabled={editMode && !input.edit}
                       >
                         {selectList}
                       </Styled.Input>
@@ -80,10 +81,12 @@ const Form = ({ formData, onSubmitHandler }) => {
                 <Grid item xs={12}>
                   <Styled.BtnWrapper>
                     <Styled.Btn
-                      {...formData.button}
+                      variant="outlined"
+                      color="primary"
+                      type="submit"
                       disabled={isSubmitting}
                     >
-                      {formData.button.label}
+                      {buttonName}
                     </Styled.Btn>
                   </Styled.BtnWrapper>
                 </Grid>
@@ -95,13 +98,14 @@ const Form = ({ formData, onSubmitHandler }) => {
     </>
   );
 };
-
+Form.defaultProps = {
+  editMode: false,
+};
 Form.propTypes = {
-  formData: PropTypes.shape({
-    inputs: PropTypes.arrayOf(PropTypes.object).isRequired,
-    button: PropTypes.object.isRequired,
-    form: PropTypes.object.isRequired,
-  }).isRequired,
+  inputs: PropTypes.arrayOf(PropTypes.object).isRequired,
+  editMode: PropTypes.bool,
+  buttonName: PropTypes.string.isRequired,
+  header: PropTypes.string.isRequired,
   onSubmitHandler: PropTypes.func.isRequired,
 };
 export default Form;

@@ -1,4 +1,6 @@
 export const ADD_BIKE = 'ADD_BIKE';
+export const EDIT_BIKE = 'EDIT_BIKE';
+
 export const ADD_COMPONENT = 'ADD_COMPONENT';
 export const SET_ACTIVE_BIKE = 'SET_ACTIVE_BIKE';
 export const ADD_BIKE_DISTANCE = 'ADD_BIKE_DISTANCE';

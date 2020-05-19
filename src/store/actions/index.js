@@ -1,5 +1,6 @@
 export {
   addBike,
+  editBike,
   setActiveBike,
   addDistance,
 } from './bikes';

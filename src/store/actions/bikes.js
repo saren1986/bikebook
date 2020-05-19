@@ -12,6 +12,12 @@ export const addBike = (bike) => ({
     bike,
   },
 });
+export const editBike = (bike) => ({
+  type: actionTypes.EDIT_BIKE,
+  data: {
+    bike,
+  },
+});
 
 export const addBikeDistance = (bikeId, distance, lengthUnit) => ({
   type: actionTypes.ADD_BIKE_DISTANCE,

@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Switch,
   Route,
+  Redirect
 } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import BikesNav from './Navigation/Navigation';
@@ -30,7 +31,10 @@ const BikesPanel = () => {
             <BikeList />
           </Route>
           <Route exact path="/bike/add">
-            <AddBike bikeTypes={bikesData.BIKE_TYPES} />
+            <AddBike />
+          </Route>
+          <Route exact path="/bike/edit">
+            <AddBike edit />
           </Route>
           <Route path="/bike">
             <BikeItem />
@@ -38,7 +42,7 @@ const BikesPanel = () => {
           <Route path="/strava">
             <Strava />
           </Route>
-          {/* <Redirect exact from="/" to="/" /> */}
+          <Redirect exact from="/" to="/bike-list" />
         </Switch>
       ) : <Spinner />}
     </ControlLayout>

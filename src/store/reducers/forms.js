@@ -7,7 +7,11 @@ const defaultState = {
       type: 'text',
       default: '',
       label: 'Bike name',
-      edit: true,
+      edit: {
+        visible: true,
+        editable: true,
+      },
+      controlledBy: false,
       validation: {
         type: 'string',
         required: true,
@@ -42,7 +46,11 @@ const defaultState = {
       type: 'select',
       default: '',
       label: 'Bike type',
-      edit: true,
+      edit: {
+        visible: true,
+        editable: true,
+      },
+      controlledBy: false,
       selectOption: [
         {
           id: '1',
@@ -91,7 +99,11 @@ const defaultState = {
       type: 'text',
       default: '',
       label: 'Brand name',
-      edit: true,
+      edit: {
+        visible: true,
+        editable: true,
+      },
+      controlledBy: false,
       validation: {
         type: 'string',
         required: false,
@@ -113,7 +125,11 @@ const defaultState = {
       type: 'text',
       default: '',
       label: 'Model',
-      edit: true,
+      edit: {
+        visible: true,
+        editable: true,
+      },
+      controlledBy: false,
       validation: {
         type: 'string',
         required: false,
@@ -131,11 +147,15 @@ const defaultState = {
       },
     },
     {
-      id: 'frameWeight',
+      id: 'weight',
       type: 'number',
       default: '',
       label: 'Frame mass /',
-      edit: true,
+      edit: {
+        visible: true,
+        editable: true,
+      },
+      controlledBy: false,
       validation: {
         type: 'number',
         required: false,
@@ -162,7 +182,11 @@ const defaultState = {
       type: 'number',
       default: '',
       label: 'Distance / ',
-      edit: false,
+      edit: {
+        visible: false,
+        editable: false,
+      },
+      controlledBy: false,
       validation: {
         type: 'number',
         required: false,
@@ -193,7 +217,11 @@ const defaultState = {
       type: 'text',
       default: '',
       label: 'Description',
-      edit: true,
+      edit: {
+        visible: true,
+        editable: true,
+      },
+      controlledBy: false,
       validation: {
         type: 'string',
         required: false,
@@ -206,6 +234,308 @@ const defaultState = {
         inputDesign: {
           margin: 'normal',
           variant: 'outlined',
+        },
+      },
+    },
+  ],
+  components: [
+    {
+      id: 'bike',
+      type: 'select',
+      default: '',
+      label: 'Bike',
+      edit: {
+        visible: true,
+        editable: true,
+      },
+      controlledBy: false,
+      selectOption: [],
+      validation: {
+        type: 'string',
+        required: true,
+        rules: [
+          {
+            key: 'required',
+            params: ['This field is required'],
+          },
+        ],
+      },
+      uiStyle: {
+        width: {
+          xs: 12,
+          sm: 12,
+        },
+        inputDesign: {
+          margin: 'normal',
+          variant: 'outlined',
+        },
+      },
+    },
+    {
+      id: 'type',
+      type: 'select',
+      default: '',
+      label: 'Component type',
+      edit: {
+        visible: true,
+        editable: true,
+      },
+      controlledBy: false,
+      selectOption: [
+        {
+          id: '1',
+          label: 'Front Wheel',
+        },
+        {
+          id: '2',
+          label: 'Rear Wheel',
+        },
+        {
+          id: '3',
+          label: 'Fork',
+        },
+        {
+          id: '4',
+          label: 'Saddle',
+        },
+        {
+          id: '5',
+          label: 'Cassette',
+        },
+        {
+          id: '6',
+          label: 'Chain',
+        },
+        {
+          id: '7',
+          label: 'Pedals',
+        },
+      ],
+      validation: {
+        type: 'string',
+        required: true,
+        rules: [
+          {
+            key: 'required',
+            params: ['This field is required'],
+          },
+        ],
+      },
+      uiStyle: {
+        width: {
+          xs: 12,
+          sm: 6,
+        },
+        inputDesign: {
+          margin: 'normal',
+          variant: 'outlined',
+        },
+      },
+    },
+    {
+      id: 'brand',
+      type: 'text',
+      default: '',
+      label: 'Brand name',
+      edit: {
+        visible: true,
+        editable: true,
+      },
+      controlledBy: false,
+      validation: {
+        type: 'string',
+        required: false,
+        rules: [],
+      },
+      uiStyle: {
+        width: {
+          xs: 12,
+          sm: 6,
+        },
+        inputDesign: {
+          margin: 'normal',
+          variant: 'outlined',
+        },
+      },
+    },
+    {
+      id: 'model',
+      type: 'text',
+      default: '',
+      label: 'Model',
+      edit: {
+        visible: true,
+        editable: true,
+      },
+      controlledBy: false,
+      validation: {
+        type: 'string',
+        required: false,
+        rules: [],
+      },
+      uiStyle: {
+        width: {
+          xs: 12,
+          sm: 6,
+        },
+        inputDesign: {
+          margin: 'normal',
+          variant: 'outlined',
+        },
+      },
+    },
+    {
+      id: 'weight',
+      type: 'number',
+      default: '',
+      label: 'Weight /',
+      edit: {
+        visible: true,
+        editable: true,
+      },
+      controlledBy: false,
+      validation: {
+        type: 'number',
+        required: false,
+        rules: [
+          {
+            key: 'moreThan',
+            params: [0, 'Can\'t be less than 0!'],
+          },
+        ],
+      },
+      uiStyle: {
+        width: {
+          xs: 12,
+          sm: 6,
+        },
+        inputDesign: {
+          margin: 'normal',
+          variant: 'outlined',
+        },
+      },
+    },
+    {
+      id: 'startDate',
+      type: 'date',
+      default: new Date(),
+      label: 'Installed',
+      edit: {
+        visible: false,
+        editable: false,
+      },
+      controlledBy: 'fromBegining',
+      validation: {
+        type: 'date',
+        required: true,
+        rules: [
+          {
+            key: 'min',
+            params: ['2010-01-01', 'The date cannot be earlier than 2010'],
+          },
+          {
+            key: 'max',
+            params: [new Date(), 'The date cannot be from the future!'],
+          },
+        ],
+      },
+      uiStyle: {
+        width: {
+          xs: 12,
+          sm: 6,
+        },
+        inputDesign: {
+          margin: 'normal',
+          variant: 'outlined',
+        },
+      },
+    },
+    {
+      id: 'distance',
+      type: 'number',
+      default: 0,
+      label: 'Distance / ',
+      edit: {
+        visible: false,
+        editable: false,
+      },
+      controlledBy: false,
+      validation: {
+        type: 'number',
+        required: false,
+        rules: [
+          {
+            key: 'required',
+            params: ['This field is required'],
+          },
+          {
+            key: 'moreThan',
+            params: [-1, 'Can\'t be less than 0!'],
+          },
+        ],
+      },
+      uiStyle: {
+        width: {
+          xs: 12,
+          sm: 6,
+        },
+        inputDesign: {
+          margin: 'normal',
+          variant: 'outlined',
+        },
+      },
+    },
+    {
+      id: 'fromBegining',
+      type: 'checkbox',
+      default: false,
+      label: 'On the bike from the beginning',
+      edit: {
+        visible: false,
+        editable: false,
+      },
+      controlledBy: false,
+      validation: {
+        type: 'boolean',
+        required: false,
+        rules: [
+        ],
+      },
+      uiStyle: {
+        width: {
+          xs: 12,
+          sm: 6,
+        },
+        inputDesign: {
+          margin: 'normal',
+          variant: 'outlined',
+        },
+      },
+    },
+    {
+      id: 'description',
+      type: 'text',
+      default: '',
+      label: 'Description',
+      edit: {
+        visible: true,
+        editable: true,
+      },
+      controlledBy: false,
+      validation: {
+        type: 'string',
+        required: false,
+        rules: [],
+      },
+      uiStyle: {
+        width: {
+          xs: 12,
+        },
+        inputDesign: {
+          margin: 'normal',
+          variant: 'outlined',
+          multiline: true,
+          rows: 4,
         },
       },
     },

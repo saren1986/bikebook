@@ -1,45 +1,80 @@
 import * as actionTypes from '../actions/actionTypes';
 import bikeComponents from '../../mock/bikeComponents';
 import * as format from '../../utils/distanceFormatters';
+import { formatMassLargeToSmall } from '../../utils/massUnitsFormatter';
 
 const defaultState = [
   ...bikeComponents,
 ];
 
 const addComponent = (state, action) => {
-  const { bike, lengthUnit } = action.data;
   const {
-    initialDistance, alertOn, endDistance, ...component
+    bike, lengthUnit, massUnit, activities,
+  } = action.data;
+  const {
+    distance, weight, startDate, fromBegining, ...component
   } = action.data.component;
-
-  let distance = 0;
-  let date = '1';
-
-  if (component.startDate === '1') {
-    distance = bike.distance + format.distanceLargeToSmall(initialDistance, lengthUnit);
-  } else if (component.startDate === '2') {
-    distance += format.distanceLargeToSmall(initialDistance, lengthUnit);
-    date = new Date().toJSON().slice(0, 10);
+  console.log('startDate', fromBegining, typeof startDate);
+  let formattedDistance = 0;
+  let date = null;
+  const bikeActivities = activities.filter((activity) => activity.bikeId === bike.id);
+  if (fromBegining) {
+    formattedDistance = bike.distance + format.distanceLargeToSmall(distance, lengthUnit);
+    const foundActivities = bikeActivities
+      .sort(
+        (a, b) => new Date(a.startDate) > new Date(b.startDate),
+      );
+    if (foundActivities.length) {
+      date = foundActivities[0].startDate;
+    } else {
+      date = startDate.toJSON();
+    }
+  } else {
+    const compDistance = bikeActivities
+      .filter((activity) => new Date(activity.startDate).getTime() < startDate.getTime())
+      .reduce((sum, activity) => sum + activity.distance, 0);
+    formattedDistance = format.distanceLargeToSmall(distance, lengthUnit) + compDistance;
+    date = startDate.toJSON();
   }
+  const formattedWeight = weight ? formatMassLargeToSmall(weight, massUnit) : '';
 
   return [
     ...state,
     {
-      id: 'c111', // TODO
-      bikeId: component.bikeId,
+      bikeId: component.bike,
       ...component,
       retired: false,
       startDate: date,
-      distance,
+      distance: formattedDistance,
+      weight: formattedWeight,
       alert: {
-        on: alertOn,
+        on: false,
         note: '',
-        startDistance: 0 + format.distanceLargeToSmall(initialDistance, lengthUnit),
-        endDistance: distance
-        + format.distanceLargeToSmall(endDistance, action.data.lengthUnit),
+        startDistance: 0,
+        endDistance: 0,
       },
     },
   ];
+};
+const editComponent = (state, action) => {
+  const {
+    massUnit, compId,
+  } = action.data;
+  return state.map((comp) => {
+    if (comp.id === compId) {
+      const {
+        weight, ...component
+      } = action.data.component;
+      const formattedWeight = weight ? formatMassLargeToSmall(weight, massUnit) : '';
+      return {
+        ...comp,
+        ...component,
+        bikeId: component.bike,
+        weight: formattedWeight,
+      };
+    }
+    return comp;
+  });
 };
 const setDistanceAlert = (state, action) => state.map((component) => {
   if (component.id === action.data.compId) {
@@ -114,6 +149,7 @@ const deleteComponent = (state, action) => state
 const reducer = (state = defaultState, action) => {
   switch (action.type) {
     case actionTypes.ADD_COMPONENT: return addComponent(state, action);
+    case actionTypes.EDIT_COMPONENT: return editComponent(state, action);
     case actionTypes.SET_DISTANCE_ALERT: return setDistanceAlert(state, action);
     case actionTypes.UPDATE_COMPONENTS_DISTANCE: return updateComponentsDistance(state, action);
     case actionTypes.DISABLE_SERVICE_ALERT: return disableServiceAlert(state, action);

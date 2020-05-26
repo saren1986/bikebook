@@ -22,7 +22,10 @@ const BikeItemLinks = ({ history }) => {
     history.push('/bike/add-distance');
   };
   const addNewComponentHandle = () => {
-    history.push('/bike/components/add');
+    history.push({
+      pathname: '/component/add',
+      bikeId: activeBike,
+    });
   };
   return (
     activeBike ? (

@@ -2,20 +2,18 @@ import React from 'react';
 import {
   Switch,
   Route,
-  Redirect
+  Redirect,
 } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import BikesNav from './Navigation/Navigation';
-import AddBike from './AddBike/AddBike';
+import BikeForm from './BikeForm/BikeForm';
 import BikeItem from './BikeItem/BikeItem';
 import ControlLayout from '../Layouts/ControlLayout/ControlLayout';
 import BikeList from './BikeList/BikeList';
 import Spinner from '../../UX/Spinner/Spinner';
 import Strava from '../ServicesSync/Strava/Strava';
 import Activities from './Activities/Activities';
-
-import * as bikesData from '../../mock/constans';
-
+import ComponentForm from './BikeComponents/ComponentForm/ComponentForm';
 
 const BikesPanel = () => {
   const bikeList = useSelector((state) => state.bikes.list);
@@ -31,10 +29,16 @@ const BikesPanel = () => {
             <BikeList />
           </Route>
           <Route exact path="/bike/add">
-            <AddBike />
+            <BikeForm />
           </Route>
           <Route exact path="/bike/edit">
-            <AddBike edit />
+            <BikeForm edit />
+          </Route>
+          <Route path="/component/add">
+            <ComponentForm />
+          </Route>
+          <Route path="/component/edit">
+            <ComponentForm edit />
           </Route>
           <Route path="/bike">
             <BikeItem />

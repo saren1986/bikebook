@@ -8,7 +8,7 @@ const BikeInfo = ({ bike, history }) => {
   const classes = useStyles();
   
   useEffect(()=>{
-    console.log('BikeInfo');
+    console.log('BikeInfo', bike);
   }, [])
   const onEditClickHandler = () => {
     history.push({

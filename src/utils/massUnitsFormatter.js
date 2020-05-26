@@ -27,7 +27,7 @@ export const formatMassSmallToLarge = (mass, units) => {
   return mass;
 };
 
-export const formatMassLargeToSamll = (mass, units) => {
+export const formatMassLargeToSmall = (mass, units) => {
   if (units === 'kg') {
     return kgToG(mass);
   }

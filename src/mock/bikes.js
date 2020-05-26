@@ -9,7 +9,8 @@ const bikes = [
     type: '3',
     description: 'Lorem Ipsum is simply dummy text of the Lorem Ipsum is simply dummy text of the Lorem Ipsum is simply dummy text of the ',
     retired: false,
-    frameWeight: 7500,
+    weight: 7500,
+    startDate: null,
   },
   {
     id: 'n2',
@@ -21,7 +22,8 @@ const bikes = [
     type: '3',
     description: 'Opis',
     retired: false,
-    frameWeight: 6500,
+    weight: 6500,
+    startDate: null,
   },
   {
     id: 'n3',
@@ -32,8 +34,9 @@ const bikes = [
     model: '',
     type: '3',
     description: 'Opis',
-    frameWeight: 8000,
+    weight: 8000,
     retired: false,
+    startDate: null,
   },
   {
     id: 'b1145059',
@@ -45,7 +48,8 @@ const bikes = [
     type: '3',
     description: '',
     retired: false,
-    frameWeight: '',
+    weight: '',
+    startDate: null,
   },
   {
     id: 'b5760079',
@@ -57,7 +61,8 @@ const bikes = [
     type: '2',
     description: '',
     retired: false,
-    frameWeight: '',
+    weight: '',
+    startDate: null,
   },
 ];
 

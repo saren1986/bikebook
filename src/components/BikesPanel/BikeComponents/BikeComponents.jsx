@@ -31,22 +31,14 @@ import { formatDistance, remainDistance } from '../../../utils/distanceFormatter
 import { COMPONENT_TYPES } from '../../../mock/constans';
 
 const tableIcons = {
-  // Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
-  // Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-  // Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
-  // DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-  // Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
-  // Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
+
   Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
   FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
   LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
   NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
   PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref} />),
-  // ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-  // Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
   SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
-  // ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
-  // ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
+
 };
 
 function TabPanel(props) {
@@ -77,7 +69,6 @@ const BikeComponents = ({
 }) => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -86,7 +77,7 @@ const BikeComponents = ({
   const formatComponentsData = (compArr) => compArr.map((c) => ({
     ...c,
     distanceFormatted: formatDistance(c.distance, lengthUnit),
-    startDate: c.startDate === '1' ? 'begining' : c.startDate,
+    startDate: c.startDate,
     alert: c.alert.on ? (
       <AlertMessage
         remainDistance={remainDistance(c.alert.startDistance, c.distance, c.alert.endDistance)}
@@ -94,7 +85,7 @@ const BikeComponents = ({
         short
       />
     ) : 'no set',
-    type: COMPONENT_TYPES.find((type) => type.id === c.type).label.eng,
+    type: COMPONENT_TYPES.find((type) => type.id === c.type).label,
   }));
   const activeComponents = getActiveComponents(components, true);
   const activeComponentsTable = activeComponents.length ? {

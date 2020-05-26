@@ -1,11 +1,11 @@
 import * as yup from 'yup';
 
-const createYup = (obj, config) => {
+const createYup = (obj, config, editMode = false) => {
   const schema = obj;
   const { id } = config;
   const validationType = config.validation.type;
   const validations = config.validation.rules;
-  if (!yup[validationType]) {
+  if (!yup[validationType] || (editMode && (!config.edit.visible || !config.edit.editable))) {
     return schema;
   }
   let validator = yup[validationType]();

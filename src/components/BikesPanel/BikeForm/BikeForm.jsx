@@ -5,12 +5,12 @@ import PropTypes from 'prop-types';
 import { withRouter, Redirect } from 'react-router-dom';
 import { addBike, setActiveBike, editBike } from '../../../store/actions/index';
 import { distanceLargeToSmall } from '../../../utils/distanceFormatters';
-import { formatMassLargeToSamll } from '../../../utils/massUnitsFormatter';
-import prepareFormData from '../../../utils/formData';
+import { formatMassLargeToSmall } from '../../../utils/massUnitsFormatter';
+import { prepareFormData } from '../../../utils/formData';
 import Form from '../../../UX/Form/Form';
 import Spinner from '../../../UX/Spinner/Spinner';
 
-const AddBike = ({ history, edit }) => {
+const BikeForm = ({ history, edit }) => {
   const dispatch = useDispatch();
   const { lengthUnit, massUnit } = useSelector((state) => state.user.units);
   const formData = useSelector((state) => state.forms.addBike);
@@ -32,7 +32,7 @@ const AddBike = ({ history, edit }) => {
             id: '12bb', // TODO id
             ...values,
             distance: distanceLargeToSmall(values.distance, lengthUnit),
-            frameWeight: formatMassLargeToSamll(values.frameWeight, massUnit),
+            weight: formatMassLargeToSmall(values.weight, massUnit),
           },
         ),
       );
@@ -46,7 +46,7 @@ const AddBike = ({ history, edit }) => {
             id: bikeId,
             ...values,
             distance: distanceLargeToSmall(values.distance, lengthUnit),
-            frameWeight: formatMassLargeToSamll(values.frameWeight, massUnit),
+            weight: formatMassLargeToSmall(values.weight, massUnit),
           },
         ),
       );
@@ -78,12 +78,12 @@ const AddBike = ({ history, edit }) => {
     </>
   );
 };
-AddBike.defaultProps = {
+BikeForm.defaultProps = {
   edit: false,
 };
-AddBike.propTypes = {
+BikeForm.propTypes = {
   history: PropTypes.object.isRequired,
   edit: PropTypes.bool,
 };
 
-export default withRouter(AddBike);
+export default withRouter(BikeForm);

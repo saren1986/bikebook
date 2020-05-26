@@ -10,6 +10,7 @@ export {
   disableServiceAlert,
   retireComponent,
   deleteComponent,
+  editComponent,
 } from './bikeComponents';
 export {
   openConfirmDialog,

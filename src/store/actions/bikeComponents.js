@@ -8,12 +8,22 @@ export const setDistanceAlert = (compId, endDistance, lengthUnit) => ({
     lengthUnit,
   },
 });
-export const addComponent = (component, bike, lengthUnit) => ({
+export const addComponent = (component, bike, lengthUnit, massUnit, activities) => ({
   type: actionTypes.ADD_COMPONENT,
   data: {
     bike,
     component,
     lengthUnit,
+    massUnit,
+    activities,
+  },
+});
+export const editComponent = (compId, component, massUnit) => ({
+  type: actionTypes.EDIT_COMPONENT,
+  data: {
+    compId,
+    component,
+    massUnit,
   },
 });
 

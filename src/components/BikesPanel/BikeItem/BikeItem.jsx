@@ -5,7 +5,7 @@ import {
 
 import { useSelector, useDispatch } from 'react-redux';
 import BikeComponents from '../BikeComponents/BikeComponents';
-import AddComponent from '../BikeComponents/AddComponent/AddComponent';
+
 import useStyles from './bikeItem.style';
 
 import * as actions from '../../../store/actions/index';
@@ -27,11 +27,6 @@ const BikeItem = ({ match }) => {
     <div className={classes.wrapper}>
       <div className={classes.bikeItemView}>
         <Switch>
-          <Route path={`${match.path}/components/add`}>
-            <AddComponent
-              bikeId={bikeId}
-            />
-          </Route>
           <Route path={`${match.path}/components/detail`}>
             <ComponentDetail
               components={components}

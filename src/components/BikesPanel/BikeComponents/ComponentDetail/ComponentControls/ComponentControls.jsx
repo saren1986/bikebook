@@ -11,7 +11,7 @@ import Edit from '@material-ui/icons/Edit';
 import useStyle from './componentControlsStyle';
 
 const ComponentControls = ({
-  openDrawer, activeAlert, alertOff, retired, retireComponent, deleteComponent,
+  openDrawer, activeAlert, alertOff, retired, retireComponent, editComponent, deleteComponent,
 }) => {
   const classes = useStyle();
 
@@ -59,7 +59,7 @@ const ComponentControls = ({
         </IconButton>
       </Tooltip>
       <Tooltip title="Edit">
-        <IconButton type="button">
+        <IconButton type="button" onClick={editComponent}>
           <Edit />
         </IconButton>
       </Tooltip>
@@ -87,6 +87,7 @@ ComponentControls.propTypes = {
   activeAlert: PropTypes.bool.isRequired,
   alertOff: PropTypes.func.isRequired,
   retireComponent: PropTypes.func.isRequired,
+  editComponent: PropTypes.func.isRequired,
   deleteComponent: PropTypes.func.isRequired,
   retired: PropTypes.bool.isRequired,
 };

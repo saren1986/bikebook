@@ -129,7 +129,7 @@ const forms = {
         },
       },
       {
-        id: 'frameWeight',
+        id: 'weight',
         type: 'number',
         default: '',
         label: 'Frame mass /',

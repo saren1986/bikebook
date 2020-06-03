@@ -10,17 +10,11 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import { useSelector } from 'react-redux';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import useStyles from './bikeItemLinks.style';
-import { formatDistance } from '../../../../utils/distanceFormatters';
-
 
 const BikeItemLinks = ({ history }) => {
   const activeBike = useSelector((state) => state.bikes.activeBike);
-  const bike = useSelector((state) => state.bikes.list.find((bike) => bike.id === activeBike));
-  const { lengthUnit } = useSelector((state) => state.user.units);
+  const bike = useSelector((state) => state.bikes.list.find((b) => b.id === activeBike));
   const classes = useStyles();
-  const addDistanceClickHandler = () => {
-    history.push('/bike/add-distance');
-  };
   const addNewComponentHandle = () => {
     history.push({
       pathname: '/component/add',
@@ -43,12 +37,6 @@ const BikeItemLinks = ({ history }) => {
               }}
             >
               <span>{bike.name}</span>
-
-              <span>
-                Distance:
-                {formatDistance(bike.distance, lengthUnit)}
-              </span>
-
             </ListSubheader>
       )}
         >
@@ -69,7 +57,6 @@ const BikeItemLinks = ({ history }) => {
             </ListItem>
           </Link>
           <List component="div" disablePadding>
-
             <ListItem button className={classes.nested} onClick={addNewComponentHandle}>
               <ListItemIcon>
                 <AddIcon />
@@ -78,12 +65,6 @@ const BikeItemLinks = ({ history }) => {
 
             </ListItem>
           </List>
-          <ListItem button onClick={addDistanceClickHandler}>
-            <ListItemIcon>
-              <AddIcon />
-            </ListItemIcon>
-            <ListItemText primary="Add distance" />
-          </ListItem>
         </List>
       </>
     ) : null

@@ -3,7 +3,7 @@ const bikes = [
     id: 'n1',
     strava: false,
     name: 'rakieta',
-    distance: 11058280,
+    distance: 100000,
     brand: 'KTM',
     model: 'Strada',
     type: '3',

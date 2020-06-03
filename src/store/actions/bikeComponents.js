@@ -27,12 +27,11 @@ export const editComponent = (compId, component, massUnit) => ({
   },
 });
 
-export const updateComponentsDistance = (bikeId, distance, lengthUnit) => ({
+export const updateComponentsDistance = (componentList, distance) => ({
   type: actionTypes.UPDATE_COMPONENTS_DISTANCE,
   data: {
-    bikeId,
+    componentList,
     distance,
-    lengthUnit,
   },
 });
 

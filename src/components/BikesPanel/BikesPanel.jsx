@@ -14,6 +14,7 @@ import Spinner from '../../UX/Spinner/Spinner';
 import Strava from '../ServicesSync/Strava/Strava';
 import Activities from './Activities/Activities';
 import ComponentForm from './BikeComponents/ComponentForm/ComponentForm';
+import ActivityForm from './Activities/ActivityForm/ActivityForm';
 
 const BikesPanel = () => {
   const bikeList = useSelector((state) => state.bikes.list);
@@ -22,6 +23,12 @@ const BikesPanel = () => {
       <BikesNav />
       {bikeList ? (
         <Switch>
+          <Route path="/activity/add">
+            <ActivityForm />
+          </Route>
+          <Route path="/activity/edit">
+            <ActivityForm edit />
+          </Route>
           <Route path="/activities">
             <Activities />
           </Route>

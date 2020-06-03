@@ -2,7 +2,6 @@ export {
   addBike,
   editBike,
   setActiveBike,
-  addDistance,
 } from './bikes';
 export {
   addComponent,
@@ -25,3 +24,7 @@ export {
   stravaGetActivities,
   stravaCheckForUpdate,
 } from './strava';
+export {
+  addNewActivity,
+  updateActivity,
+} from './activities';

@@ -1,5 +1,21 @@
 const activities = [
   {
+    title: 'Testowa',
+    bikeId: 'n2',
+    distance: 150000,
+    movingTime: 3660,
+    startDate: '2020-06-03T12:06:37.552Z',
+    id: 'a1234t56',
+    strava: false,
+    stravaType: null,
+    stravaExternalId: null,
+    elapsedTime: null,
+    components: [
+      'c5',
+      'c6',
+    ],
+  },
+  {
     id: 113063715,
     strava: true,
     stravaExternalId: '2014-02-13-17-20-57.fit',
@@ -2002,6 +2018,7 @@ const activities = [
     stravaType: 'Ride',
     startDate: '2017-03-04T09:50:25Z',
     bikeId: 'b1145059',
+    components: [],
   },
   {
     id: 901519543,
@@ -2014,6 +2031,7 @@ const activities = [
     stravaType: 'Ride',
     startDate: '2017-03-14T20:22:07Z',
     bikeId: 'b1145059',
+    components: [],
   },
   {
     id: 901519541,
@@ -2026,6 +2044,7 @@ const activities = [
     stravaType: 'Ride',
     startDate: '2017-03-15T04:57:25Z',
     bikeId: 'b1145059',
+    components: [],
   },
   {
     id: 917871482,
@@ -2038,6 +2057,7 @@ const activities = [
     stravaType: 'Ride',
     startDate: '2017-03-28T10:05:37Z',
     bikeId: 'b1145059',
+    components: [],
   },
   {
     id: 918576440,
@@ -2050,6 +2070,7 @@ const activities = [
     stravaType: 'Ride',
     startDate: '2017-03-28T18:29:10Z',
     bikeId: 'b1145059',
+    components: [],
   },
 ];
 

@@ -6,13 +6,15 @@ import * as Yup from 'yup';
 import Grid from '@material-ui/core/Grid';
 import { MenuItem } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import { MuiPickersUtilsProvider, DatePicker, KeyboardDatePicker } from '@material-ui/pickers';
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import createYup from '../../utils/createYup';
-import * as Styled from '../../styled/styled';
+import {
+  Header, Input, BtnWrapper, Btn,
+} from '../../styled/styled';
 
 
 const Form = ({
@@ -22,14 +24,11 @@ const Form = ({
   const yupSchema = inputs.reduce((obj, config) => createYup(obj, config, editMode), {});
   const validateSchema = Yup.object().shape(yupSchema);
   for (const f of inputs) {
-    if (editMode && (!f.edit.editable || !f.edit.visible)) {
-    } else {
-      initialValues[f.id] = f.default;
-    }
+    initialValues[f.id] = f.default;
   }
   return (
     <>
-      <Styled.Header>{header}</Styled.Header>
+      <Header>{header}</Header>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <Formik
           initialValues={initialValues}
@@ -122,7 +121,7 @@ const Form = ({
                       }
                     } else {
                       field = (
-                        <Styled.Input
+                        <Input
                           id={input.id}
                           name={input.id}
                           label={input.label}
@@ -137,7 +136,7 @@ const Form = ({
                           disabled={(editMode && !input.edit.editable) || off}
                         >
                           {selectList}
-                        </Styled.Input>
+                        </Input>
                       );
                     }
                     return (
@@ -147,25 +146,23 @@ const Form = ({
                         {...input.uiStyle.width}
                       >
                         {field}
-
                       </Grid>
                     );
                   })}
                   <Grid item xs={12}>
-                    <Styled.BtnWrapper>
-                      <Styled.Btn
+                    <BtnWrapper>
+                      <Btn
                         variant="outlined"
                         color="primary"
                         type="submit"
                         disabled={isSubmitting}
                       >
                         {buttonName}
-                      </Styled.Btn>
-                    </Styled.BtnWrapper>
+                      </Btn>
+                    </BtnWrapper>
                   </Grid>
                 </Grid>
               </form>
-
             );
           }}
         </Formik>

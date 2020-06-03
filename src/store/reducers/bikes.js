@@ -1,6 +1,5 @@
 import * as actionTypes from '../actions/actionTypes';
 import bikes from '../../mock/bikes';
-import * as format from '../../utils/distanceFormatters';
 
 const defaultState = {
   list: bikes,
@@ -18,7 +17,6 @@ const addBike = (state, action) => {
     list: [
       ...state.list,
       {
-        // id: 'b100', //TODO nowy bikeID z serwera
         ...bike,
         retired: false,
         distance: bike.distance,
@@ -45,11 +43,10 @@ const editBike = (state, action) => {
   };
 };
 
-const addDistance = (state, action) => {
-  const newDistance = format.distanceLargeToSmall(action.data.distance, action.data.lengthUnit);
+const updateBikeDistance = (state, action) => {
   const newBikeList = state.list.map((bike) => {
     if (bike.id === action.data.bikeId) {
-      const resultDistance = bike.distance + newDistance;
+      const resultDistance = bike.distance + action.data.distance;
       return {
         ...bike,
         distance: resultDistance,
@@ -70,7 +67,7 @@ const reducer = (state = defaultState, action) => {
     case actionTypes.SET_ACTIVE_BIKE: {
       return setActiveBike(state, action);
     }
-    case actionTypes.ADD_BIKE_DISTANCE: return addDistance(state, action);
+    case actionTypes.UPDATE_BIKE_DISTANCE: return updateBikeDistance(state, action);
     default: return state;
   }
 };

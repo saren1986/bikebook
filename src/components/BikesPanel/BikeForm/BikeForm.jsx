@@ -53,13 +53,10 @@ const BikeForm = ({ history, edit }) => {
       dispatch(setActiveBike(bikeId));
       history.push('/bike');
     }
-
-    // TODO ustawianie aktywnego bike'a po zwrotce z serwera
   };
 
   const headerLabel = edit ? 'Edit bike' : 'Add new bike';
   const buttonLabel = edit ? 'Edit' : 'Add';
-
   const formToRender = formattedData
     ? (
       <Form

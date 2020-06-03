@@ -8,10 +8,10 @@ const bikeComponents = [
     model: 'XC10',
     weight: 1000,
     startDate: '16-12-2019',
-    distance: 530000,
+    distance: 10000,
     alert: {
       on: true,
-      startDistance: 20000,
+      startDistance: 10000,
       endDistance: 520000,
       // note: '',
       // alertType,
@@ -69,7 +69,7 @@ const bikeComponents = [
     model: 'XC10',
     weight: 3010,
     startDate: '2019-12-11T13:40:29.089Z',
-    distance: 200000,
+    distance: 50000,
     alert: {
       on: false,
       startDistance: 12000,

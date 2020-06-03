@@ -1,4 +1,8 @@
-import * as actionTypes from '../actions/actionTypes';
+import {
+  ADD_COMPONENT, EDIT_COMPONENT, SET_DISTANCE_ALERT,
+  UPDATE_COMPONENTS_DISTANCE, DISABLE_SERVICE_ALERT, SWITCH_TO_BIKE,
+  RETIRE_COMPONENT, DELETE_COMPONENT,
+} from '../actions/actionTypes';
 import bikeComponents from '../../mock/bikeComponents';
 import * as format from '../../utils/distanceFormatters';
 import { formatMassLargeToSmall } from '../../utils/massUnitsFormatter';
@@ -14,7 +18,7 @@ const addComponent = (state, action) => {
   const {
     distance, weight, startDate, fromBegining, ...component
   } = action.data.component;
-  console.log('startDate', fromBegining, typeof startDate);
+
   let formattedDistance = 0;
   let date = null;
   const bikeActivities = activities.filter((activity) => activity.bikeId === bike.id);
@@ -41,7 +45,7 @@ const addComponent = (state, action) => {
   return [
     ...state,
     {
-      bikeId: component.bike,
+      bikeId: component.bikeId,
       ...component,
       retired: false,
       startDate: date,
@@ -69,7 +73,7 @@ const editComponent = (state, action) => {
       return {
         ...comp,
         ...component,
-        bikeId: component.bike,
+        bikeId: component.bikeId,
         weight: formattedWeight,
       };
     }
@@ -91,18 +95,18 @@ const setDistanceAlert = (state, action) => state.map((component) => {
   return component;
 });
 const updateComponentsDistance = (state, action) => state.map((component) => {
-  if (action.data.bikeId === component.bikeId) {
+  if (action.data.componentList.findIndex((c) => c === component.id) !== -1) {
     return {
       ...component,
+      distance: component.distance + action.data.distance,
       alert: {
         ...component.alert,
       },
-      distance: component.distance
-      + format.distanceLargeToSmall(action.data.distance, action.data.lengthUnit),
     };
   }
   return component;
 });
+
 const disableServiceAlert = (state, action) => state.map((component) => {
   if (component.id === action.data.compId) {
     return {
@@ -148,14 +152,14 @@ const deleteComponent = (state, action) => state
 
 const reducer = (state = defaultState, action) => {
   switch (action.type) {
-    case actionTypes.ADD_COMPONENT: return addComponent(state, action);
-    case actionTypes.EDIT_COMPONENT: return editComponent(state, action);
-    case actionTypes.SET_DISTANCE_ALERT: return setDistanceAlert(state, action);
-    case actionTypes.UPDATE_COMPONENTS_DISTANCE: return updateComponentsDistance(state, action);
-    case actionTypes.DISABLE_SERVICE_ALERT: return disableServiceAlert(state, action);
-    case actionTypes.SWITCH_TO_BIKE: return switchToBike(state, action);
-    case actionTypes.RETIRE_COMPONENT: return retireComponent(state, action);
-    case actionTypes.DELETE_COMPONENT: return deleteComponent(state, action);
+    case ADD_COMPONENT: return addComponent(state, action);
+    case EDIT_COMPONENT: return editComponent(state, action);
+    case SET_DISTANCE_ALERT: return setDistanceAlert(state, action);
+    case UPDATE_COMPONENTS_DISTANCE: return updateComponentsDistance(state, action);
+    case DISABLE_SERVICE_ALERT: return disableServiceAlert(state, action);
+    case SWITCH_TO_BIKE: return switchToBike(state, action);
+    case RETIRE_COMPONENT: return retireComponent(state, action);
+    case DELETE_COMPONENT: return deleteComponent(state, action);
     default: return state;
   }
 };

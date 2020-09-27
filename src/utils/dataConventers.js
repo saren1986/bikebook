@@ -1,4 +1,4 @@
-import { stravaDateFormatter } from './timeFormatters';
+import { deleteTimeFormJsonDate } from './timeFormatters';
 
 export const convertStravaActivities = (activities, bikesId) => activities
   .filter((act) => bikesId
@@ -12,7 +12,7 @@ export const convertStravaActivities = (activities, bikesId) => activities
     movingTime: act.moving_time,
     elapsedTime: act.elapsed_time,
     stravaType: act.type,
-    startDate: stravaDateFormatter(act.start_date),
+    startDate: act.start_date,
     bikeId: act.gear_id,
     description: act.description,
   }));
@@ -27,5 +27,5 @@ export const convertStravaBike = (bike) => ({
   type: `${bike.frame_type}`,
   description: bike.description,
   retired: false,
-  frameWeight: null,
+  weight: '',
 });

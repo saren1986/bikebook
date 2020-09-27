@@ -2,19 +2,19 @@ import React from 'react';
 import {
   Switch,
   Route,
+  Redirect,
 } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import BikesNav from './Navigation/Navigation';
-import AddBike from './AddBike/AddBike';
+import BikeForm from './BikeForm/BikeForm';
 import BikeItem from './BikeItem/BikeItem';
 import ControlLayout from '../Layouts/ControlLayout/ControlLayout';
 import BikeList from './BikeList/BikeList';
 import Spinner from '../../UX/Spinner/Spinner';
 import Strava from '../ServicesSync/Strava/Strava';
 import Activities from './Activities/Activities';
-
-import * as bikesData from '../../mock/constans';
-
+import ComponentForm from './BikeComponents/ComponentForm/ComponentForm';
+import ActivityForm from './Activities/ActivityForm/ActivityForm';
 
 const BikesPanel = () => {
   const bikeList = useSelector((state) => state.bikes.list);
@@ -23,6 +23,12 @@ const BikesPanel = () => {
       <BikesNav />
       {bikeList ? (
         <Switch>
+          <Route path="/activity/add">
+            <ActivityForm />
+          </Route>
+          <Route path="/activity/edit">
+            <ActivityForm edit />
+          </Route>
           <Route path="/activities">
             <Activities />
           </Route>
@@ -30,7 +36,16 @@ const BikesPanel = () => {
             <BikeList />
           </Route>
           <Route exact path="/bike/add">
-            <AddBike bikeTypes={bikesData.BIKE_TYPES} />
+            <BikeForm />
+          </Route>
+          <Route exact path="/bike/edit">
+            <BikeForm edit />
+          </Route>
+          <Route path="/component/add">
+            <ComponentForm />
+          </Route>
+          <Route path="/component/edit">
+            <ComponentForm edit />
           </Route>
           <Route path="/bike">
             <BikeItem />
@@ -38,7 +53,7 @@ const BikesPanel = () => {
           <Route path="/strava">
             <Strava />
           </Route>
-          {/* <Redirect exact from="/" to="/" /> */}
+          <Redirect exact from="/" to="/bike-list" />
         </Switch>
       ) : <Spinner />}
     </ControlLayout>

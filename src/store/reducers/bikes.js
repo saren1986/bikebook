@@ -1,10 +1,9 @@
 import * as actionTypes from '../actions/actionTypes';
 import bikes from '../../mock/bikes';
-import * as format from '../../utils/distanceFormatters';
 
 const defaultState = {
   list: bikes,
-  activeBike: null,
+  activeBike: 'n2'//null,
 };
 const setActiveBike = (state, action) => ({
   ...state,
@@ -18,7 +17,6 @@ const addBike = (state, action) => {
     list: [
       ...state.list,
       {
-        // id: 'b100', //TODO nowy bikeID z serwera
         ...bike,
         retired: false,
         distance: bike.distance,
@@ -27,11 +25,28 @@ const addBike = (state, action) => {
   };
 };
 
-const addDistance = (state, action) => {
-  const newDistance = format.distanceLargeToSmall(action.data.distance, action.data.lengthUnit);
+const editBike = (state, action) => {
+  const { bike } = action.data;
+  const bikeList = state.list.map((b) => {
+    if (b.id === bike.id) {
+      return {
+        ...bike,
+        retired: false,
+        distance: b.distance,
+      };
+    }
+    return b;
+  });
+  return {
+    ...state,
+    list: bikeList,
+  };
+};
+
+const updateBikeDistance = (state, action) => {
   const newBikeList = state.list.map((bike) => {
     if (bike.id === action.data.bikeId) {
-      const resultDistance = bike.distance + newDistance;
+      const resultDistance = bike.distance + action.data.distance;
       return {
         ...bike,
         distance: resultDistance,
@@ -48,8 +63,11 @@ const addDistance = (state, action) => {
 const reducer = (state = defaultState, action) => {
   switch (action.type) {
     case actionTypes.ADD_BIKE: return addBike(state, action);
-    case actionTypes.SET_ACTIVE_BIKE: return setActiveBike(state, action);
-    case actionTypes.ADD_BIKE_DISTANCE: return addDistance(state, action);
+    case actionTypes.EDIT_BIKE: return editBike(state, action);
+    case actionTypes.SET_ACTIVE_BIKE: {
+      return setActiveBike(state, action);
+    }
+    case actionTypes.UPDATE_BIKE_DISTANCE: return updateBikeDistance(state, action);
     default: return state;
   }
 };

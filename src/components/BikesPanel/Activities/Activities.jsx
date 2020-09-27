@@ -25,7 +25,7 @@ const Activities = ({ history }) => {
   const isStravaAuth = useSelector((state) => !!state.strava.auth.accessToken);
 
   const addNewActivityHandler = () => {
-    history.push('/activities/add');
+    history.push('/activity/add');
   };
   const stravaClickHandler = () => {
     if (isStravaAuth) {
@@ -34,8 +34,14 @@ const Activities = ({ history }) => {
       window.location = STRAVA_SYNC_URL;
     }
   };
+  const editActivityHandler = (activity) => {
+    history.push({
+      pathname: '/activity/edit',
+      activity,
+    });
+  };
   const activitiesToRender = activities
-    .sort((a, b) => b.startDate - a.startDate)
+    .sort((a, b) => (new Date(a.startDate) > new Date(b.startDate) ? -1 : 1))
     .map((activity) => {
       const bike = bikes.find((b) => b.id === activity.bikeId);
       return (
@@ -48,6 +54,7 @@ const Activities = ({ history }) => {
             bike={bike ? bike.name : 'unknown'}
             time={secondsToHours(activity.movingTime)}
             distance={formatDistance(activity.distance, 'km')}
+            editHandler={!activity.strava ? () => editActivityHandler(activity) : null}
           />
         </LazyLoad>
       );

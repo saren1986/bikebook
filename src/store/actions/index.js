@@ -1,7 +1,7 @@
 export {
   addBike,
+  editBike,
   setActiveBike,
-  addDistance,
 } from './bikes';
 export {
   addComponent,
@@ -9,6 +9,7 @@ export {
   disableServiceAlert,
   retireComponent,
   deleteComponent,
+  editComponent,
 } from './bikeComponents';
 export {
   openConfirmDialog,
@@ -23,3 +24,7 @@ export {
   stravaGetActivities,
   stravaCheckForUpdate,
 } from './strava';
+export {
+  addNewActivity,
+  updateActivity,
+} from './activities';

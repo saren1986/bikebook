@@ -20,8 +20,11 @@ const ComponentDetail = ({ components, history, location }) => {
   const [alertMode, setAlerteMode] = useState(false);
   const classes = useStyles();
   const dispatch = useDispatch();
-  const {lengthUnit, massUnit} = useSelector((state) => state.user.units);
+  const { lengthUnit, massUnit } = useSelector((state) => state.user.units);
   const component = components.find((comp) => comp.id === location.state.id);
+  console.log('====================================');
+  console.log('component', component);
+  console.log('====================================');
   const setAlertHandler = (distance) => {
     dispatch(actions.setDistanceAlert(component.id, distance, lengthUnit));
     setDrawer(false);
@@ -58,7 +61,14 @@ const ComponentDetail = ({ components, history, location }) => {
       },
     ));
   };
-  const componentType = COMPONENT_TYPES.find((type) => type.id === component.type).label.eng;
+  const editComponentHandler = () => {
+    history.push({
+      pathname: '/component/edit',
+      bikeId: component.bikeId,
+      component,
+    });
+  };
+  const componentType = COMPONENT_TYPES.find((type) => type.id === component.type).label;
   const distanceAlert = component.alert.on ? (
     <ProgressBar
       startDistance={component.alert.startDistance}
@@ -105,6 +115,7 @@ const ComponentDetail = ({ components, history, location }) => {
                   retireComponent={retireComponentHandler}
                   alertOff={() => disableAlertHandler()}
                   deleteComponent={deleteComponentHandler}
+                  editComponent={editComponentHandler}
                 />
               </div>
             </div>
@@ -117,7 +128,7 @@ const ComponentDetail = ({ components, history, location }) => {
               <div className={classes.compItem}>
                 Mass:
                 {' '}
-                <strong>{formatMassDisplay(component.weight, massUnit)}</strong>
+                <strong>{component.weight ? formatMassDisplay(component.weight, massUnit) : 'Unset'}</strong>
               </div>
               <div className={classes.compItem}>
                 Installed:

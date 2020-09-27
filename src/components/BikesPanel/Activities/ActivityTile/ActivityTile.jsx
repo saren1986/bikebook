@@ -39,7 +39,7 @@ const useStyles = makeStyles({
   },
 });
 const ActivityTile = ({
-  startDate, strava, title, bike, distance, time,
+  startDate, strava, title, bike, distance, time, editHandler
 }) => {
   const classes = useStyles();
   return (
@@ -61,7 +61,7 @@ const ActivityTile = ({
                     </IconButton>
                   </Tooltip>
                   <Tooltip title="Edit">
-                    <IconButton type="button">
+                    <IconButton type="button" onClick={editHandler}>
                       <Edit />
                     </IconButton>
                   </Tooltip>
@@ -96,6 +96,11 @@ const ActivityTile = ({
     </Card>
   );
 };
+
+ActivityTile.defaultProps = {
+  editHandler: null,
+};
+
 ActivityTile.propTypes = {
   startDate: PropTypes.string.isRequired,
   strava: PropTypes.bool.isRequired,
@@ -103,5 +108,6 @@ ActivityTile.propTypes = {
   bike: PropTypes.string.isRequired,
   distance: PropTypes.string.isRequired,
   time: PropTypes.string.isRequired,
+  editHandler: PropTypes.func,
 };
 export default ActivityTile;

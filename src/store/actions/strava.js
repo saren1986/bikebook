@@ -44,7 +44,10 @@ const fetchAthlete = async (strava) => strava.athlete.get({});
 const fetchBike = async (strava, id) => strava.gear.get({ id });
 const fetchActivities = async (strava) => strava.athlete.listActivities({
   after: 1336756835,
-  per_page: 200,
+  // per_page: 300,
+  // page: 10,
+
+  //TODO:  Get Athlete Stats (getStats)
 });
 
 

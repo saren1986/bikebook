@@ -33,46 +33,33 @@ export const BIKE_TYPES = [
 export const COMPONENT_TYPES = [
   {
     id: '1',
-    label: {
-      eng: 'Front Wheel',
-    },
+    label: 'Front Wheel',
   },
   {
     id: '2',
-    label: {
-      eng: 'Rear Wheel',
-    },
+    label: 'Rear Wheel',
   },
   {
     id: '3',
-    label: {
-      eng: 'Fork',
-    },
+    label: 'Fork',
   },
   {
     id: '4',
-    label: {
-      eng: 'Fork',
-    },
+    label: 'Saddle',
   },
   {
     id: '5',
-    label: {
-      eng: 'Cassette',
-    },
+    label: 'Cassette',
   },
   {
     id: '6',
-    label: {
-      eng: 'Chain',
-    },
+    label: 'Chain',
   },
   {
     id: '7',
-    label: {
-      eng: 'Pedals',
-    },
+    label: 'Pedals',
   },
+
   // 'Front Tire',
   // 'Rear Tire',
   // 'Bottom Bracket',

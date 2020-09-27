@@ -22,6 +22,9 @@ const ComponentDetail = ({ components, history, location }) => {
   const dispatch = useDispatch();
   const { lengthUnit, massUnit } = useSelector((state) => state.user.units);
   const component = components.find((comp) => comp.id === location.state.id);
+  console.log('====================================');
+  console.log('component', component);
+  console.log('====================================');
   const setAlertHandler = (distance) => {
     dispatch(actions.setDistanceAlert(component.id, distance, lengthUnit));
     setDrawer(false);

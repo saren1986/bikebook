@@ -3,7 +3,7 @@ import bikes from '../../mock/bikes';
 
 const defaultState = {
   list: bikes,
-  activeBike: null,
+  activeBike: 'n2'//null,
 };
 const setActiveBike = (state, action) => ({
   ...state,

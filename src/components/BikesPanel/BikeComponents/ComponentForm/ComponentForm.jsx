@@ -44,7 +44,8 @@ const ComponentForm = ({ history, edit }) => {
   const buttonLabel = edit ? 'Edit' : 'Add';
   const seeder = (edit && typeof component !== 'undefined') ? { ...component, startDate: new Date(component.startDate) } : {};
 
-  const formattedData = formSelectSeeder(prepareFormData(formData, lengthUnit, massUnit, seeder),
+  const formattedData = formSelectSeeder(
+    prepareFormData(formData, lengthUnit, massUnit, seeder, edit),
     {
       bikeId: {
         selectOption: bikes.map((bike) => ({
@@ -53,7 +54,8 @@ const ComponentForm = ({ history, edit }) => {
         })),
         default: bikeId || '',
       },
-    });
+    },
+  );
   const redirect = (edit && typeof component === 'undefined') ? <Redirect to="/bike-list" /> : null;
   return (
     <>

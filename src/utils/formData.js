@@ -1,13 +1,16 @@
-import { InputLabel } from '@material-ui/core';
 import { distanceSmallToLarge } from './distanceFormatters';
 import { formatMassSmallToLarge } from './massUnitsFormatter';
 
-export const prepareFormData = (formData, lengthUnit, massUnit, seed) => {
+export const prepareFormData = (formData, lengthUnit, massUnit, seed, editForm) => {
   let seedKeys = null;
   if (seed) {
     seedKeys = Object.keys(seed);
   }
-  return formData.map((input) => {
+  let formattedData = formData;
+  if (editForm) {
+    formattedData = formattedData.filter((input) => input.edit.editable && input.edit.visible);
+  }
+  formattedData = formattedData.map((input) => {
     let { label } = input;
     if (input.id === 'weight') {
       label += ` ${massUnit}`;
@@ -36,6 +39,7 @@ export const prepareFormData = (formData, lengthUnit, massUnit, seed) => {
       label,
     };
   });
+  return formattedData;
 };
 
 export const formSelectSeeder = (formData, seeder = {}) => {

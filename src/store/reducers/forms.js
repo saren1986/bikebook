@@ -275,8 +275,8 @@ const defaultState = {
     },
     {
       id: 'type',
-      type: 'select',
-      default: '',
+      type: 'autocomplete',
+      default: null,
       label: 'Component type',
       edit: {
         visible: true,

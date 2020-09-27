@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withRouter, Redirect } from 'react-router-dom';
@@ -14,15 +14,14 @@ const BikeForm = ({ history, edit }) => {
   const dispatch = useDispatch();
   const { lengthUnit, massUnit } = useSelector((state) => state.user.units);
   const formData = useSelector((state) => state.forms.addBike);
-  const [formattedData, setFormattedData] = useState(null);
-  useEffect(() => {
-    if (edit && history.location.bike) {
-      const { bike } = history.location;
-      setFormattedData(prepareFormData(formData, lengthUnit, massUnit, bike));
-    } else {
-      setFormattedData(prepareFormData(formData, lengthUnit, massUnit));
-    }
-  }, []);
+
+  let formattedData = null;
+  if (edit && history.location.bike) {
+    const { bike } = history.location;
+    formattedData = (prepareFormData(formData, lengthUnit, massUnit, bike));
+  } else {
+    formattedData = (prepareFormData(formData, lengthUnit, massUnit));
+  }
 
   const onSubmitHandler = (values) => {
     if (!edit) {

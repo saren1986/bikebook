@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
@@ -6,10 +6,7 @@ import useStyles from './bikeInfo.style';
 
 const BikeInfo = ({ bike, history }) => {
   const classes = useStyles();
-  
-  useEffect(()=>{
-    console.log('BikeInfo', bike);
-  }, [])
+
   const onEditClickHandler = () => {
     history.push({
       pathname: '/bike/edit',

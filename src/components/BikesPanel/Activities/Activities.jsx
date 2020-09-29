@@ -10,7 +10,7 @@ import { secondsToHours } from '../../../utils/timeFormatters';
 import Placeholder from '../../../UX/Placeholders/Placeholder';
 import InfoBox from '../../../UX/InfoBox/InfoBox';
 import { STRAVA_SYNC_URL } from '../../../CONST';
-import { removeActivity } from '../../../store/actions/index';
+import { removeActivity, openConfirmDialog } from '../../../store/actions/index';
 
 
 const useStyles = makeStyles({
@@ -26,6 +26,7 @@ const Activities = ({ history }) => {
   const bikes = useSelector((store) => store.bikes.list);
   const isStravaAuth = useSelector((state) => !!state.strava.auth.accessToken);
   const dispatch = useDispatch();
+
 
   const addNewActivityHandler = () => {
     history.push('/activity/add');
@@ -43,14 +44,16 @@ const Activities = ({ history }) => {
       activity,
     });
   };
+
   const deleteActivityHandler = (activity) => {
-    const bikeComponents = components
-      .filter((comp) => comp.bikeId === activity.bikeId && !comp.retired
-      && new Date(comp.startDate).getTime() < new Date(activity.startDate).getTime())
-      .map((comp) => comp.id);
-    dispatch(removeActivity(
-      activity,
-      bikeComponents,
+    dispatch(openConfirmDialog(
+      'Delete activity', 'The activity will be deleted permanently. Are you sure?', () => {
+        const bikeComponents = components
+          .filter((comp) => comp.bikeId === activity.bikeId && !comp.retired
+                  && new Date(comp.startDate).getTime() < new Date(activity.startDate).getTime())
+          .map((comp) => comp.id);
+        dispatch(removeActivity(activity, bikeComponents));
+      },
     ));
   };
   const activitiesToRender = activities

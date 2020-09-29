@@ -25,6 +25,7 @@ export {
   stravaCheckForUpdate,
 } from './strava';
 export {
-  addNewActivity,
+  addActivity,
   updateActivity,
+  removeActivity,
 } from './activities';

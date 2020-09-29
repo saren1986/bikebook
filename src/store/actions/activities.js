@@ -1,4 +1,6 @@
-import { ADD_ACTIVITIES, ADD_ACTIVITY, EDIT_ACTIVITY } from './actionTypes';
+import {
+  ADD_ACTIVITIES, ADD_ACTIVITY, EDIT_ACTIVITY, REMOVE_ACTIVITY,
+} from './actionTypes';
 import { updateBikeDistance } from './bikes';
 import { updateComponentsDistance } from './bikeComponents';
 
@@ -9,27 +11,38 @@ export const addActivities = (activities) => ({
   },
 });
 
-const addActivity = (activity, components) => ({
+const add = (activity, components) => ({
   type: ADD_ACTIVITY,
   data: {
     activity,
     components,
   },
 });
-const editActivity = (activity, components) => ({
+const edit = (activity, components) => ({
   type: EDIT_ACTIVITY,
   data: {
     activity,
     components,
   },
 });
+const remove = (id) => ({
+  type: REMOVE_ACTIVITY,
+  data: {
+    id,
+  },
+});
 export const updateActivity = (activity, bikeId, components, distanceDiffrence) => (dispatch) => {
-  dispatch(editActivity(activity));
+  dispatch(edit(activity));
   dispatch(updateComponentsDistance(components, distanceDiffrence));
   dispatch(updateBikeDistance(bikeId, distanceDiffrence));
 };
-export const addNewActivity = (activity, components) => (dispatch) => {
-  dispatch(addActivity(activity, components));
+export const addActivity = (activity, components) => (dispatch) => {
+  dispatch(add(activity, components));
   dispatch(updateBikeDistance(activity.bikeId, activity.distance));
   dispatch(updateComponentsDistance(components, activity.distance));
+};
+export const removeActivity = (activity, components) => (dispatch) => {
+  dispatch(updateBikeDistance(activity.bikeId, -activity.distance));
+  dispatch(updateComponentsDistance(components, -activity.distance));
+  dispatch(remove(activity.id));
 };

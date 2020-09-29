@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import LazyLoad from 'react-lazyload';
 import { withRouter } from 'react-router-dom';
@@ -10,6 +10,7 @@ import { secondsToHours } from '../../../utils/timeFormatters';
 import Placeholder from '../../../UX/Placeholders/Placeholder';
 import InfoBox from '../../../UX/InfoBox/InfoBox';
 import { STRAVA_SYNC_URL } from '../../../CONST';
+import { removeActivity } from '../../../store/actions/index';
 
 
 const useStyles = makeStyles({
@@ -21,8 +22,10 @@ const useStyles = makeStyles({
 const Activities = ({ history }) => {
   const classes = useStyles();
   const activities = useSelector((store) => store.activities);
+  const components = useSelector((state) => state.components);
   const bikes = useSelector((store) => store.bikes.list);
   const isStravaAuth = useSelector((state) => !!state.strava.auth.accessToken);
+  const dispatch = useDispatch();
 
   const addNewActivityHandler = () => {
     history.push('/activity/add');
@@ -40,6 +43,16 @@ const Activities = ({ history }) => {
       activity,
     });
   };
+  const deleteActivityHandler = (activity) => {
+    const bikeComponents = components
+      .filter((comp) => comp.bikeId === activity.bikeId && !comp.retired
+      && new Date(comp.startDate).getTime() < new Date(activity.startDate).getTime())
+      .map((comp) => comp.id);
+    dispatch(removeActivity(
+      activity,
+      bikeComponents,
+    ));
+  };
   const activitiesToRender = activities
     .sort((a, b) => (new Date(a.startDate) > new Date(b.startDate) ? -1 : 1))
     .map((activity) => {
@@ -55,6 +68,7 @@ const Activities = ({ history }) => {
             time={secondsToHours(activity.movingTime)}
             distance={formatDistance(activity.distance, 'km')}
             editHandler={!activity.strava ? () => editActivityHandler(activity) : null}
+            deleteHandler={!activity.strava ? () => deleteActivityHandler(activity) : null}
           />
         </LazyLoad>
       );

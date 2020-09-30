@@ -2,9 +2,18 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import useStyles from './bikeInfo.style';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+  header: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
+}));
 
 const BikeInfo = ({ bike, history }) => {
+  console.log('Bike', bike);
   const classes = useStyles();
 
   const onEditClickHandler = () => {
@@ -24,7 +33,10 @@ const BikeInfo = ({ bike, history }) => {
       >
         {bike.name}
       </Typography>
-      <button onClick={onEditClickHandler}>edit</button>
+        <div className={classes.actionsBar}>
+          <button onClick={onEditClickHandler}>edit</button>
+        </div>
+      
     </>
   );
 };

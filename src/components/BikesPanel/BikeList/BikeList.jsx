@@ -12,6 +12,7 @@ import * as actions from '../../../store/actions/index';
 const BikeList = ({ history }) => {
   const dispatch = useDispatch();
   const bikeList = useSelector((state) => state.bikes.list);
+
   const bikeClickHandler = (bikeId) => () => {
     dispatch(actions.setActiveBike(bikeId));
     history.push('/bike');

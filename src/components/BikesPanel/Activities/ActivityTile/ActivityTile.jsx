@@ -39,7 +39,7 @@ const useStyles = makeStyles({
   },
 });
 const ActivityTile = ({
-  startDate, strava, title, bike, distance, time, editHandler
+  startDate, strava, title, bike, distance, time, editHandler, deleteHandler,
 }) => {
   const classes = useStyles();
   return (
@@ -56,15 +56,17 @@ const ActivityTile = ({
               {!strava ? (
                 <>
                   <Tooltip title="Delete">
-                    <IconButton type="button">
+                    <IconButton type="button" onClick={deleteHandler}>
                       <DeleteIcon />
                     </IconButton>
                   </Tooltip>
-                  <Tooltip title="Edit">
-                    <IconButton type="button" onClick={editHandler}>
-                      <Edit />
-                    </IconButton>
-                  </Tooltip>
+                  {editHandler ? (
+                    <Tooltip title="Edit">
+                      <IconButton type="button" onClick={editHandler}>
+                        <Edit />
+                      </IconButton>
+                    </Tooltip>
+                  ) : null }
                 </>
               )
                 : (
@@ -109,5 +111,6 @@ ActivityTile.propTypes = {
   distance: PropTypes.string.isRequired,
   time: PropTypes.string.isRequired,
   editHandler: PropTypes.func,
+  deleteHandler: PropTypes.func,
 };
 export default ActivityTile;

@@ -1,28 +1,30 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
-import LazyLoad from 'react-lazyload';
 import { withRouter } from 'react-router-dom';
 import { Header, BtnWrapper, Btn } from '../../../styled/styled';
 import ActivityTile from './ActivityTile/ActivityTile';
 import { formatDistance } from '../../../utils/distanceFormatters';
-import { secondsToHours } from '../../../utils/timeFormatters';
-import Placeholder from '../../../UX/Placeholders/Placeholder';
+import { secondsToHours, timeFormatter } from '../../../utils/timeFormatters';
 import InfoBox from '../../../UX/InfoBox/InfoBox';
 import { STRAVA_SYNC_URL } from '../../../CONST';
+import { removeActivity, openConfirmDialog } from '../../../store/actions/index';
+import Pagination from '../../../UX/Pagination/Pagination';
 
 
 const useStyles = makeStyles({
-  activitiesList: {
-
-
-  },
+  activitiesList: {},
 });
 const Activities = ({ history }) => {
   const classes = useStyles();
   const activities = useSelector((store) => store.activities);
+  const components = useSelector((state) => state.components);
   const bikes = useSelector((store) => store.bikes.list);
   const isStravaAuth = useSelector((state) => !!state.strava.auth.accessToken);
+  const dispatch = useDispatch();
+  const activitiesPerPage = 10;
+  const [currentPage, setCurrentPage] = useState(0);
+  const activitiesFrom = currentPage * activitiesPerPage;
 
   const addNewActivityHandler = () => {
     history.push('/activity/add');
@@ -40,36 +42,59 @@ const Activities = ({ history }) => {
       activity,
     });
   };
+
+  const deleteActivityHandler = (activity) => {
+    dispatch(openConfirmDialog(
+      'Delete activity', 'The activity will be deleted permanently. Are you sure?', () => {
+        const bikeComponents = components
+          .filter((comp) => comp.bikeId === activity.bikeId && !comp.retired
+                  && new Date(comp.startDate).getTime() < new Date(activity.startDate).getTime())
+          .map((comp) => comp.id);
+        dispatch(removeActivity(activity, bikeComponents));
+      },
+    ));
+  };
   const activitiesToRender = activities
     .sort((a, b) => (new Date(a.startDate) > new Date(b.startDate) ? -1 : 1))
+    .slice(activitiesFrom, activitiesFrom + activitiesPerPage)
     .map((activity) => {
       const bike = bikes.find((b) => b.id === activity.bikeId);
       return (
-        <LazyLoad key={activity.id} height={115} offset={-50} once placeholder={<Placeholder />}>
-          <ActivityTile
-            id={activity.id}
-            startDate={activity.startDate}
-            strava={activity.strava}
-            title={activity.title}
-            bike={bike ? bike.name : 'unknown'}
-            time={secondsToHours(activity.movingTime)}
-            distance={formatDistance(activity.distance, 'km')}
-            editHandler={!activity.strava ? () => editActivityHandler(activity) : null}
-          />
-        </LazyLoad>
+        <ActivityTile
+          key={activity.id}
+          id={activity.id}
+          startDate={timeFormatter(activity.startDate)}
+          strava={activity.strava}
+          title={activity.title}
+          bike={bike ? bike.name : 'unknown'}
+          time={secondsToHours(activity.movingTime)}
+          distance={formatDistance(activity.distance, 'km')}
+          editHandler={!activity.strava ? () => editActivityHandler(activity) : null}
+          deleteHandler={!activity.strava ? () => deleteActivityHandler(activity) : null}
+        />
       );
     });
+
   return (
     <>
       <Header>Activities</Header>
       <div className={classes.activitiesList}>
-        {activitiesToRender.length ? activitiesToRender
+        {activitiesToRender.length
+          ? activitiesToRender
           : (
             <InfoBox type="warning">
               You have not any activities yet.
             </InfoBox>
           )}
       </div>
+      {activities.length > activitiesPerPage ? (
+        <Pagination
+          elemenstLength={activities.length}
+          perPage={activitiesPerPage}
+          pageClick={(page) => { setCurrentPage(page); }}
+        />
+      ) : null}
+
       <BtnWrapper>
         {!isStravaAuth || !activitiesToRender.length ? (
           <Btn variant="outlined" color="primary" onClick={stravaClickHandler}>

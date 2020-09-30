@@ -695,7 +695,7 @@ const defaultState = {
       label: 'Activity date',
       edit: {
         visible: true,
-        editable: true,
+        editable: false,
       },
       controlledBy: false,
       validation: {

@@ -1,4 +1,4 @@
-import { ADD_ACTIVITIES, ADD_ACTIVITY, EDIT_ACTIVITY} from '../actions/actionTypes';
+import { ADD_ACTIVITIES, ADD_ACTIVITY, EDIT_ACTIVITY, REMOVE_ACTIVITY } from '../actions/actionTypes';
 import activities from '../../mock/activities';
 import { timeToSeconds } from '../../utils/timeFormatters';
 
@@ -10,6 +10,7 @@ const addActivitites = (state, action) => [
   ...state,
   ...action.data.activities,
 ];
+
 const addActivity = (state, action) => {
   const { components } = action.data;
   const { movingTime, startDate } = action.data.activity;
@@ -47,12 +48,16 @@ const editActivity = (state, action) => {
     return activity;
   });
 };
+const removeActivity = (state, action) => state
+  .filter((activity) => (activity.id !== action.data.id) || activity.strava);
+
 
 const reducer = (state = defaultState, action) => {
   switch (action.type) {
     case ADD_ACTIVITIES: return addActivitites(state, action);
     case ADD_ACTIVITY: return addActivity(state, action);
     case EDIT_ACTIVITY: return editActivity(state, action);
+    case REMOVE_ACTIVITY: return removeActivity(state, action);
     default: return state;
   }
 };

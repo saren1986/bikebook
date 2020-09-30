@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withRouter, Redirect } from 'react-router-dom';
-import { addNewActivity, updateActivity } from '../../../../store/actions/index';
+import { addActivity, updateActivity } from '../../../../store/actions/index';
 import { prepareFormData, formSelectSeeder } from '../../../../utils/formData';
 import { distanceLargeToSmall } from '../../../../utils/distanceFormatters';
 import { secondsToTime } from '../../../../utils/timeFormatters';
@@ -18,11 +18,12 @@ const ComponentForm = ({ history, edit }) => {
 
   const onSubmitHandler = (values) => {
     const bikeComponents = components
-      .filter((comp) => comp.bikeId === values.bikeId && !comp.retired)
+      .filter((comp) => comp.bikeId === values.bikeId && !comp.retired
+      && new Date(comp.startDate).getTime() < values.startDate)
       .map((comp) => comp.id);
     const newDistance = distanceLargeToSmall(values.distance, lengthUnit);
     if (!edit) {
-      dispatch(addNewActivity(
+      dispatch(addActivity(
         {
           ...values,
           distance: newDistance,
@@ -53,7 +54,8 @@ const ComponentForm = ({ history, edit }) => {
 
   const headerLabel = edit ? 'Edit activity' : 'Add new activity';
   const buttonLabel = edit ? 'Edit' : 'Add';
-  const seeder = (edit && typeof activity !== 'undefined') ? { ...activity, 
+  const seeder = (edit && typeof activity !== 'undefined') ? {
+    ...activity,
     movingTime: secondsToTime(activity.movingTime),
     startDate: new Date(activity.startDate),
   } : {};

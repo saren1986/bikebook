@@ -95,7 +95,7 @@ const BikesSync = ({ bikes, history }) => {
         className={classes.root}
         subheader={(
           <ListSubheader component="div" id="nested-list-subheader">
-            Select the bikes you want to sync:
+            Select bikes you want to sync:
           </ListSubheader>
     )}
       >

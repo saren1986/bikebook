@@ -9,7 +9,7 @@ import Form from '../../../../UX/Form/Form';
 const ComponentForm = ({ history, edit }) => {
   const dispatch = useDispatch();
   const formData = useSelector((state) => state.forms.components);
-  const bikes = useSelector((state) => state.bikes.list);
+  const bikes = useSelector((state) => state.bikes);
   const activities = useSelector((state) => state.activities);
   const { lengthUnit, massUnit } = useSelector((state) => state.user.units);
   const { bikeId, component } = history.location;

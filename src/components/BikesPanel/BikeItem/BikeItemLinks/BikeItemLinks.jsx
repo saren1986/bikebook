@@ -12,8 +12,8 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import useStyles from './bikeItemLinks.style';
 
 const BikeItemLinks = ({ history }) => {
-  const activeBike = useSelector((state) => state.bikes.activeBike);
-  const bike = useSelector((state) => state.bikes.list.find((b) => b.id === activeBike));
+  const activeBike = useSelector((state) => state.options.activeBike);
+  const bike = useSelector((state) => state.bikes.find((b) => b.id === activeBike));
   const classes = useStyles();
   const addNewComponentHandle = () => {
     history.push({

@@ -5,9 +5,7 @@ import {
 
 import { useSelector, useDispatch } from 'react-redux';
 import BikeComponents from '../BikeComponents/BikeComponents';
-
 import useStyles from './bikeItem.style';
-
 import * as actions from '../../../store/actions/index';
 import ComponentDetail from '../BikeComponents/ComponentDetail/ComponentDetail';
 import BikeInfo from '../BikeInfo/BikeInfo';
@@ -15,8 +13,8 @@ import BikeInfo from '../BikeInfo/BikeInfo';
 const BikeItem = ({ match }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const bikeId = useSelector((state) => state.bikes.activeBike);
-  const bike = useSelector((state) => state.bikes.list.find((elem) => elem.id === bikeId));
+  const bikeId = useSelector((state) => state.options.activeBike);
+  const bike = useSelector((state) => state.bikes.find((elem) => elem.id === bikeId));
   const components = useSelector((state) => state.components
     .filter((comp) => comp.bikeId === bikeId));
   useEffect(() => () => dispatch(actions.setActiveBike(null)), []);

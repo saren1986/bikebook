@@ -26,7 +26,6 @@ const defaultState = {
   },
   bikes: null,
   error: null,
-
 };
 
 const stravaUpdateAthlete = (state, action) => {

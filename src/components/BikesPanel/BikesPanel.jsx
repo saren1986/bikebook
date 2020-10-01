@@ -17,7 +17,7 @@ import ComponentForm from './BikeComponents/ComponentForm/ComponentForm';
 import ActivityForm from './Activities/ActivityForm/ActivityForm';
 
 const BikesPanel = () => {
-  const bikeList = useSelector((state) => state.bikes.list);
+  const bikeList = useSelector((state) => state.bikes);
   return (
     <ControlLayout>
       <BikesNav />

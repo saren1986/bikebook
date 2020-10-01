@@ -11,7 +11,6 @@ import { STRAVA_SYNC_URL } from '../../../CONST';
 import { removeActivity, openConfirmDialog } from '../../../store/actions/index';
 import Pagination from '../../../UX/Pagination/Pagination';
 
-
 const useStyles = makeStyles({
   activitiesList: {},
 });
@@ -19,7 +18,7 @@ const Activities = ({ history }) => {
   const classes = useStyles();
   const activities = useSelector((store) => store.activities);
   const components = useSelector((state) => state.components);
-  const bikes = useSelector((store) => store.bikes.list);
+  const bikes = useSelector((store) => store.bikes);
   const isStravaAuth = useSelector((state) => !!state.strava.auth.accessToken);
   const dispatch = useDispatch();
   const activitiesPerPage = 10;

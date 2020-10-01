@@ -150,8 +150,6 @@ const BikeComponents = ({
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-
-
         <MaterialTable
           isFreeAction="true"
           style={{ borderRadius: 'none' }}

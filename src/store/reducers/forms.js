@@ -1,5 +1,3 @@
-import * as actionTypes from '../actions/actionTypes';
-
 const defaultState = {
   addBike: [
     {
@@ -725,7 +723,6 @@ const defaultState = {
     },
   ],
 };
-
 
 const reducer = (state = defaultState, action) => {
   switch (action.type) {

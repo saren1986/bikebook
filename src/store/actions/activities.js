@@ -1,5 +1,5 @@
 import {
-  ADD_ACTIVITIES, ADD_ACTIVITY, EDIT_ACTIVITY, REMOVE_ACTIVITY,
+  ADD_ACTIVITIES, ADD_ACTIVITY, EDIT_ACTIVITY, REMOVE_ACTIVITY, REMOVE_ACTIVITIES, 
 } from './actionTypes';
 import { updateBikeDistance } from './bikes';
 import { updateComponentsDistance } from './bikeComponents';
@@ -31,6 +31,13 @@ const remove = (id) => ({
     id,
   },
 });
+export const removeActivities = (bikeId) => ({
+  type: REMOVE_ACTIVITIES,
+  data: {
+    bikeId,
+  },
+});
+
 export const updateActivity = (activity, bikeId, components, distanceDiffrence) => (dispatch) => {
   dispatch(edit(activity));
   dispatch(updateComponentsDistance(components, distanceDiffrence));

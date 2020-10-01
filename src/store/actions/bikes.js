@@ -1,9 +1,6 @@
 import * as actionTypes from './actionTypes';
-
-export const setActiveBike = (bikeId) => ({
-  type: actionTypes.SET_ACTIVE_BIKE,
-  id: bikeId,
-});
+import { deleteComponents, retireComponents } from './bikeComponents';
+import { removeActivities } from './activities';
 
 export const addBike = (bike) => ({
   type: actionTypes.ADD_BIKE,
@@ -25,3 +22,26 @@ export const updateBikeDistance = (bikeId, distance) => ({
     bikeId,
   },
 });
+
+const retire = (bikeId) => ({
+  type: actionTypes.RETIRE_BIKE,
+  data: {
+    bikeId,
+  },
+});
+const remove = (bikeId) => ({
+  type: actionTypes.DELETE_BIKE,
+  data: {
+    bikeId,
+  },
+});
+
+export const deleteBike = (bikeId) => (dispatch) => {
+  dispatch(remove(bikeId));
+  dispatch(deleteComponents(bikeId));
+  dispatch(removeActivities(bikeId));
+};
+export const retireBike = (bikeId) => (dispatch) => {
+  dispatch(retire(bikeId));
+  dispatch(retireComponents(bikeId));
+};

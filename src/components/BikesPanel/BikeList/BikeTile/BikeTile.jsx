@@ -4,39 +4,16 @@ import Grid from '@material-ui/core/Grid';
 import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import { formatDistance } from '../../../../utils/distanceFormatters';
 import StravaLong from '../../../../icons/Strava/StravaLong';
 
 const useStyles = makeStyles((theme) => ({
-  wrapper: {
-    border: '1px solid #ccc',
-    padding: '15px',
-    minHeight: '100px',
-    display: 'block',
-    textDecoration: 'none',
-    textAlign: 'center',
-    width: '100%',
-    cursor: 'pointer',
-    '&:active':
-      { color: 'inherit' },
-  },
-  name: {
-    fontWeight: 'bold',
-  },
-  top: {
+
+  topInfo: {
     display: 'flex',
-    justifyContent: 'center',
-    flexFlow: 'column',
-    '&> span': { display: 'block', margin: '10px 0' },
-  },
-  syncInfo: {
-    display: 'flex',
-    justifyContent: 'flex-end',
     alignItems: 'center',
     minHeight: 30,
     marginTop: -10,
@@ -44,6 +21,19 @@ const useStyles = makeStyles((theme) => ({
   },
   pos: {
     marginBottom: 12,
+  },
+  retiredWrapper: {
+    background: '#e6e3e3c4',
+  },
+  retired: {
+    color: '#f00',
+  },
+  topLeft: {
+    width: '50%',
+  },
+  topRight: {
+    width: '50%',
+    textAlign: 'right',
   },
 }));
 
@@ -53,13 +43,18 @@ const BikeTile = ({ bike, click }) => {
   return (
     <Grid item md={4} xs={12}>
       <Card
-        className={classes.root}
+        className={bike.retired ? classes.retiredWrapper : classes.root}
         variant="outlined"
       >
         <CardActionArea onClick={click}>
           <CardContent>
-            <div className={classes.syncInfo}>
-              {bike.strava ? <StravaLong /> : 'Bikebook'}
+            <div className={classes.topInfo}>
+              <div className={classes.topLeft}>
+                {!bike.retired ? null
+                  : (<strong className={classes.retired}>RETIRED</strong>)}
+              </div>
+              <div className={classes.topRight}>{bike.strava ? <StravaLong /> : 'Bikebook'}</div>
+
             </div>
             <Typography variant="h5" component="h2">
               {bike.name}
@@ -82,6 +77,7 @@ BikeTile.propTypes = {
     name: PropTypes.string.isRequired,
     distance: PropTypes.number.isRequired,
     strava: PropTypes.bool.isRequired,
+    retired: PropTypes.bool.isRequired,
   }).isRequired,
   click: PropTypes.func.isRequired,
 };

@@ -19,6 +19,11 @@ const BikeList = ({ history }) => {
   };
 
   const renderedBikeList = bikeList ? bikeList
+    .sort((a, b) => {
+      if (a.retired === b.retired) return 0;
+      if (b.retired) return -1;
+      return 1;
+    })
     .map((bike) => (
       <BikeTile
         key={bike.id}

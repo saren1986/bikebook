@@ -1,7 +1,7 @@
 import {
   ADD_COMPONENT, EDIT_COMPONENT, SET_DISTANCE_ALERT,
   UPDATE_COMPONENTS_DISTANCE, DISABLE_SERVICE_ALERT, SWITCH_TO_BIKE,
-  RETIRE_COMPONENT, DELETE_COMPONENT,
+  RETIRE_COMPONENT, RETIRE_COMPONENTS, DELETE_COMPONENT, DELETE_COMPONENTS,
 } from '../actions/actionTypes';
 import bikeComponents from '../../mock/bikeComponents';
 import * as format from '../../utils/distanceFormatters';
@@ -147,8 +147,25 @@ const retireComponent = (state, action) => state.map((component) => {
   }
   return component;
 });
+const retireComponents = (state, action) => state.map((component) => {
+  if (component.bikeId === action.data.bikeId) {
+    return {
+      ...component,
+      alert: {
+        ...component.alert,
+        on: false,
+        startDistance: null,
+        endDistance: null,
+      },
+      retired: true,
+    };
+  }
+  return component;
+});
 const deleteComponent = (state, action) => state
   .filter((component) => component.id !== action.data.compId);
+const deleteComponents = (state, action) => state
+  .filter((component) => component.bikeId !== action.data.bikeId);
 
 const reducer = (state = defaultState, action) => {
   switch (action.type) {
@@ -159,7 +176,9 @@ const reducer = (state = defaultState, action) => {
     case DISABLE_SERVICE_ALERT: return disableServiceAlert(state, action);
     case SWITCH_TO_BIKE: return switchToBike(state, action);
     case RETIRE_COMPONENT: return retireComponent(state, action);
+    case RETIRE_COMPONENTS: return retireComponents(state, action);
     case DELETE_COMPONENT: return deleteComponent(state, action);
+    case DELETE_COMPONENTS: return deleteComponents(state, action);
     default: return state;
   }
 };

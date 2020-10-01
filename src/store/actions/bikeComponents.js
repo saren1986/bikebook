@@ -55,9 +55,21 @@ export const retireComponent = (compId) => ({
     compId,
   },
 });
+export const retireComponents = (bikeId) => ({
+  type: actionTypes.RETIRE_COMPONENTS,
+  data: {
+    bikeId,
+  },
+});
 export const deleteComponent = (compId) => ({
   type: actionTypes.DELETE_COMPONENT,
   data: {
     compId,
+  },
+});
+export const deleteComponents = (bikeId) => ({
+  type: actionTypes.DELETE_COMPONENTS,
+  data: {
+    bikeId,
   },
 });

@@ -3,7 +3,7 @@ import bikes from '../../mock/bikes';
 
 const defaultState = {
   list: bikes,
-  activeBike: 'n2'//null,
+  activeBike: 'b1145059', // null,
 };
 const setActiveBike = (state, action) => ({
   ...state,
@@ -60,6 +60,27 @@ const updateBikeDistance = (state, action) => {
   };
 };
 
+const retireBike = (state, action) => {
+  const { bikeId } = action.data;
+  const bikeList = state.list.map((bike) => {
+    if (bike.id === bikeId) {
+      return {
+        ...bike,
+        retired: true,
+      };
+    }
+    return bike;
+  });
+  return {
+    ...state,
+    list: bikeList,
+  };
+};
+const deleteBike = (state, action) => ({
+  ...state,
+  list: state.list.filter((bike) => (bike.id !== action.data.bikeId) || bike.strava),
+});
+
 const reducer = (state = defaultState, action) => {
   switch (action.type) {
     case actionTypes.ADD_BIKE: return addBike(state, action);
@@ -68,6 +89,8 @@ const reducer = (state = defaultState, action) => {
       return setActiveBike(state, action);
     }
     case actionTypes.UPDATE_BIKE_DISTANCE: return updateBikeDistance(state, action);
+    case actionTypes.RETIRE_BIKE: return retireBike(state, action);
+    case actionTypes.DELETE_BIKE: return deleteBike(state, action);
     default: return state;
   }
 };

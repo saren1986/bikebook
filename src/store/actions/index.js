@@ -2,6 +2,8 @@ export {
   addBike,
   editBike,
   setActiveBike,
+  retireBike,
+  deleteBike,
 } from './bikes';
 export {
   addComponent,
@@ -9,6 +11,7 @@ export {
   disableServiceAlert,
   retireComponent,
   deleteComponent,
+  deleteComponents,
   editComponent,
 } from './bikeComponents';
 export {
@@ -28,4 +31,5 @@ export {
   addActivity,
   updateActivity,
   removeActivity,
+  removeActivities,
 } from './activities';

@@ -7,14 +7,15 @@ import BikeTile from './BikeTile/BikeTile';
 import BikeListControls from './BikeListControls/BikeListControls';
 import Spinner from '../../../UX/Spinner/Spinner';
 import { Header } from '../../../styled/styled';
-import * as actions from '../../../store/actions/index';
+import InfoBox from '../../../UX/InfoBox/InfoBox';
+import { setActiveBike } from '../../../store/actions/index';
 
 const BikeList = ({ history }) => {
   const dispatch = useDispatch();
   const bikeList = useSelector((state) => state.bikes);
 
   const bikeClickHandler = (bikeId) => () => {
-    dispatch(actions.setActiveBike(bikeId));
+    dispatch(setActiveBike(bikeId));
     history.push('/bike');
   };
 
@@ -37,9 +38,13 @@ const BikeList = ({ history }) => {
     <>
       <Header>Your Bikes</Header>
       <div>
-        <Grid container spacing={2}>
-          {renderedBikeList}
-        </Grid>
+        {renderedBikeList.length
+          ? (<Grid container spacing={2}>{renderedBikeList}</Grid>)
+          : (
+            <InfoBox type="warning">
+              You have not any bikes yet.
+            </InfoBox>
+          )}
       </div>
       <BikeListControls />
     </>

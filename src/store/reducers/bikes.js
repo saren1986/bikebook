@@ -2,7 +2,7 @@ import * as actionTypes from '../actions/actionTypes';
 import bikes from '../../mock/bikes';
 
 const defaultState = [
-  ...bikes,
+  // ...bikes,
 ];
 
 const addBike = (state, action) => [

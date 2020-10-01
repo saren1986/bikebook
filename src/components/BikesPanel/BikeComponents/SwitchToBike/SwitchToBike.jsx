@@ -19,7 +19,7 @@ const SwitchToBike = ({ compId, bikeId, clb }) => {
     setSelectValue('');
     clb();
   };
-  const bikes = useSelector((state) => state.bikes.list);
+  const bikes = useSelector((state) => state.bikes);
 
   return (
     <Styled.SmallForm>

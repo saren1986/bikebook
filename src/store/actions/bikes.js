@@ -2,11 +2,6 @@ import * as actionTypes from './actionTypes';
 import { deleteComponents, retireComponents } from './bikeComponents';
 import { removeActivities } from './activities';
 
-export const setActiveBike = (bikeId) => ({
-  type: actionTypes.SET_ACTIVE_BIKE,
-  id: bikeId,
-});
-
 export const addBike = (bike) => ({
   type: actionTypes.ADD_BIKE,
   data: {

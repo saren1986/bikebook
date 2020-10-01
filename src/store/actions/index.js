@@ -1,7 +1,6 @@
 export {
   addBike,
   editBike,
-  setActiveBike,
   retireBike,
   deleteBike,
 } from './bikes';
@@ -31,5 +30,7 @@ export {
   addActivity,
   updateActivity,
   removeActivity,
-  removeActivities,
 } from './activities';
+export {
+  setActiveBike,
+} from './options';

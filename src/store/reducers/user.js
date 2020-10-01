@@ -1,5 +1,3 @@
-import * as actionTypes from '../actions/actionTypes';
-
 const defaultState = {
   units: {
     lengthUnit: 'km',
@@ -7,10 +5,8 @@ const defaultState = {
   },
 };
 
-
 const reducer = (state = defaultState, action) => {
   switch (action.type) {
-
     default:
       return state;
   }

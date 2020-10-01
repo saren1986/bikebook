@@ -9,6 +9,7 @@ import user from './reducers/user';
 import strava from './reducers/strava';
 import activities from './reducers/activities';
 import forms from './reducers/forms';
+import options from './reducers/options';
 
 const composeEnhancers = typeof window === 'object'
   && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
@@ -22,6 +23,7 @@ const enhancer = composeEnhancers(
 );
 
 const reducer = combineReducers({
+  options,
   bikes,
   components,
   ux,

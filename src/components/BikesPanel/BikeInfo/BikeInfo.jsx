@@ -49,7 +49,6 @@ const BikeInfo = ({ bike, history }) => {
   const {
     id, retired, distance, model, type, description,
   } = bike;
-  console.log('Bike', bike);
   const classes = useStyles();
 
   const onEditClickHandler = () => {

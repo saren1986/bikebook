@@ -11,7 +11,7 @@ import Form from '../../../../UX/Form/Form';
 const ComponentForm = ({ history, edit }) => {
   const dispatch = useDispatch();
   const formData = useSelector((state) => state.forms.activity);
-  const bikes = useSelector((state) => state.bikes.list);
+  const bikes = useSelector((state) => state.bikes);
   const components = useSelector((state) => state.components);
   const { lengthUnit } = useSelector((state) => state.user.units);
   const { activity } = history.location;

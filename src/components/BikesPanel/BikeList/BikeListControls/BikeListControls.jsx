@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import { BtnWrapper, Btn } from '../../../../styled/styled';
 import { STRAVA_SYNC_URL } from '../../../../CONST';
 
-
 const BikeListControls = ({ history }) => {
   const isStravaAuth = useSelector((state) => !!state.strava.auth.accessToken);
   const addNewBikeClickHandler = () => {

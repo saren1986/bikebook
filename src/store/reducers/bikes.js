@@ -1,63 +1,68 @@
-import * as actionTypes from '../actions/actionTypes';
+import { createSlice } from '@reduxjs/toolkit';
 import bikes from '../../mock/bikes';
 
-const defaultState = [
-  // ...bikes,
+const initialState = [
+  ...bikes,
 ];
 
-const addBike = (state, action) => [
-  ...state,
-  {
-    ...action.data.bike,
-    retired: false,
-    strava: false,
+const bikeSlice = createSlice({
+  name: 'bike',
+  initialState,
+  reducers: {
+    create: {
+      reducer: (state, { payload }) => {
+        state.push(payload);
+      },
+      prepare: (payload) => ({
+        payload: {
+          id: Math.random().toString(36).substring(7),
+          ...payload,
+          retired: false,
+          strava: false,
+        },
+      }),
+    },
+    edit: (state, { payload }) => {
+      const bikeToEdit = state.find((stateBike) => stateBike.id === payload.id);
+      if (bikeToEdit) {
+        const {
+          brand, description, model, name, type, weight,
+        } = payload;
+        bikeToEdit.brand = brand;
+        bikeToEdit.description = description;
+        bikeToEdit.model = model;
+        bikeToEdit.name = name;
+        bikeToEdit.type = type;
+        bikeToEdit.weight = weight;
+      }
+    },
+    remove: (state, { payload }) => {
+      const i = state.findIndex((bike) => (bike.id === payload.bikeId) && !bike.strava);
+      if (i !== -1) {
+        state.splice(i, 1);
+      }
+    },
+    retire: (state, { payload }) => {
+      const bikeToEdit = state.find((stateBike) => stateBike.id === payload.bikeId);
+      if (bikeToEdit) {
+        bikeToEdit.retired = true;
+      }
+    },
+    updateDistance: (state, { payload }) => {
+      const bikeToEdit = state.find((stateBike) => stateBike.id === payload.bikeId);
+      if (bikeToEdit) {
+        bikeToEdit.distance += payload.distance;
+      }
+    },
   },
-];
-
-const editBike = (state, action) => state.map((stateBike) => {
-  if (stateBike.id === action.data.bike.id) {
-    return {
-      ...stateBike,
-      ...action.data.bike,
-    };
-  }
-  return stateBike;
 });
 
-const updateBikeDistance = (state, action) => state.map((bike) => {
-  if (bike.id === action.data.bikeId) {
-    const resultDistance = bike.distance + action.data.distance;
-    return {
-      ...bike,
-      distance: resultDistance,
-    };
-  }
-  return bike;
-});
+export const {
+  create: addBike,
+  edit: editBike,
+  updateDistance: updateBikeDistance,
+  retire,
+  remove,
+} = bikeSlice.actions;
 
-const retireBike = (state, action) => {
-  return state.map((bike) => {
-    if (bike.id === action.data.bikeId) {
-      return {
-        ...bike,
-        retired: true,
-      };
-    }
-    return bike;
-  });
-};
-const deleteBike = (state, action) => state
-  .filter((bike) => (bike.id !== action.data.bikeId) || bike.strava);
-
-const reducer = (state = defaultState, action) => {
-  switch (action.type) {
-    case actionTypes.ADD_BIKE: return addBike(state, action);
-    case actionTypes.EDIT_BIKE: return editBike(state, action);
-    case actionTypes.UPDATE_BIKE_DISTANCE: return updateBikeDistance(state, action);
-    case actionTypes.RETIRE_BIKE: return retireBike(state, action);
-    case actionTypes.DELETE_BIKE: return deleteBike(state, action);
-    default: return state;
-  }
-};
-
-export default reducer;
+export default bikeSlice.reducer;

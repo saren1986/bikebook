@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withRouter, Redirect } from 'react-router-dom';
 import { addBike, setActiveBike, editBike } from '../../../store/actions/index';
+// import { editBike } from '../../../store/reducers/bikes';
 import { distanceLargeToSmall } from '../../../utils/distanceFormatters';
 import { formatMassLargeToSmall } from '../../../utils/massUnitsFormatter';
 import { prepareFormData } from '../../../utils/formData';
@@ -28,7 +29,6 @@ const BikeForm = ({ history, edit }) => {
       dispatch(
         addBike(
           {
-            id: '12bb', // TODO id
             ...values,
             distance: distanceLargeToSmall(values.distance, lengthUnit),
             weight: formatMassLargeToSmall(values.weight, massUnit),

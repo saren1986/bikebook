@@ -1,6 +1,8 @@
 export {
   addBike,
   editBike,
+} from '../reducers/bikes';
+export {
   retireBike,
   deleteBike,
 } from './bikes';

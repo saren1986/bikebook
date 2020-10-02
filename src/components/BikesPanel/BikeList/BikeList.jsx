@@ -13,25 +13,29 @@ import { setActiveBike } from '../../../store/actions/index';
 const BikeList = ({ history }) => {
   const dispatch = useDispatch();
   const bikeList = useSelector((state) => state.bikes);
+  console.log('====================================');
+  console.log('bikeList', bikeList);
+  console.log('====================================');
 
   const bikeClickHandler = (bikeId) => () => {
     dispatch(setActiveBike(bikeId));
     history.push('/bike');
   };
 
-  const renderedBikeList = bikeList ? bikeList
-    .sort((a, b) => {
-      if (a.retired === b.retired) return 0;
-      if (b.retired) return -1;
-      return 1;
-    })
-    .map((bike) => (
-      <BikeTile
-        key={bike.id}
-        bike={bike}
-        click={bikeClickHandler(bike.id)}
-      />
-    ))
+  const renderedBikeList = bikeList
+    ? bikeList.slice()
+      .sort((a, b) => {
+        if (a.retired === b.retired) return 0;
+        if (b.retired) return -1;
+        return 1;
+      })
+      .map((bike) => (
+        <BikeTile
+          key={bike.id}
+          bike={bike}
+          click={bikeClickHandler(bike.id)}
+        />
+      ))
     : <Spinner />;
 
   return (

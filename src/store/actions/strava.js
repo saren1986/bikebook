@@ -4,7 +4,7 @@ import axios from 'axios';
 import stravaApi from 'strava-v3';
 import * as actionTypes from './actionTypes';
 import { addActivities } from './activities';
-import { addBike } from './bikes';
+import { addBike } from '../reducers/bikes';
 import { convertStravaActivities, convertStravaBike } from '../../utils/dataConventers';
 
 

@@ -8,13 +8,14 @@ export {
 } from './bikes';
 export {
   addComponent,
+  editComponent,
   setDistanceAlert,
-  disableServiceAlert,
+  disableAlert,
+  switchToBike,
   retireComponent,
   deleteComponent,
-  deleteComponents,
-  editComponent,
-} from './bikeComponents';
+  deleteAllWithBike,
+} from '../reducers/bikeComponents';
 export {
   openConfirmDialog,
   closeConfirmDialog,

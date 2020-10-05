@@ -6,10 +6,12 @@ import PropTypes from 'prop-types';
 import ProgressBar from './progressBar/ProgressBar';
 import ComponentControls from './ComponentControls/ComponentControls';
 import SetAlert from '../Alert/SetAlert/SetAlert';
-import * as actions from '../../../../store/actions/index';
+import {
+  setDistanceAlert, disableAlert, retireComponent, deleteComponent, openConfirmDialog,
+} from '../../../../store/actions/index';
 import useStyles from './componentDetailStyle';
 import DrawerSmall from '../../../../UX/DrawerSmall/DrawerSmall';
-import { formatDistance } from '../../../../utils/distanceFormatters';
+import { formatDistance, distanceLargeToSmall } from '../../../../utils/distanceFormatters';
 import { formatMassDisplay } from '../../../../utils/massUnitsFormatter';
 import { COMPONENT_TYPES } from '../../../../mock/constans';
 import SwitchToBike from '../SwitchToBike/SwitchToBike';
@@ -26,12 +28,17 @@ const ComponentDetail = ({ components, history, location }) => {
   console.log('component', component);
   console.log('====================================');
   const setAlertHandler = (distance) => {
-    dispatch(actions.setDistanceAlert(component.id, distance, lengthUnit));
+    dispatch(setDistanceAlert({
+      componentId: component.id,
+      alertDistance: distanceLargeToSmall(distance, lengthUnit),
+    }));
     setDrawer(false);
     setAlerteMode(false);
   };
   const disableAlertHandler = () => {
-    dispatch(actions.disableServiceAlert(component.id));
+    dispatch(disableAlert({
+      componentId: component.id,
+    }));
   };
   const drawerOnHandler = (elem) => {
     if (elem === 'switch') {
@@ -47,16 +54,20 @@ const ComponentDetail = ({ components, history, location }) => {
     setDrawer(false);
   };
   const retireComponentHandler = () => {
-    dispatch(actions.openConfirmDialog(
+    dispatch(openConfirmDialog(
       'Retire component', 'The component will be retired. All service alerts will be deleted. Are you sure?', () => {
-        dispatch(actions.retireComponent(component.id));
+        dispatch(retireComponent({
+          componentId: component.id,
+        }));
       },
     ));
   };
   const deleteComponentHandler = () => {
-    dispatch(actions.openConfirmDialog(
+    dispatch(openConfirmDialog(
       'Delete component', 'The component will be deleted permanently. Are you sure?', () => {
-        dispatch(actions.deleteComponent(component.id));
+        dispatch(deleteComponent({
+          componentId: component.id,
+        }));
         history.push('/bike/components');
       },
     ));

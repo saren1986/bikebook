@@ -2,7 +2,7 @@ import {
   ADD_ACTIVITIES, ADD_ACTIVITY, EDIT_ACTIVITY, REMOVE_ACTIVITY, REMOVE_ACTIVITIES, 
 } from './actionTypes';
 import { updateBikeDistance } from '../reducers/bikes';
-import { updateComponentsDistance } from './bikeComponents';
+import { updateComponentsDistance } from '../reducers/bikeComponents';
 
 export const addActivities = (activities) => ({
   type: ADD_ACTIVITIES,
@@ -52,7 +52,10 @@ export const addActivity = (activity, components) => (dispatch) => {
     bikeId: activity.bikeId,
     distance: activity.distance,
   }));
-  dispatch(updateComponentsDistance(components, activity.distance));
+  dispatch(updateComponentsDistance({
+    components,
+    distance: activity.distance,
+  }));
 };
 export const removeActivity = (activity, components) => (dispatch) => {
   dispatch(updateBikeDistance({

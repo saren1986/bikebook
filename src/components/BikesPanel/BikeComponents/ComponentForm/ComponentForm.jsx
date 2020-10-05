@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { withRouter, Redirect } from 'react-router-dom';
 import { addComponent, setActiveBike, editComponent } from '../../../../store/actions/index';
 import { prepareFormData, formSelectSeeder } from '../../../../utils/formData';
+import { distanceLargeToSmall } from '../../../../utils/distanceFormatters';
+import { formatMassLargeToSmall } from '../../../../utils/massUnitsFormatter';
 import Form from '../../../../UX/Form/Form';
 
 const ComponentForm = ({ history, edit }) => {
@@ -15,27 +17,57 @@ const ComponentForm = ({ history, edit }) => {
   const { bikeId, component } = history.location;
 
   const onSubmitHandler = (values) => {
+    const formattedWeight = values.weight ? formatMassLargeToSmall(values.weight, massUnit) : '';
+
     if (!edit) {
+      const selectedBike = bikes.find((bike) => bike.id === values.bikeId);
+      const bikeActivities = activities.filter((activity) => activity.bikeId === values.bikeId);
+      let formattedDistance = 0;
+      let date = values.startDate.toJSON();
+      if (values.fromBegining) {
+        formattedDistance = selectedBike.distance
+        + distanceLargeToSmall(values.distance, lengthUnit);
+        if (bikeActivities.length) {
+          bikeActivities.sort((a, b) => new Date(a.startDate) > new Date(b.startDate));
+          date = bikeActivities[0].startDate;
+        }
+      } else {
+        const compDistance = bikeActivities
+          .filter((activity) => new Date(activity.startDate).getTime() < values.startDate.getTime())
+          .reduce((sum, activity) => sum + activity.distance, 0);
+        formattedDistance = distanceLargeToSmall(values.distance, lengthUnit) + compDistance;
+      }
       dispatch(addComponent({
-        id: 'c123',
-        ...values, // TODO id
-      },
-      bikes.find((bike) => bike.id === values.bikeId), lengthUnit, massUnit, activities));
+        component: {
+          bikeId: values.bikeId,
+          type: values.type,
+          brand: values.brand,
+          model: values.model,
+          weight: formattedWeight,
+          startDate: date,
+          distance: formattedDistance,
+          description: values.description,
+        },
+      }));
       dispatch(setActiveBike(values.bikeId));
       history.push({
-        pathname: '/bike/components/detail',
-        state: {
-          id: 'c123',
-        },
+        pathname: '/bike/components',
       });
     } else if (typeof component !== 'undefined') {
-      dispatch(editComponent(component.id, values, massUnit));
+      dispatch(editComponent({
+        component: {
+          id: component.id,
+          ...values,
+          weight: formattedWeight,
+        },
+      }));
       dispatch(setActiveBike(values.bikeId));
       history.push({
-        pathname: '/bike/components/detail',
-        state: {
-          id: component.id,
-        },
+        pathname: '/bike/components',
+        // pathname: '/bike/components/detail',
+        // state: {
+        //   id: component.id,
+        // },
       });
     }
   };

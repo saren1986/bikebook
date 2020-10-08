@@ -13,7 +13,7 @@ const ComponentForm = ({ history, edit }) => {
   const formData = useSelector((state) => state.forms.activity);
   const bikes = useSelector((state) => state.bikes);
   const components = useSelector((state) => state.components);
-  const { lengthUnit } = useSelector((state) => state.user.units);
+  const { lengthUnit } = useSelector((state) => state.options.units);
   const { activity } = history.location;
   console.log('activity', activity);
   const onSubmitHandler = (values) => {

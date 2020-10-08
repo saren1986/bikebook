@@ -19,7 +19,7 @@ export {
 export {
   openConfirmDialog,
   closeConfirmDialog,
-} from './ux';
+} from '../reducers/ux';
 export {
   stravaSync,
   stravaSyncStart,
@@ -39,4 +39,4 @@ export {
 } from './activities';
 export {
   setActiveBike,
-} from './options';
+} from '../reducers/options';

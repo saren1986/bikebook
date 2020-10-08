@@ -1,18 +1,26 @@
-import { SET_ACTIVE_BIKE } from '../actions/actionTypes';
+/* eslint-disable no-param-reassign */
+import { createSlice } from '@reduxjs/toolkit';
 
-const defaultState = {
+const initialState = {
   activeBike: null,
+  units: {
+    lengthUnit: 'km',
+    massUnit: 'kg',
+  },
 };
-const setActiveBike = (state, action) => ({
-  ...state,
-  activeBike: action.id,
+
+const optionsSlice = createSlice({
+  name: 'options',
+  initialState,
+  reducers: {
+    setActiveBike: (state, { payload }) => {
+      state.activeBike = payload;
+    },
+  },
 });
 
-const reducer = (state = defaultState, action) => {
-  switch (action.type) {
-    case SET_ACTIVE_BIKE: return setActiveBike(state, action);
-    default: return state;
-  }
-};
+export const {
+  setActiveBike,
+} = optionsSlice.actions;
 
-export default reducer;
+export default optionsSlice.reducer;

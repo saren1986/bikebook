@@ -11,7 +11,7 @@ import Spinner from '../../../UX/Spinner/Spinner';
 
 const BikeForm = ({ history, edit }) => {
   const dispatch = useDispatch();
-  const { lengthUnit, massUnit } = useSelector((state) => state.user.units);
+  const { lengthUnit, massUnit } = useSelector((state) => state.options.units);
   const formData = useSelector((state) => state.forms.addBike);
 
   let formattedData = null;

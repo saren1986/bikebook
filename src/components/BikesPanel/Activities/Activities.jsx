@@ -41,11 +41,11 @@ const Activities = ({ history }) => {
     });
   };
   const deleteActivityHandler = (activity) => {
-    dispatch(openConfirmDialog(
-      'Delete activity', 'The activity will be deleted permanently. Are you sure?', () => {
-        dispatch(removeActivity(activity));
-      },
-    ));
+    dispatch(openConfirmDialog({
+      title: 'Delete activity',
+      description: 'The activity will be deleted permanently. Are you sure?',
+      confirm: () => { dispatch(removeActivity(activity)); },
+    }));
   };
 
   const newActivities = activities.slice()

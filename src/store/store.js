@@ -5,7 +5,6 @@ import thunk from 'redux-thunk';
 import bikes from './reducers/bikes';
 import components from './reducers/bikeComponents';
 import ux from './reducers/ux';
-import user from './reducers/user';
 import strava from './reducers/strava';
 import activities from './reducers/activities';
 import forms from './reducers/forms';
@@ -27,7 +26,6 @@ const reducer = combineReducers({
   bikes,
   components,
   ux,
-  user,
   strava,
   activities,
   forms,

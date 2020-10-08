@@ -22,7 +22,7 @@ const ComponentDetail = ({ components, history, location }) => {
   const [alertMode, setAlerteMode] = useState(false);
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { lengthUnit, massUnit } = useSelector((state) => state.user.units);
+  const { lengthUnit, massUnit } = useSelector((state) => state.options.units);
   const component = components.find((comp) => comp.id === location.state.id);
   console.log('====================================');
   console.log('component', component);
@@ -54,23 +54,23 @@ const ComponentDetail = ({ components, history, location }) => {
     setDrawer(false);
   };
   const retireComponentHandler = () => {
-    dispatch(openConfirmDialog(
-      'Retire component', 'The component will be retired. All service alerts will be deleted. Are you sure?', () => {
-        dispatch(retireComponent({
-          componentId: component.id,
-        }));
+    dispatch(openConfirmDialog({
+      title: 'Retire component',
+      description: 'The component will be retired. All service alerts will be deleted. Are you sure?',
+      confirm: () => {
+        dispatch(retireComponent({ componentId: component.id }));
       },
-    ));
+    }));
   };
   const deleteComponentHandler = () => {
-    dispatch(openConfirmDialog(
-      'Delete component', 'The component will be deleted permanently. Are you sure?', () => {
-        dispatch(deleteComponent({
-          componentId: component.id,
-        }));
+    dispatch(openConfirmDialog({
+      title: 'Delete component',
+      description: 'The component will be deleted permanently. Are you sure?',
+      confirm: () => {
+        dispatch(deleteComponent({ componentId: component.id }));
         history.push('/bike/components');
       },
-    ));
+    }));
   };
   const editComponentHandler = () => {
     history.push({

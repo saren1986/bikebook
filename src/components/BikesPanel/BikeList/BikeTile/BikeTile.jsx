@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
 
 const BikeTile = ({ bike, click }) => {
   const classes = useStyles();
-  const { lengthUnit } = useSelector((state) => state.user.units);
+  const { lengthUnit } = useSelector((state) => state.options.units);
   return (
     <Grid item md={4} xs={12}>
       <Card

@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const BikeInfo = ({ bike, history }) => {
-  const { lengthUnit } = useSelector((state) => state.user.units);
+  const { lengthUnit } = useSelector((state) => state.options.units);
   const dispatch = useDispatch();
   const {
     id, retired, distance, model, type, description,
@@ -63,12 +63,11 @@ const BikeInfo = ({ bike, history }) => {
     menuItems.push({
       name: 'Retire',
       func: () => {
-        dispatch(openConfirmDialog(
-          'Retire bike', 'Bike will be retired. All components refered to bike will be retired too. Are you sure?',
-          () => {
-            dispatch(retireBike(id));
-          },
-        ));
+        dispatch(openConfirmDialog({
+          title: 'Retire bike',
+          description: 'Bike will be retired. All components refered to bike will be retired too. Are you sure?',
+          confirm: () => { dispatch(retireBike(id)); },
+        }));
       },
     },
     {
@@ -79,16 +78,17 @@ const BikeInfo = ({ bike, history }) => {
     menuItems.push({
       name: 'Delete',
       func: () => {
-        dispatch(openConfirmDialog(
-          'Delete bike', 'Bike will be deleted permanently. All components and activities refered to bike will be deleted too. Are you sure?',
-          () => {
+        dispatch(openConfirmDialog({
+          title: 'Delete bike',
+          description: 'Bike will be deleted permanently. All components and activities refered to bike will be deleted too. Are you sure?',
+          confirm: () => {
             dispatch(deleteBike(id));
             dispatch(setActiveBike(null));
             history.push({
               pathname: '/bike-list',
             });
           },
-        ));
+        }));
       },
     });
   }

@@ -1,40 +1,38 @@
-import * as actionTypes from '../actions/actionTypes';
+import { createSlice } from '@reduxjs/toolkit';
 
-const defaultState = {
+const initialState = {
   confirmDialog: {
     open: false,
     title: 'Alert',
-    description: null,
-    confirm: null,
+    description: '',
+    confirm: () => {},
   },
 };
 
-const openConfirmDialog = (state, action) => ({
-  ...state,
-  confirmDialog: {
-    open: true,
-    title: action.data.title,
-    description: action.data.description,
-    confirm: action.data.confirm,
+const uxSlice = createSlice({
+  name: 'ux',
+  initialState,
+  reducers: {
+    openConfirmDialog: (state, { payload }) => {
+      const { confirmDialog } = state;
+      confirmDialog.open = true;
+      confirmDialog.title = payload.title;
+      confirmDialog.description = payload.description;
+      confirmDialog.confirm = payload.confirm;
+    },
+    closeConfirmDialog: (state) => {
+      const { confirmDialog } = state;
+      confirmDialog.open = false;
+      confirmDialog.title = 'Alert';
+      confirmDialog.description = '';
+      confirmDialog.confirm = () => {};
+    },
   },
 });
-const closeConfirmDialog = (state) => ({
-  ...state,
-  confirmDialog: {
-    open: false,
-    title: 'Alert',
-    description: null,
-    confirm: null,
-  },
-});
 
+export const {
+  openConfirmDialog,
+  closeConfirmDialog,
+} = uxSlice.actions;
 
-const reducer = (state = defaultState, action) => {
-  switch (action.type) {
-    case actionTypes.OPEN_CONFIRM_DIALOG: return openConfirmDialog(state, action);
-    case actionTypes.CLOSE_CONFIRM_DIALOG: return closeConfirmDialog(state);
-    default: return state;
-  }
-};
-
-export default reducer;
+export default uxSlice.reducer;

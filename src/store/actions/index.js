@@ -30,6 +30,9 @@ export {
   stravaCheckForUpdate,
 } from './strava';
 export {
+
+} from '../reducers/activities';
+export {
   addActivity,
   updateActivity,
   removeActivity,

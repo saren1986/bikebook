@@ -32,7 +32,7 @@ const BikesSync = ({ bikes, history }) => {
   const dispatch = useDispatch();
   const lengthUnit = useSelector((state) => state.user.units.lengthUnit);
   const token = useSelector((state) => state.strava.auth.accessToken);
-  const bikesList = useSelector((state) => state.bikes.list);
+  const bikesList = useSelector((state) => state.bikes);
   const [checked, setChecked] = React.useState([]);
   const [isValidate, setIsValidate] = React.useState(true);
 

@@ -3,10 +3,9 @@
 import axios from 'axios';
 import stravaApi from 'strava-v3';
 import * as actionTypes from './actionTypes';
-import { addActivities } from './activities';
+import { addFromStrava } from '../reducers/activities';
 import { addBike } from '../reducers/bikes';
 import { convertStravaActivities, convertStravaBike } from '../../utils/dataConventers';
-
 
 export const stravaSyncStart = () => ({
   type: actionTypes.STRAVA_SYNC_START,
@@ -54,7 +53,7 @@ const fetchActivities = async (strava) => strava.athlete.listActivities({
 export const stravaGetActivities = (token, bikesId) => (dispatch) => {
   const strava = new stravaApi.client(token);
   fetchActivities(strava).then((response) => {
-    dispatch(addActivities(convertStravaActivities(response, bikesId)));
+    dispatch(addFromStrava(convertStravaActivities(response, bikesId)));
     dispatch(stravaSyncEnd());
   })
     .catch((err) => {
@@ -132,7 +131,7 @@ export const stravaSync = (code) => async (dispatch) => {
       const athlete = await fetchAthlete(strava);
       dispatch(stravaUpdateAthlete(athlete));
       const activities = await fetchActivities(strava);
-      dispatch(addActivities(convertStravaActivities(activities)));
+      dispatch(addFromStrava(convertStravaActivities(activities)));
     } catch (error) {
       dispatch(stravaSyncFailed(`Something went wrong... ${error.response.body.message}`));
     }

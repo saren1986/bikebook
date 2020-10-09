@@ -22,7 +22,6 @@ export {
 } from '../reducers/ux';
 export {
   stravaSync,
-  stravaSyncStart,
   stravaGetBike,
   checkStravaAuth,
   stravaGetAthlete,
@@ -30,8 +29,14 @@ export {
   stravaCheckForUpdate,
 } from './strava';
 export {
+  stravaSyncStart,
+  stravaSyncEnd,
+  stravaUpdateBikes,
+  stravaUpdateAthlete,
+  stravaUpdateAuth,
+  stravaSyncFailed,
+} from '../reducers/strava';
 
-} from '../reducers/activities';
 export {
   addActivity,
   updateActivity,

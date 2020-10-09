@@ -1,6 +1,7 @@
-import * as actionTypes from '../actions/actionTypes';
+/* eslint-disable no-param-reassign */
+import { createSlice } from '@reduxjs/toolkit';
 
-const defaultState = {
+const initialState = {
   startSync: false,
   sync: false,
   auth: {
@@ -28,83 +29,66 @@ const defaultState = {
   error: null,
 };
 
-const stravaUpdateAthlete = (state, action) => {
-  const {
-    id, username, firstname,
-    lastname, premium, profile, weight,
-    profile_medium, resource_state, sex, updated_at, measurement_preference,
-  } = action.data.athlete;
-  return {
-    ...state,
-    sync: true,
-    athlete: {
-      id,
-      username,
-      firstname,
-      lastname,
-      premium,
-      profile,
-      profileMedium: profile_medium,
-      resourceState: resource_state,
-      sex,
-      updatedAt: updated_at,
-      weight,
-      measurementPreference: measurement_preference,
+const stravaSlice = createSlice({
+  name: 'strava',
+  initialState,
+  reducers: {
+    updateBikes: (state, { payload }) => {
+      state.bikes = payload;
     },
-    bikes: action.data.athlete.bikes,
-  };
-};
-
-const stravaUpdateBikes = (state, action) => {
-  return {
-    ...state,
-    bikes: action.data.bikes,
-  };
-};
-
-const stravaUpdateAuth = (state, action) => {
-  const {
-    accessToken, expiresAt, expiresIn, refreshToken, tokenType,
-  } = action.data.auth;
-  return {
-    ...state,
-    auth: {
-      accessToken,
-      expiresAt,
-      expiresIn,
-      refreshToken,
-      tokenType,
+    updateAthlete: (state, { payload }) => {
+      const {
+        id, username, firstname,
+        lastname, premium, profile, weight,
+        // eslint-disable-next-line camelcase
+        profile_medium, resource_state, sex, updated_at, measurement_preference,
+      } = payload;
+      state.athlete = {
+        id,
+        username,
+        firstname,
+        lastname,
+        premium,
+        profile,
+        profileMedium: profile_medium,
+        resourceState: resource_state,
+        sex,
+        updatedAt: updated_at,
+        weight,
+        measurementPreference: measurement_preference,
+      };
+      state.bikes = payload.bikes;
     },
-  };
-};
-
-const stravaSyncStart = (state) => ({
-  ...state,
-  startSync: true,
+    updateAuth: (state, { payload }) => { // git
+      const {
+        accessToken, expiresAt, expiresIn, refreshToken, tokenType,
+      } = payload;
+      const { auth } = state;
+      auth.accessToken = accessToken;
+      auth.expiresAt = expiresAt;
+      auth.expiresIn = expiresIn;
+      auth.refreshToken = refreshToken;
+      auth.tokenType = tokenType;
+    },
+    syncStart: (state) => { // git
+      state.startSync = true;
+    },
+    syncEnd: (state) => {
+      state.startSync = false;
+    },
+    syncFailed: (state, payload) => {
+      state.startSync = false;
+      state.error = payload.error;
+    },
+  },
 });
+export const {
+  updateBikes: stravaUpdateBikes,
+  syncStart: stravaSyncStart,
+  syncEnd: stravaSyncEnd,
+  updateAthlete: stravaUpdateAthlete,
+  updateAuth: stravaUpdateAuth,
+  syncFailed: stravaSyncFailed,
+} = stravaSlice.actions;
 
-const stravaSyncEnd = (state) => ({
-  ...state,
-  startSync: false,
-});
-
-const stravaSyncFailed = (state, action) => ({
-  ...state,
-  startSync: false,
-  error: action.data.error,
-});
-
-const reducer = (state = defaultState, action) => {
-  switch (action.type) {
-    case actionTypes.STRAVA_UPDATE_ATHLETE: return stravaUpdateAthlete(state, action);
-    case actionTypes.STRAVA_UPDATE_BIKES: return stravaUpdateBikes(state, action);
-    case actionTypes.STRAVA_UPDATE_AUTH: return stravaUpdateAuth(state, action);
-    case actionTypes.STRAVA_SYNC_START: return stravaSyncStart(state);
-    case actionTypes.STRAVA_SYNC_END: return stravaSyncEnd(state);
-    case actionTypes.STRAVA_SYNC_FAILED: return stravaSyncFailed(state, action);
-    default:
-      return state;
-  }
-};
-
-export default reducer;
+export default stravaSlice.reducer;

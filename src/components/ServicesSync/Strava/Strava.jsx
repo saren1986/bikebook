@@ -44,7 +44,7 @@ const Strava = () => {
     } else if (!athlete && token) {
       dispatch(stravaCheckForUpdate(token));
     }
-  }, []);
+  }, [token, scope]);
 
   const updateClickHandler = () => {
     setUpdateBox(false);

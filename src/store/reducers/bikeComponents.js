@@ -1,186 +1,123 @@
-import {
-  ADD_COMPONENT, EDIT_COMPONENT, SET_DISTANCE_ALERT,
-  UPDATE_COMPONENTS_DISTANCE, DISABLE_SERVICE_ALERT, SWITCH_TO_BIKE,
-  RETIRE_COMPONENT, RETIRE_COMPONENTS, DELETE_COMPONENT, DELETE_COMPONENTS,
-} from '../actions/actionTypes';
+import { createSlice } from '@reduxjs/toolkit';
 import bikeComponents from '../../mock/bikeComponents';
-import * as format from '../../utils/distanceFormatters';
-import { formatMassLargeToSmall } from '../../utils/massUnitsFormatter';
 
-const defaultState = [
+const initialState = [
   ...bikeComponents,
 ];
 
-const addComponent = (state, action) => {
-  const {
-    bike, lengthUnit, massUnit, activities,
-  } = action.data;
-  const {
-    distance, weight, startDate, fromBegining, ...component
-  } = action.data.component;
-
-  let formattedDistance = 0;
-  let date = null;
-  const bikeActivities = activities.filter((activity) => activity.bikeId === bike.id);
-  if (fromBegining) {
-    formattedDistance = bike.distance + format.distanceLargeToSmall(distance, lengthUnit);
-    const foundActivities = bikeActivities
-      .sort(
-        (a, b) => new Date(a.startDate) > new Date(b.startDate),
-      );
-    if (foundActivities.length) {
-      date = foundActivities[0].startDate;
-    } else {
-      date = startDate.toJSON();
-    }
-  } else {
-    const compDistance = bikeActivities
-      .filter((activity) => new Date(activity.startDate).getTime() < startDate.getTime())
-      .reduce((sum, activity) => sum + activity.distance, 0);
-    formattedDistance = format.distanceLargeToSmall(distance, lengthUnit) + compDistance;
-    date = startDate.toJSON();
-  }
-  const formattedWeight = weight ? formatMassLargeToSmall(weight, massUnit) : '';
-
-  return [
-    ...state,
-    {
-      bikeId: component.bikeId,
-      ...component,
-      retired: false,
-      startDate: date,
-      distance: formattedDistance,
-      weight: formattedWeight,
-      alert: {
-        on: false,
-        note: '',
-        startDistance: 0,
-        endDistance: 0,
+const bikeComponentsSlice = createSlice({
+  name: 'component',
+  initialState,
+  reducers: {
+    create: {
+      reducer: (state, { payload }) => {
+        state.push(payload.component);
       },
+      prepare: (payload) => ({
+        payload: {
+          ...payload,
+          component: {
+            ...payload.component,
+            id: Math.random().toString(36).substring(7),
+            retired: false,
+            alert: {
+              on: false,
+              note: '',
+              startDistance: 0,
+              endDistance: 0,
+            },
+          },
+        },
+      }),
     },
-  ];
-};
-const editComponent = (state, action) => {
-  const {
-    massUnit, compId,
-  } = action.data;
-  return state.map((comp) => {
-    if (comp.id === compId) {
+    edit: (state, { payload }) => {
       const {
-        weight, ...component
-      } = action.data.component;
-      const formattedWeight = weight ? formatMassLargeToSmall(weight, massUnit) : '';
-      return {
-        ...comp,
-        ...component,
-        bikeId: component.bikeId,
-        weight: formattedWeight,
-      };
-    }
-    return comp;
-  });
-};
-const setDistanceAlert = (state, action) => state.map((component) => {
-  if (component.id === action.data.compId) {
-    return {
-      ...component,
-      alert: {
-        on: true,
-        startDistance: component.distance,
-        endDistance: component.distance
-        + format.distanceLargeToSmall(action.data.endDistance, action.data.lengthUnit),
-      },
-    };
-  }
-  return component;
-});
-const updateComponentsDistance = (state, action) => state.map((component) => {
-  if (action.data.componentList.findIndex((c) => c === component.id) !== -1) {
-    return {
-      ...component,
-      distance: component.distance + action.data.distance,
-      alert: {
-        ...component.alert,
-      },
-    };
-  }
-  return component;
+        id, bikeId, type, brand, model, weight, description,
+      } = payload.component;
+      const compToEdit = state.find((component) => component.id === id);
+      if (compToEdit) {
+        compToEdit.bikeId = bikeId;
+        compToEdit.type = type;
+        compToEdit.brand = brand;
+        compToEdit.model = model;
+        compToEdit.weight = weight;
+        compToEdit.description = description;
+      }
+    },
+    setDistanceAlert: (state, { payload }) => {
+      const compToEdit = state.find((component) => component.id === payload.componentId);
+      if (compToEdit) {
+        compToEdit.alert.on = true;
+        compToEdit.alert.startDistance = compToEdit.distance;
+        compToEdit.alert.endDistance = compToEdit.distance
+        + payload.alertDistance;
+      }
+    },
+    disableAlert: (state, { payload }) => {
+      const compToEdit = state.find((component) => component.id === payload.componentId);
+      if (compToEdit) {
+        compToEdit.alert.on = false;
+        compToEdit.alert.startDistance = 0;
+        compToEdit.alert.endDistance = 0;
+      }
+    },
+    updateDistance: (state, { payload }) => {
+      payload.components.forEach((id) => {
+        const compToEdit = state.find((component) => component.id === id);
+        if (compToEdit) {
+          compToEdit.distance += payload.distance;
+        }
+      });
+    },
+    switchToBike: (state, { payload }) => {
+      const compToEdit = state.find((component) => component.id === payload.componentId);
+      if (compToEdit) {
+        compToEdit.bikeId = payload.bikeId;
+      }
+    },
+    retire: (state, { payload }) => {
+      const compToEdit = state.find((component) => component.id === payload.componentId);
+      if (compToEdit) {
+        compToEdit.retired = true;
+        compToEdit.alert.on = false;
+        compToEdit.alert.startDistance = 0;
+        compToEdit.alert.endDistance = 0;
+      }
+    },
+    retireAllWithBike: (state, { payload }) => {
+      state.forEach((component) => {
+        if (component.bikeId === payload.bikeId) {
+          const componentToEdit = component;
+          componentToEdit.retired = true;
+          componentToEdit.alert.on = false;
+          componentToEdit.alert.startDistance = 0;
+          componentToEdit.alert.endDistance = 0;
+        }
+      });
+    },
+    remove: (state, { payload }) => {
+      const i = state.findIndex((component) => component.id === payload.componentId);
+      if (i !== -1) {
+        state.splice(i, 1);
+      }
+    },
+    removeAllWithBike: (state, { payload }) => {
+      return state.filter((elem) => elem.bikeId !== payload.bikeId);
+    },
+  },
 });
 
-const disableServiceAlert = (state, action) => state.map((component) => {
-  if (component.id === action.data.compId) {
-    return {
-      ...component,
-      alert: {
-        on: false,
-        startDistance: null,
-        endDistance: null,
-      },
-    };
-  }
-  return component;
-});
-const switchToBike = (state, action) => state.map((component) => {
-  if (component.id === action.data.compId) {
-    return {
-      ...component,
-      alert: {
-        ...component.alert,
-      },
-      bikeId: action.data.bikeId,
-    };
-  }
-  return component;
-});
-const retireComponent = (state, action) => state.map((component) => {
-  if (component.id === action.data.compId) {
-    return {
-      ...component,
-      alert: {
-        ...component.alert,
-        on: false,
-        startDistance: null,
-        endDistance: null,
-      },
-      retired: true,
-    };
-  }
-  return component;
-});
-const retireComponents = (state, action) => state.map((component) => {
-  if (component.bikeId === action.data.bikeId) {
-    return {
-      ...component,
-      alert: {
-        ...component.alert,
-        on: false,
-        startDistance: null,
-        endDistance: null,
-      },
-      retired: true,
-    };
-  }
-  return component;
-});
-const deleteComponent = (state, action) => state
-  .filter((component) => component.id !== action.data.compId);
-const deleteComponents = (state, action) => state
-  .filter((component) => component.bikeId !== action.data.bikeId);
+export const {
+  create: addComponent,
+  edit: editComponent,
+  setDistanceAlert,
+  disableAlert,
+  switchToBike,
+  retire: retireComponent,
+  updateDistance: updateComponentsDistance,
+  retireAllWithBike,
+  remove: deleteComponent,
+  removeAllWithBike: deleteAllWithBike,
+} = bikeComponentsSlice.actions;
 
-const reducer = (state = defaultState, action) => {
-  switch (action.type) {
-    case ADD_COMPONENT: return addComponent(state, action);
-    case EDIT_COMPONENT: return editComponent(state, action);
-    case SET_DISTANCE_ALERT: return setDistanceAlert(state, action);
-    case UPDATE_COMPONENTS_DISTANCE: return updateComponentsDistance(state, action);
-    case DISABLE_SERVICE_ALERT: return disableServiceAlert(state, action);
-    case SWITCH_TO_BIKE: return switchToBike(state, action);
-    case RETIRE_COMPONENT: return retireComponent(state, action);
-    case RETIRE_COMPONENTS: return retireComponents(state, action);
-    case DELETE_COMPONENT: return deleteComponent(state, action);
-    case DELETE_COMPONENTS: return deleteComponents(state, action);
-    default: return state;
-  }
-};
-
-export default reducer;
+export default bikeComponentsSlice.reducer;

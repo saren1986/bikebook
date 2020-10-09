@@ -66,7 +66,7 @@ const BikeComponents = ({
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  const { lengthUnit } = useSelector((state) => state.user.units);
+  const { lengthUnit } = useSelector((state) => state.options.units);
   const getActiveComponents = (compArr, active) => compArr.filter((c) => c.retired !== active);
   const formatComponentsData = (compArr) => compArr.map((c) => ({
     ...c,

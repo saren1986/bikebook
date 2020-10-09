@@ -5,7 +5,7 @@ import { withRouter, Redirect } from 'react-router-dom';
 import { addActivity, updateActivity } from '../../../../store/actions/index';
 import { prepareFormData, formSelectSeeder } from '../../../../utils/formData';
 import { distanceLargeToSmall } from '../../../../utils/distanceFormatters';
-import { secondsToTime } from '../../../../utils/timeFormatters';
+import { secondsToTime, timeToSeconds } from '../../../../utils/timeFormatters';
 import Form from '../../../../UX/Form/Form';
 
 const ComponentForm = ({ history, edit }) => {
@@ -13,37 +13,43 @@ const ComponentForm = ({ history, edit }) => {
   const formData = useSelector((state) => state.forms.activity);
   const bikes = useSelector((state) => state.bikes);
   const components = useSelector((state) => state.components);
-  const { lengthUnit } = useSelector((state) => state.user.units);
+  const { lengthUnit } = useSelector((state) => state.options.units);
   const { activity } = history.location;
-
+  console.log('activity', activity);
   const onSubmitHandler = (values) => {
     const bikeComponents = components
       .filter((comp) => comp.bikeId === values.bikeId && !comp.retired
       && new Date(comp.startDate).getTime() < values.startDate)
       .map((comp) => comp.id);
-    const newDistance = distanceLargeToSmall(values.distance, lengthUnit);
+    const distance = distanceLargeToSmall(values.distance, lengthUnit);
+    const movingTime = timeToSeconds(values.movingTime);
+    const startDate = values.startDate.toJSON();
+    console.log('====================================');
+    console.log('activity values', values);
+    console.log('====================================');
     if (!edit) {
       dispatch(addActivity(
         {
           ...values,
-          distance: newDistance,
-          id: 'a123456',
+          distance,
+          movingTime,
+          startDate,
+          components: bikeComponents,
         },
         bikeComponents,
       ));
       history.push({
         pathname: '/activities',
       });
-    } else {
-      const distanceDiffrence = newDistance - activity.distance;
+    } else if (activity) {
+      const distanceDiffrence = distance - activity.distance;
       dispatch(updateActivity(
         {
+          ...activity,
           ...values,
-          distance: newDistance,
-          id: activity.id,
+          distance,
+          movingTime,
         },
-        activity.bikeId,
-        bikeComponents,
         distanceDiffrence,
       ));
       history.push({

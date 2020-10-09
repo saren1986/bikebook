@@ -1,47 +1,13 @@
-import * as actionTypes from './actionTypes';
-import { deleteComponents, retireComponents } from './bikeComponents';
-import { removeActivities } from './activities';
-
-export const addBike = (bike) => ({
-  type: actionTypes.ADD_BIKE,
-  data: {
-    bike,
-  },
-});
-export const editBike = (bike) => ({
-  type: actionTypes.EDIT_BIKE,
-  data: {
-    bike,
-  },
-});
-
-export const updateBikeDistance = (bikeId, distance) => ({
-  type: actionTypes.UPDATE_BIKE_DISTANCE,
-  data: {
-    distance,
-    bikeId,
-  },
-});
-
-const retire = (bikeId) => ({
-  type: actionTypes.RETIRE_BIKE,
-  data: {
-    bikeId,
-  },
-});
-const remove = (bikeId) => ({
-  type: actionTypes.DELETE_BIKE,
-  data: {
-    bikeId,
-  },
-});
+import { retireAllWithBike, deleteAllWithBike } from '../reducers/bikeComponents';
+import { retire, remove } from '../reducers/bikes';
+import { removeActivities } from '../reducers/activities';
 
 export const deleteBike = (bikeId) => (dispatch) => {
-  dispatch(remove(bikeId));
-  dispatch(deleteComponents(bikeId));
-  dispatch(removeActivities(bikeId));
+  dispatch(remove({ bikeId }));
+  dispatch(deleteAllWithBike({ bikeId }));
+  dispatch(removeActivities({ bikeId }));
 };
 export const retireBike = (bikeId) => (dispatch) => {
-  dispatch(retire(bikeId));
-  dispatch(retireComponents(bikeId));
+  dispatch(retire({ bikeId }));
+  dispatch(retireAllWithBike({ bikeId }));
 };

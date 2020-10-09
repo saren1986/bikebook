@@ -1,25 +1,27 @@
 export {
   addBike,
   editBike,
+} from '../reducers/bikes';
+export {
   retireBike,
   deleteBike,
 } from './bikes';
 export {
   addComponent,
+  editComponent,
   setDistanceAlert,
-  disableServiceAlert,
+  disableAlert,
+  switchToBike,
   retireComponent,
   deleteComponent,
-  deleteComponents,
-  editComponent,
-} from './bikeComponents';
+  deleteAllWithBike,
+} from '../reducers/bikeComponents';
 export {
   openConfirmDialog,
   closeConfirmDialog,
-} from './ux';
+} from '../reducers/ux';
 export {
   stravaSync,
-  stravaSyncStart,
   stravaGetBike,
   checkStravaAuth,
   stravaGetAthlete,
@@ -27,10 +29,19 @@ export {
   stravaCheckForUpdate,
 } from './strava';
 export {
+  stravaSyncStart,
+  stravaSyncEnd,
+  stravaUpdateBikes,
+  stravaUpdateAthlete,
+  stravaUpdateAuth,
+  stravaSyncFailed,
+} from '../reducers/strava';
+
+export {
   addActivity,
   updateActivity,
   removeActivity,
 } from './activities';
 export {
   setActiveBike,
-} from './options';
+} from '../reducers/options';

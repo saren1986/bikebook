@@ -3,9 +3,8 @@ import { Button, MenuItem } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
-import { switchToBike } from '../../../../store/actions/bikeComponents';
 import * as Styled from '../../../../styled/styled';
-import { setActiveBike } from '../../../../store/actions';
+import { setActiveBike, switchToBike } from '../../../../store/actions/index';
 
 const SwitchToBike = ({ compId, bikeId, clb }) => {
   const [selectValue, setSelectValue] = useState('');
@@ -14,7 +13,10 @@ const SwitchToBike = ({ compId, bikeId, clb }) => {
     setSelectValue(e.target.value);
   };
   const clickHandler = () => {
-    dispatch(switchToBike(compId, selectValue));
+    dispatch(switchToBike({
+      componentId: compId,
+      bikeId: selectValue,
+    }));
     dispatch(setActiveBike(selectValue));
     setSelectValue('');
     clb();

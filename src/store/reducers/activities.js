@@ -1,68 +1,54 @@
-import { ADD_ACTIVITIES, ADD_ACTIVITY, EDIT_ACTIVITY, REMOVE_ACTIVITY, REMOVE_ACTIVITIES } from '../actions/actionTypes';
+import { createSlice } from '@reduxjs/toolkit';
 import activities from '../../mock/activities';
-import { timeToSeconds } from '../../utils/timeFormatters';
 
-const defaultState = [
+const initialState = [
   ...activities,
 ];
 
-const addActivitites = (state, action) => [
-  ...state,
-  ...action.data.activities,
-];
-
-const addActivity = (state, action) => {
-  const { components } = action.data;
-  const { movingTime, startDate } = action.data.activity;
-  const formattedMovingTime = timeToSeconds(movingTime);
-  const formattedDate = startDate.toJSON();
-  return [
-    ...state,
-    {
-      ...action.data.activity,
-      strava: false,
-      stravaType: null,
-      stravaExternalId: null,
-      elapsedTime: null,
-      movingTime: formattedMovingTime,
-      startDate: formattedDate,
-      components,
+const activitySlice = createSlice({
+  name: 'activity',
+  initialState,
+  reducers: {
+    create: {
+      reducer: (state, { payload }) => {
+        state.push(payload);
+      },
+      prepare: (payload) => ({
+        payload: {
+          id: Math.random().toString(36).substring(7),
+          ...payload,
+          strava: false,
+          stravaType: null,
+          stravaExternalId: null,
+          elapsedTime: null,
+        },
+      }),
     },
-  ];
-};
-const editActivity = (state, action) => {
-  const {
-    id, movingTime, startDate,
-  } = action.data.activity;
-  const formattedMovingTime = timeToSeconds(movingTime);
-  const formattedDate = startDate.toJSON();
-  return state.map((activity) => {
-    if (activity.id === id) {
-      return {
-        ...activity,
-        ...action.data.activity,
-        movingTime: formattedMovingTime,
-        startDate: formattedDate,
-      };
-    }
-    return activity;
-  });
-};
-const removeActivity = (state, action) => state
-  .filter((activity) => (activity.id !== action.data.id) || activity.strava);
+    addFromStrava: (state, { payload }) => state.concat(payload),
+    edit: (state, { payload }) => {
+      const activityToEdit = state.find((activity) => activity.id === payload.id);
+      if (activityToEdit) {
+        activityToEdit.title = payload.title;
+        activityToEdit.distance = payload.distance;
+        activityToEdit.movingTime = payload.movingTime;
+      }
+    },
+    remove: (state, { payload }) => {
+      const i = state.findIndex((activity) => activity.id === payload.id && !activity.strava);
+      if (i !== -1) {
+        state.splice(i, 1);
+      }
+    },
+    removeByBikeId: (state, { payload }) => state
+      .filter((activity) => (activity.bikeId !== payload.bikeId) || activity.strava),
+  },
 
-const removeActivities = (state, action) => state
-  .filter((activity) => (activity.bikeId !== action.data.bikeId) || activity.strava);
-
-const reducer = (state = defaultState, action) => {
-  switch (action.type) {
-    case ADD_ACTIVITIES: return addActivitites(state, action);
-    case ADD_ACTIVITY: return addActivity(state, action);
-    case EDIT_ACTIVITY: return editActivity(state, action);
-    case REMOVE_ACTIVITY: return removeActivity(state, action);
-    case REMOVE_ACTIVITIES: return removeActivities(state, action);
-    default: return state;
-  }
-};
-
-export default reducer;
+});
+export const {
+  create,
+  edit,
+  remove,
+  removeByBikeId: removeActivities,
+  addFromStrava,
+} = activitySlice.actions;
+export default activitySlice.reducer;

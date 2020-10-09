@@ -35,14 +35,16 @@ const Strava = () => {
         dispatch(stravaSync(code, scope));
         setUpdateBox(false);
       } else {
-        dispatch(openConfirmDialog(
-          'Insufficient permissions', 'You must grant all permissions. Try again?', stravaSyncHandler,
-        ));
+        dispatch(openConfirmDialog({
+          title: 'Insufficient permissions',
+          description: 'You must grant all permissions. Try again?',
+          confirm: stravaSyncHandler,
+        }));
       }
     } else if (!athlete && token) {
       dispatch(stravaCheckForUpdate(token));
     }
-  }, []);
+  }, [token, scope]);
 
   const updateClickHandler = () => {
     setUpdateBox(false);

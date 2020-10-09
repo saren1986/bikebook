@@ -17,7 +17,6 @@ const useStyles = makeStyles({
 const Activities = ({ history }) => {
   const classes = useStyles();
   const activities = useSelector((store) => store.activities);
-  const components = useSelector((state) => state.components);
   const bikes = useSelector((store) => store.bikes);
   const isStravaAuth = useSelector((state) => !!state.strava.auth.accessToken);
   const dispatch = useDispatch();
@@ -41,20 +40,17 @@ const Activities = ({ history }) => {
       activity,
     });
   };
-
   const deleteActivityHandler = (activity) => {
-    dispatch(openConfirmDialog(
-      'Delete activity', 'The activity will be deleted permanently. Are you sure?', () => {
-        const bikeComponents = components
-          .filter((comp) => comp.bikeId === activity.bikeId && !comp.retired
-                  && new Date(comp.startDate).getTime() < new Date(activity.startDate).getTime())
-          .map((comp) => comp.id);
-        dispatch(removeActivity(activity, bikeComponents));
-      },
-    ));
+    dispatch(openConfirmDialog({
+      title: 'Delete activity',
+      description: 'The activity will be deleted permanently. Are you sure?',
+      confirm: () => { dispatch(removeActivity(activity)); },
+    }));
   };
-  const activitiesToRender = activities
-    .sort((a, b) => (new Date(a.startDate) > new Date(b.startDate) ? -1 : 1))
+
+  const newActivities = activities.slice()
+    .sort((a, b) => (new Date(a.startDate) > new Date(b.startDate) ? -1 : 1));
+  const activitiesToRender = newActivities
     .slice(activitiesFrom, activitiesFrom + activitiesPerPage)
     .map((activity) => {
       const bike = bikes.find((b) => b.id === activity.bikeId);
@@ -107,6 +103,5 @@ const Activities = ({ history }) => {
     </>
   );
 };
-
 
 export default withRouter(Activities);

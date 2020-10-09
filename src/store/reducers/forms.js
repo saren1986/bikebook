@@ -418,7 +418,7 @@ const defaultState = {
     {
       id: 'startDate',
       type: 'date',
-      default: new Date(),
+      default: () => new Date(),
       label: 'Installed',
       edit: {
         visible: false,
@@ -435,7 +435,7 @@ const defaultState = {
           },
           {
             key: 'max',
-            params: [new Date(), 'The date cannot be from the future!'],
+            params: [() => new Date(), 'The date cannot be from the future!'],
           },
         ],
       },
@@ -689,7 +689,7 @@ const defaultState = {
     {
       id: 'startDate',
       type: 'date',
-      default: new Date(),
+      default: () => new Date(),
       label: 'Activity date',
       edit: {
         visible: true,
@@ -706,7 +706,7 @@ const defaultState = {
           },
           {
             key: 'max',
-            params: [new Date(), 'The date cannot be from the future!'],
+            params: [() => new Date().toJSON(), 'The date cannot be from the future!'],
           },
         ],
       },

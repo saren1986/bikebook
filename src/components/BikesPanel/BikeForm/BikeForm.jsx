@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -12,7 +11,7 @@ import Spinner from '../../../UX/Spinner/Spinner';
 
 const BikeForm = ({ history, edit }) => {
   const dispatch = useDispatch();
-  const { lengthUnit, massUnit } = useSelector((state) => state.user.units);
+  const { lengthUnit, massUnit } = useSelector((state) => state.options.units);
   const formData = useSelector((state) => state.forms.addBike);
 
   let formattedData = null;
@@ -28,7 +27,6 @@ const BikeForm = ({ history, edit }) => {
       dispatch(
         addBike(
           {
-            id: '12bb', // TODO id
             ...values,
             distance: distanceLargeToSmall(values.distance, lengthUnit),
             weight: formatMassLargeToSmall(values.weight, massUnit),

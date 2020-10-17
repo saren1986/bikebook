@@ -25,9 +25,17 @@ const theme = createMuiTheme({
     },
     background: {
       default: '#f7f7fa',
-    }
+    },
   },
   overrides: {
+    MuiCssBaseline: {
+      '@global': {
+        a: {
+          textDecoration: 'none',
+          color: 'inherit',
+        },
+      },
+    },
     MuiFormControl: {
       marginNormal: {
         marginTop: 0,

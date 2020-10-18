@@ -6,15 +6,15 @@ import { remainDistance } from '../../../../../utils/distanceFormatters';
 import AlertMessage from '../../Alert/Message/Message';
 
 const ProgressBar = ({
-  startDistance, currentDistance, endDistance, lengthUnit,
+  startDistance, currentDistance, endDistance,
 }) => {
   const classes = useStyles();
   const progress = ((currentDistance - startDistance) / (endDistance - startDistance)) * 100;
-  const distanceLeft = remainDistance(startDistance, currentDistance, endDistance);
+  const leftDistance = remainDistance(startDistance, currentDistance, endDistance);
   return (
     <div className={classes.wrapper}>
       <div className={classes.alertInfo}>
-        <AlertMessage remainDistance={distanceLeft} lengthUnit={lengthUnit}/>
+        <AlertMessage leftDistance={leftDistance} />
       </div>
       <ProgressLine progress={progress} />
     </div>
@@ -25,7 +25,6 @@ ProgressBar.propTypes = {
   startDistance: PropTypes.number.isRequired,
   currentDistance: PropTypes.number.isRequired,
   endDistance: PropTypes.number.isRequired,
-  lengthUnit: PropTypes.string.isRequired,
 };
 
 export default ProgressBar;

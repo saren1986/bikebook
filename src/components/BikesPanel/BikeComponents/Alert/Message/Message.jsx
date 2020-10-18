@@ -3,6 +3,7 @@ import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import { makeStyles } from '@material-ui/core/styles';
 import BuildIcon from '@material-ui/icons/Build';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import { formatDistance } from '../../../../../utils/distanceFormatters';
 
 const useStyles = makeStyles((theme) => ({
@@ -11,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   },
   msgActiveLabel: {
-    marginRight: '5px',
+    marginLeft: '5px',
     color: theme.palette.error.dark,
   },
   msgActiveLabelLong: {
@@ -26,18 +27,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Message = ({ remainDistance, lengthUnit, short }) => {
+const Message = ({ leftDistance, short }) => {
   const classes = useStyles();
-  const distanceFormatted = formatDistance(remainDistance, lengthUnit);
+  const { lengthUnit } = useSelector((state) => state.options.units);
+  const distanceFormatted = formatDistance(leftDistance, lengthUnit);
   let message = '';
-  if (remainDistance <= 0 && short) {
+  if (leftDistance <= 0 && short) {
     message = (
       <div className={classes.msgWrapper}>
-        <span className={classes.msgActiveLabel}>Alert activated</span>
         <ErrorOutlineIcon classes={{
           root: classes.icon,
         }}
         />
+        <span className={classes.msgActiveLabel}>Component needs action.</span>
       </div>
     );
   } else if (short) {
@@ -50,14 +52,14 @@ const Message = ({ remainDistance, lengthUnit, short }) => {
         </span>
       </div>
     );
-  } else if (remainDistance <= 0) {
+  } else if (leftDistance <= 0) {
     message = (
       <div className={classes.msgWrapper}>
         <span className={classes.msgActiveLabelLong}>
           Alert was activated
           {' '}
           <strong>
-            {formatDistance(Math.abs(remainDistance), lengthUnit)}
+            {formatDistance(Math.abs(leftDistance), lengthUnit)}
           </strong>
           {' '}
           ago
@@ -68,13 +70,13 @@ const Message = ({ remainDistance, lengthUnit, short }) => {
         />
       </div>
     );
-  } else if (remainDistance > 0) {
+  } else if (leftDistance > 0) {
     message = (
       <div className={classes.msgWrapper}>
         <BuildIcon />
         <span>
           <strong>
-            {formatDistance(remainDistance, lengthUnit)}
+            {formatDistance(leftDistance, lengthUnit)}
             {' '}
           </strong>
           left to service alert.
@@ -85,8 +87,7 @@ const Message = ({ remainDistance, lengthUnit, short }) => {
   return message;
 };
 Message.propTypes = {
-  remainDistance: PropTypes.number.isRequired,
-  lengthUnit: PropTypes.string.isRequired,
+  leftDistance: PropTypes.number.isRequired,
   short: PropTypes.bool,
 };
 export default Message;

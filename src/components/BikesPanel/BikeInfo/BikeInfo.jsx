@@ -10,30 +10,14 @@ import MiniMenu from '../../../UX/MiniMenu/MiniMenu';
 import {
   retireBike, deleteBike, setActiveBike, openConfirmDialog,
 } from '../../../store/actions/index';
+import InfoHeader from '../../../UX/InfoHeader/InfoHeader';
 
 const useStyles = makeStyles((theme) => ({
-  topHeader: {
-    display: 'flex',
-    alignItems: 'center',
-    position: 'relative',
-  },
-  bikeName: {
-    width: '60%',
-    textAlign: 'center',
-  },
   retiredWrapper: {
     textAlign: 'center',
   },
   retired: {
     color: '#f00',
-  },
-  syncInfo: {
-    width: '20%',
-    textAlign: 'left',
-  },
-  actionsMenu: {
-    width: '20%',
-    textAlign: 'right',
   },
   content: {
     padding: '10px 0',
@@ -94,28 +78,11 @@ const BikeInfo = ({ bike, history }) => {
   }
   return (
     <>
-      <div className={classes.topHeader}>
-        <div className={classes.syncInfo}>
-          {bike.strava ? <StravaLong /> : null}
-        </div>
-        <Typography
-          variant="h2"
-          component="h2"
-          classes={{
-            root: classes.bikeName,
-          }}
-        >
-          {' '}
-          {bike.name}
-          {' '}
-
-        </Typography>
-
-        <div className={classes.actionsMenu}>
-          <MiniMenu items={menuItems} />
-        </div>
-      </div>
-
+      <InfoHeader
+        title={bike.name}
+        rightPlaceholder={bike.strava ? <StravaLong /> : null}
+        menuItems={menuItems}
+      />
       <div className={classes.content}>
         <div className={classes.retiredWrapper}>
           {!retired ? null

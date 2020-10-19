@@ -7,6 +7,8 @@ import ComponentItem from './ComponentItem/ComponentItem';
 import InfoHeader from '../../../UX/InfoHeader/InfoHeader';
 import { formatDistance, remainDistance } from '../../../utils/distanceFormatters';
 import { COMPONENT_TYPES } from '../../../mock/constans';
+import { withRouter } from 'react-router-dom';
+import InfoBox from '../../../UX/InfoBox/InfoBox';
 
 const useStyles = makeStyles((theme) => ({
   componentsList: {
@@ -64,11 +66,17 @@ const BikeComponents = ({
   return (
     <>
       <InfoHeader
-        title={`${bike.name}'s Components`}
+        title={`${bike.name}'s components`}
         menuItems={menuItems}
       />
       <div className={classes.componentsList} >
-        {renederComponents}
+        {renederComponents.length
+          ? renederComponents
+          : (
+            <InfoBox type="warning">
+              {`${bike.name} does not have any components yet`}
+            </InfoBox>
+          )}
       </div>
     </>
   );
@@ -82,4 +90,4 @@ BikeComponents.propTypes = {
   }).isRequired,
 };
 
-export default BikeComponents;
+export default withRouter(BikeComponents);

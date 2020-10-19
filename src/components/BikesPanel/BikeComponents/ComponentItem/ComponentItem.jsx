@@ -125,9 +125,9 @@ const ComponentItem = ({
         onClick={clickHandler}
       >
         <div className={classes.labelsSection}>
-          <strong className={classes.label}>{type}</strong>
-          <strong className={classes.label}>{brand}</strong>
-          <span className={classes.label}>{model}</span>
+          {type ? (<strong className={classes.label}>{type}</strong>) : null}
+          {brand ? (<strong className={classes.label}>{brand}</strong>) : null}
+          {model ? (<span className={classes.label}>{model}</span>) : null}
         </div>
         <div className={classes.distanceSection}>
           <div className={classes.label2}>Distance: </div>

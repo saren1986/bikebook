@@ -58,9 +58,10 @@ const Strava = () => {
   if (athlete && !startSync && updateBox) {
     content = (
       <div>
-        <InfoBox type="info">
-          Your account is already synchronized with Strava
-        </InfoBox>
+        <InfoBox
+          type="info"
+          title="Your account is already synchronized with Strava"
+        />
         <BtnWrapper>
           <Btn variant="outlined" color="primary" onClick={updateClickHandler}>
             Check for update
@@ -71,9 +72,10 @@ const Strava = () => {
   } else if (startSync) {
     content = (
       <div>
-        <InfoBox type="normal">
-          Fetching data from Strava... Please wait.
-        </InfoBox>
+        <InfoBox
+          type="normal"
+          title="Fetching data from Strava... Please wait."
+        />
         <Spiner />
       </div>
     );
@@ -87,13 +89,15 @@ const Strava = () => {
     content = (
       <>
         {error ? (
-          <InfoBox type="error">
-            {error}
-          </InfoBox>
+          <InfoBox
+            type="error"
+            title={error}
+          />
         ) : (
-          <InfoBox type="warning">
-            Strava synchronization is not enabled
-          </InfoBox>
+          <InfoBox
+            type="warning"
+            title="Strava synchronization is not enabled"
+          />
         )}
 
         <BtnWrapper>

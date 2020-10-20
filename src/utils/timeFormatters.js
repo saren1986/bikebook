@@ -1,5 +1,5 @@
 export const stravaDateFormatter = (date) => date.replace('T', ' ').replace('Z', ' ');
-export const timeFormatter = (stringDate) => stringDate.substring(0, 16).replace('T', ' ');
+export const timeFormatter = (stringDate, hours = true) => stringDate.substring(0, hours ? 16 : 10).replace('T', ' ');
 export const deleteTimeFormJsonDate = (date) => date.substr(0, date.indexOf('T'));
 
 export const secondsToHours = (time) => {

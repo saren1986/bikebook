@@ -4,11 +4,22 @@ import {
 } from 'react-router-dom';
 
 import { useSelector, useDispatch } from 'react-redux';
+import { makeStyles } from '@material-ui/core/styles';
 import BikeComponents from '../BikeComponents/BikeComponents';
-import useStyles from './bikeItem.style';
 import * as actions from '../../../store/actions/index';
 import ComponentDetail from '../BikeComponents/ComponentDetail/ComponentDetail';
 import BikeInfo from '../BikeInfo/BikeInfo';
+
+const useStyles = makeStyles((theme) => ({
+  title: { textAlign: 'center' },
+  bikeItemHeader: {
+    borderBottom: '1px solid #f5f5f5',
+    paddingBottom: '10px',
+    justifyContent: 'center',
+  },
+  topInfo: { textAlign: 'right' },
+  bikeItemView: { marginBottom: '15px' },
+}));
 
 const BikeItem = ({ match }) => {
   const classes = useStyles();
@@ -31,12 +42,12 @@ const BikeItem = ({ match }) => {
           <Route path={`${match.path}/components`}>
             <BikeComponents
               components={components}
+              bike={bike}
             />
           </Route>
           <Route path={[`${match.path}/info`, `${match.path}`]}>
             <BikeInfo bike={bike} />
           </Route>
-          {/* <Redirect exact from="/bike" to={`${match.path}/components`} /> */}
         </Switch>
       </div>
     </div>

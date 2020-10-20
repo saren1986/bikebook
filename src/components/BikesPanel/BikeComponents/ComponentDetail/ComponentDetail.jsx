@@ -3,18 +3,84 @@ import Grid from '@material-ui/core/Grid';
 import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/core/styles';
 import ProgressBar from './progressBar/ProgressBar';
 import ComponentControls from './ComponentControls/ComponentControls';
 import SetAlert from '../Alert/SetAlert/SetAlert';
 import {
   setDistanceAlert, disableAlert, retireComponent, deleteComponent, openConfirmDialog,
 } from '../../../../store/actions/index';
-import useStyles from './componentDetailStyle';
 import DrawerSmall from '../../../../UX/DrawerSmall/DrawerSmall';
 import { formatDistance, distanceLargeToSmall } from '../../../../utils/distanceFormatters';
+import { timeFormatter } from '../../../../utils/timeFormatters';
 import { formatMassDisplay } from '../../../../utils/massUnitsFormatter';
 import { COMPONENT_TYPES } from '../../../../mock/constans';
 import SwitchToBike from '../SwitchToBike/SwitchToBike';
+
+const useStyles = makeStyles((theme) => ({
+  wrapper: {
+    padding: '10px',
+    background: theme.backgroundColor.box,
+    display: 'flex',
+    flexWrap: 'wrap',
+    position: 'relative',
+    [theme.breakpoints.up('sm')]: {
+      padding: '20px',
+    },
+  },
+  topBar: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    marginBottom: '15px',
+    [theme.breakpoints.up('sm')]: {
+      justifyContent: 'space-between',
+      marginBottom: '0',
+    },
+    '& > div': {
+      [theme.breakpoints.up('sm')]: {
+        width: '33%',
+      },
+    },
+  },
+  compTypeLabel: {
+    order: '2',
+    display: 'inline-flex',
+    marginRight: '15px',
+    [theme.breakpoints.up('sm')]: {
+      display: 'block',
+      marginRight: '0',
+    },
+  },
+  label: {
+    order: '2',
+    textAlign: 'center',
+    display: 'inline-flex',
+    [theme.breakpoints.up('sm')]: {
+      display: 'block',
+    },
+    '& span': {
+      margin: '0 5px',
+    },
+  },
+  compItem: {
+    margin: '10px 0',
+  },
+
+  componentControls: {
+    order: '1',
+    display: 'flex',
+    justifyContent: 'flex-end',
+    flexBasis: '100%',
+    marginBottom: '15px',
+    [theme.breakpoints.up('sm')]: {
+      order: '2',
+      flexBasis: '33%',
+      marginBottom: '0',
+    },
+  },
+
+}));
 
 const ComponentDetail = ({ components, history, location }) => {
   const [drawer, setDrawer] = useState(false);
@@ -24,9 +90,7 @@ const ComponentDetail = ({ components, history, location }) => {
   const dispatch = useDispatch();
   const { lengthUnit, massUnit } = useSelector((state) => state.options.units);
   const component = components.find((comp) => comp.id === location.state.id);
-  console.log('====================================');
-  console.log('component', component);
-  console.log('====================================');
+
   const setAlertHandler = (distance) => {
     dispatch(setDistanceAlert({
       componentId: component.id,
@@ -144,7 +208,7 @@ const ComponentDetail = ({ components, history, location }) => {
               <div className={classes.compItem}>
                 Installed:
                 {' '}
-                <strong>{component.startDate}</strong>
+                <strong>{timeFormatter(component.startDate, false)}</strong>
               </div>
             </div>
           </Grid>

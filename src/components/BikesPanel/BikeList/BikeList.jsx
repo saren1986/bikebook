@@ -45,9 +45,10 @@ const BikeList = ({ history }) => {
         {renderedBikeList.length
           ? (<Grid container spacing={2}>{renderedBikeList}</Grid>)
           : (
-            <InfoBox type="warning">
-              You have not any bikes yet.
-            </InfoBox>
+            <InfoBox
+              type="warning"
+              title="You have not any bikes yet."
+            />
           )}
       </div>
       <BikeListControls />

@@ -101,9 +101,10 @@ const BikesSync = ({ bikes, history }) => {
       >
         {stravaBikeList}
       </List>
-      <InfoBox type={isValidate ? 'normal' : 'error'}>
-        {isValidate ? null : 'You have to select at least one bike!'}
-      </InfoBox>
+      <InfoBox
+        type={isValidate ? 'normal' : 'error'}
+        title={isValidate ? null : 'You have to select at least one bike!'}
+      />
       <BtnWrapper>
         <Btn variant="outlined" color="primary" onClick={clickHandler}>
           Import

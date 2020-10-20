@@ -5,11 +5,9 @@ import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
-import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import Checkbox from '@material-ui/core/Checkbox';
 import InfoBox from '../../../UX/InfoBox/InfoBox';
 import { COMPONENT_TYPES } from '../../../mock/constans';
@@ -26,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
   formControl: {
     margin: theme.spacing(3),
+    marginLeft: 0,
   },
   group: {
     flexDirection: 'row',
@@ -33,9 +32,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const BikeComponents = ({
-  components, bike, history, location,
+  components, bike, history,
 }) => {
-  console.log('components', components);
   const classes = useStyles();
   const { lengthUnit } = useSelector((state) => state.options.units);
   const [filterState, setFilterState] = useState({
@@ -90,7 +88,6 @@ const BikeComponents = ({
     <>
       <div className={classes.filters}>
         <FormControl component="fieldset" className={classes.formControl}>
-          <FormLabel component="legend">Filters</FormLabel>
           <FormGroup
             classes={{
               root: classes.group,

@@ -5,14 +5,18 @@ import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    textAlign: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexWrap: 'wrap',
     padding: '10px',
     minHeight: '52px',
+    marginTop: 10,
     border: (props) => props.border,
   },
 }));
 
-const InfoBox = ({ children, type }) => {
+const InfoBox = ({ title, children, type }) => {
   const style = {
     border: '2px solid',
   };
@@ -22,21 +26,20 @@ const InfoBox = ({ children, type }) => {
     style.border += ' #46b386';
   } else if (type === 'error') {
     style.border += ' #d32f2f';
-  }
-  else if (type === 'warning') {
+  } else if (type === 'warning') {
     style.border += ' #ab9111';
   }
   const classes = useStyles(style);
   return (
-    <Typography
-      variant="subtitle1"
-      component="div"
-      classes={{
-        root: classes.root,
-      }}
-    >
+    <div className={classes.root}>
+      <Typography
+        variant="subtitle1"
+        component="div"
+      >
+        {title}
+      </Typography>
       {children}
-    </Typography>
+    </div>
   );
 };
 InfoBox.defaultProps = {
@@ -44,7 +47,8 @@ InfoBox.defaultProps = {
   type: 'normal',
 };
 InfoBox.propTypes = {
-  children: PropTypes.string,
+  title: PropTypes.string.isRequired,
+  children: PropTypes.node,
   type: PropTypes.string,
 };
 export default InfoBox;

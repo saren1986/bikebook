@@ -77,9 +77,10 @@ const Activities = ({ history }) => {
         {activitiesToRender.length
           ? activitiesToRender
           : (
-            <InfoBox type="warning">
-              You have not any activities yet.
-            </InfoBox>
+            <InfoBox
+              type="warning"
+              title="You have not any activities yet"
+            />
           )}
       </div>
       {activities.length > activitiesPerPage ? (

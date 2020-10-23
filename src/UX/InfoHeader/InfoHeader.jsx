@@ -9,6 +9,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     position: 'relative',
+    marginBottom: 15,
   },
   title: {
     width: '60%',

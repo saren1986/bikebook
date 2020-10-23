@@ -34,6 +34,9 @@ const theme = createMuiTheme({
           textDecoration: 'none',
           color: 'inherit',
         },
+        html: {
+          overflow: 'scroll',
+        },
       },
     },
     MuiFormControl: {

@@ -7,7 +7,7 @@ import { Placeholder } from '../../../styled/styled';
 
 const useStyles = makeStyles(() => ({
   content: {
-    minHeight: '100px',
+    minHeight: '200px',
     position: 'relative',
     overflow: 'hidden',
   },

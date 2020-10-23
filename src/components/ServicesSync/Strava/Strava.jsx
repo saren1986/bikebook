@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
-  stravaSync, stravaCheckForUpdate, stravaSyncStart, openConfirmDialog, stravaGetAthlete, checkStravaAuth,
+  stravaSync, stravaCheckForUpdate, openConfirmDialog,
 } from '../../../store/actions/index';
 import Spiner from '../../../UX/Spinner/Spinner';
 import InfoBox from '../../../UX/InfoBox/InfoBox';
-import { Header, BtnWrapper, Btn } from '../../../styled/styled';
+import { BtnWrapper, Btn } from '../../../styled/styled';
 import BikeSync from './BikesSync/BikesSync';
+import InfoHeader from '../../../UX/InfoHeader/InfoHeader';
 import { STRAVA_SYNC_URL } from '../../../CONST';
 
 const Strava = () => {
@@ -51,22 +52,22 @@ const Strava = () => {
     dispatch(stravaCheckForUpdate(token, activities));
   };
   let bikesSelect = null;
+  const menuItems = [];
   if (bikes && !error && !startSync) {
     bikesSelect = <BikeSync bikes={bikes} />;
   }
   let content = null;
   if (athlete && !startSync && updateBox) {
+    menuItems.push({
+      name: 'Check for update',
+      func: updateClickHandler,
+    });
     content = (
       <div>
         <InfoBox
           type="info"
           title="Your account is already synchronized with Strava"
         />
-        <BtnWrapper>
-          <Btn variant="outlined" color="primary" onClick={updateClickHandler}>
-            Check for update
-          </Btn>
-        </BtnWrapper>
       </div>
     );
   } else if (startSync) {
@@ -86,6 +87,10 @@ const Strava = () => {
       </div>
     );
   } else {
+    menuItems.push({
+      name: 'Sync with Strava',
+      func: stravaSyncHandler,
+    });
     content = (
       <>
         {error ? (
@@ -108,9 +113,13 @@ const Strava = () => {
       </>
     );
   }
+
   return (
     <div>
-      <Header>Synchronize with Strava</Header>
+      <InfoHeader
+        title="Synchronize with Strava"
+        menuItems={menuItems}
+      />
       {content}
     </div>
   );

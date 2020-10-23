@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import ProgressBar from './progressBar/ProgressBar';
-import ComponentControls from './ComponentControls/ComponentControls';
 import SetAlert from '../Alert/SetAlert/SetAlert';
 import {
   setDistanceAlert, disableAlert, retireComponent, deleteComponent, openConfirmDialog,
@@ -16,6 +15,7 @@ import { timeFormatter } from '../../../../utils/timeFormatters';
 import { formatMassDisplay } from '../../../../utils/massUnitsFormatter';
 import { COMPONENT_TYPES } from '../../../../mock/constans';
 import SwitchToBike from '../SwitchToBike/SwitchToBike';
+import InfoHeader from '../../../../UX/InfoHeader/InfoHeader';
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -99,22 +99,13 @@ const ComponentDetail = ({ components, history, location }) => {
     setDrawer(false);
     setAlerteMode(false);
   };
-  const disableAlertHandler = () => {
-    dispatch(disableAlert({
-      componentId: component.id,
-    }));
-  };
-  const drawerOnHandler = (elem) => {
-    if (elem === 'switch') {
-      setSwitchBikeMode(true);
-    } else if (elem === 'alert') {
-      setAlerteMode(true);
-    }
+
+  const SwitchBikeHandler = (elem) => {
+    setSwitchBikeMode(true);
     setDrawer(true);
   };
   const drawerOffHandler = () => {
     setSwitchBikeMode(false);
-    setAlerteMode(false);
     setDrawer(false);
   };
   const retireComponentHandler = () => {
@@ -143,6 +134,32 @@ const ComponentDetail = ({ components, history, location }) => {
       component,
     });
   };
+  const menuItems = [];
+  if (component.retired) {
+    menuItems.push({
+      name: 'Delete',
+      func: deleteComponentHandler,
+    });
+  } else {
+    menuItems.push(
+      {
+        name: 'Manage Alerts',
+        func: () => {},
+      },
+      {
+        name: 'Edit',
+        func: editComponentHandler,
+      },
+      {
+        name: 'Switch bike',
+        func: SwitchBikeHandler,
+      },
+      {
+        name: 'Retire',
+        func: retireComponentHandler,
+      },
+    );
+  }
   const componentType = COMPONENT_TYPES.find((type) => type.id === component.type).label;
   const distanceAlert = component.alert.on ? (
     <ProgressBar
@@ -172,29 +189,22 @@ const ComponentDetail = ({ components, history, location }) => {
       <div className={classes.wrapper}>
         <Grid container spacing={1}>
           <Grid item xs={12}>
-            <div className={classes.topBar}>
-              <div className={classes.compTypeLabel}>
-                <strong>{componentType}</strong>
-              </div>
-              <div className={classes.label}>
-                <span><strong>{component.brand}</strong></span>
-                {' '}
-                <span>{component.model}</span>
-                {' '}
-              </div>
-              <div className={classes.componentControls}>
-                <ComponentControls
-                  openDrawer={drawerOnHandler}
-                  activeAlert={component.alert.on}
-                  retired={component.retired}
-                  retireComponent={retireComponentHandler}
-                  alertOff={() => disableAlertHandler()}
-                  deleteComponent={deleteComponentHandler}
-                  editComponent={editComponentHandler}
-                />
-              </div>
-            </div>
+            <InfoHeader
+              title={`${componentType}`}
+              menuItems={menuItems}
+              rightPlaceholder={`Bike name`}
+            />
             <div className={classes.itemWrapper}>
+              <div className={classes.compItem}>
+                Model:
+                {' '}
+                <strong>{component.model}</strong>
+              </div>
+              <div className={classes.compItem}>
+                Brand:
+                {' '}
+                <strong>{component.brand}</strong>
+              </div>
               <div className={classes.compItem}>
                 Distance:
                 {' '}
@@ -227,9 +237,7 @@ const ComponentDetail = ({ components, history, location }) => {
           open={drawer}
           closeHandle={drawerOffHandler}
         >
-
           {switchBikeContent}
-          {alertContent}
         </DrawerSmall>
       </div>
     </>

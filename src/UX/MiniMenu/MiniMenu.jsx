@@ -4,17 +4,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import IconButton from '@material-ui/core/IconButton';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    transform: 'translateX(-10px)!important',
-  },
-}));
 
 const MiniMenu = ({ items }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const classes = useStyles();
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -38,12 +30,17 @@ const MiniMenu = ({ items }) => {
       <Menu
         id="mini-menu"
         anchorEl={anchorEl}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleClose}
-        classes={{
-          paper: classes.paper,
-        }}
       >
         {menuItems}
       </Menu>

@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router-dom';
-import { Header, BtnWrapper, Btn } from '../../../styled/styled';
+import { BtnWrapper, Btn } from '../../../styled/styled';
+import InfoHeader from '../../../UX/InfoHeader/InfoHeader';
 import ActivityTile from './ActivityTile/ActivityTile';
 import { formatDistance } from '../../../utils/distanceFormatters';
 import { secondsToHours, timeFormatter } from '../../../utils/timeFormatters';
@@ -69,18 +70,42 @@ const Activities = ({ history }) => {
         />
       );
     });
-
+  const menuItems = [
+    {
+      name: 'Add new',
+      func: addNewActivityHandler,
+    },
+    {
+      name: 'Sync with Strava',
+      func: stravaClickHandler,
+    },
+  ];
   return (
     <>
-      <Header>Activities</Header>
+      <InfoHeader
+        title="Activities"
+        menuItems={menuItems}
+      />
       <div className={classes.activitiesList}>
         {activitiesToRender.length
           ? activitiesToRender
           : (
-            <InfoBox
-              type="warning"
-              title="You have not any activities yet"
-            />
+            <>
+              <InfoBox
+                type="warning"
+                title="You have not any activities yet"
+              />
+              <BtnWrapper>
+                {!isStravaAuth || !activitiesToRender.length ? (
+                  <Btn variant="outlined" color="primary" onClick={stravaClickHandler}>
+                    Sync with Strava
+                  </Btn>
+                ) : null}
+                <Btn variant="outlined" color="primary" onClick={addNewActivityHandler}>
+                  Add new activity
+                </Btn>
+              </BtnWrapper>
+            </>
           )}
       </div>
       {activities.length > activitiesPerPage ? (
@@ -91,16 +116,6 @@ const Activities = ({ history }) => {
         />
       ) : null}
 
-      <BtnWrapper>
-        {!isStravaAuth || !activitiesToRender.length ? (
-          <Btn variant="outlined" color="primary" onClick={stravaClickHandler}>
-            Sync with Strava
-          </Btn>
-        ) : null}
-        <Btn variant="outlined" color="primary" onClick={addNewActivityHandler}>
-          Add new activity
-        </Btn>
-      </BtnWrapper>
     </>
   );
 };

@@ -13,15 +13,12 @@ export const prepareFormData = (formData, lengthUnit, massUnit, seed, editForm) 
   formattedData = formattedData.map((input) => {
     let { label } = input;
     let defaultVal = input.default;
-    if (input.id === 'weight') {
+    if (input.seedType === 'weight') {
       label += ` ${massUnit}`;
-    } else if (input.id === 'distance') {
+    } else if (input.seedType === 'distance') {
       label += ` ${lengthUnit}`;
-    } else if (input.id === 'startDate' && typeof input.default === 'function') {
-      console.log('input id', input.id, typeof input.default === 'function');
-      // defaultVal = input.default(); 
-      defaultVal = new Date(); 
-      console.log('defaultVal', defaultVal);
+    } else if (input.type === 'date' && typeof input.default === 'function') {
+      defaultVal = input.default();
     }
     if (seedKeys) {
       const seedKey = seedKeys.find((key) => key === input.id);

@@ -15,6 +15,7 @@ import Strava from '../ServicesSync/Strava/Strava';
 import Activities from './Activities/Activities';
 import ComponentForm from './BikeComponents/ComponentForm/ComponentForm';
 import ActivityForm from './Activities/ActivityForm/ActivityForm';
+import AlertForm from './BikeComponents/Alert/AlertForm/AlertForm';
 
 const BikesPanel = () => {
   const bikeList = useSelector((state) => state.bikes);
@@ -46,6 +47,9 @@ const BikesPanel = () => {
           </Route>
           <Route path="/component/edit">
             <ComponentForm edit />
+          </Route>
+          <Route path="/component/add-alert">
+            <AlertForm />
           </Route>
           <Route path="/bike">
             <BikeItem />

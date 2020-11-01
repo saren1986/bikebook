@@ -3,8 +3,9 @@ import { Button, MenuItem } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
-import * as Styled from '../../../../styled/styled';
+import { SmallForm, Header } from '../../../../styled/styled';
 import { setActiveBike, switchToBike } from '../../../../store/actions/index';
+import Input from '../../../../UX/Form/Input/Input';
 
 const SwitchToBike = ({ compId, bikeId, clb }) => {
   const [selectValue, setSelectValue] = useState('');
@@ -24,9 +25,9 @@ const SwitchToBike = ({ compId, bikeId, clb }) => {
   const bikes = useSelector((state) => state.bikes);
 
   return (
-    <Styled.SmallForm>
-      <Styled.Header>Switch component to bike</Styled.Header>
-      <Styled.Input
+    <SmallForm>
+      <Header>Switch component to bike</Header>
+      <Input
         id="distanceAlert"
         label="Select bike"
         select
@@ -41,7 +42,7 @@ const SwitchToBike = ({ compId, bikeId, clb }) => {
             {bike.name}
           </MenuItem>
         ))}
-      </Styled.Input>
+      </Input>
       <Button
         variant="contained"
         color="primary"
@@ -50,7 +51,7 @@ const SwitchToBike = ({ compId, bikeId, clb }) => {
       >
         Add
       </Button>
-    </Styled.SmallForm>
+    </SmallForm>
   );
 };
 SwitchToBike.propTypes = {

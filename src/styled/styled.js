@@ -1,5 +1,5 @@
 import { styled } from '@material-ui/core/styles';
-import { TextField, Button } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 
 export const Header = styled('div')({
   display: 'flex',
@@ -8,10 +8,6 @@ export const Header = styled('div')({
   padding: '15px',
   fontSize: '18px',
   fontWeight: '600',
-});
-
-export const Input = styled(TextField)({
-  width: '100%',
 });
 
 export const BtnWrapper = styled('div')(({ theme }) => ({

@@ -1,12 +1,21 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 
 const theme = createMuiTheme({
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 700,
+      md: 960,
+      lg: 1280,
+      xl: 1920,
+    },
+  },
   hovers: {
     icon: '#ccc',
   },
   backdropZindex: 999,
   backgroundColor: {
-    box: '#eee',
+    box: '#f7f7f7',
     backdrop: 'rgba(0, 0, 0, 0.5)',
   },
   typography: {
@@ -21,7 +30,7 @@ const theme = createMuiTheme({
   },
   palette: {
     primary: {
-      main: '#fc4c02',
+      main: '#8c3d1c',
     },
     background: {
       default: '#f7f7fa',

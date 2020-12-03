@@ -9,7 +9,7 @@ const defaultState = {
         visible: true,
         editable: true,
       },
-      controlledBy: false,
+      controlledBy: null,
       validation: {
         type: 'string',
         required: true,
@@ -48,7 +48,7 @@ const defaultState = {
         visible: true,
         editable: true,
       },
-      controlledBy: false,
+      controlledBy: null,
       selectOption: [
         {
           id: '1',
@@ -101,7 +101,7 @@ const defaultState = {
         visible: true,
         editable: true,
       },
-      controlledBy: false,
+      controlledBy: null,
       validation: {
         type: 'string',
         required: false,
@@ -127,7 +127,7 @@ const defaultState = {
         visible: true,
         editable: true,
       },
-      controlledBy: false,
+      controlledBy: null,
       validation: {
         type: 'string',
         required: false,
@@ -147,13 +147,14 @@ const defaultState = {
     {
       id: 'weight',
       type: 'number',
+      seedType: 'weight',
       default: '',
       label: 'Frame mass /',
       edit: {
         visible: true,
         editable: true,
       },
-      controlledBy: false,
+      controlledBy: null,
       validation: {
         type: 'number',
         required: false,
@@ -178,13 +179,14 @@ const defaultState = {
     {
       id: 'distance',
       type: 'number',
+      seedType: 'distance',
       default: '',
       label: 'Distance / ',
       edit: {
         visible: false,
         editable: false,
       },
-      controlledBy: false,
+      controlledBy: null,
       validation: {
         type: 'number',
         required: false,
@@ -219,7 +221,7 @@ const defaultState = {
         visible: true,
         editable: true,
       },
-      controlledBy: false,
+      controlledBy: null,
       validation: {
         type: 'string',
         required: false,
@@ -248,7 +250,7 @@ const defaultState = {
         visible: true,
         editable: true,
       },
-      controlledBy: false,
+      controlledBy: null,
       selectOption: [],
       validation: {
         type: 'string',
@@ -280,7 +282,7 @@ const defaultState = {
         visible: true,
         editable: true,
       },
-      controlledBy: false,
+      controlledBy: null,
       selectOption: [
         {
           id: '1',
@@ -341,7 +343,7 @@ const defaultState = {
         visible: true,
         editable: true,
       },
-      controlledBy: false,
+      controlledBy: null,
       validation: {
         type: 'string',
         required: false,
@@ -367,7 +369,7 @@ const defaultState = {
         visible: true,
         editable: true,
       },
-      controlledBy: false,
+      controlledBy: null,
       validation: {
         type: 'string',
         required: false,
@@ -387,13 +389,14 @@ const defaultState = {
     {
       id: 'weight',
       type: 'number',
+      seedType: 'weight',
       default: '',
       label: 'Weight /',
       edit: {
         visible: true,
         editable: true,
       },
-      controlledBy: false,
+      controlledBy: null,
       validation: {
         type: 'number',
         required: false,
@@ -424,9 +427,14 @@ const defaultState = {
         visible: false,
         editable: false,
       },
-      controlledBy: 'fromBegining',
+      controlledBy: {
+        checkboxId: 'fromBegining',
+        default: 'enabled',
+      },
       validation: {
         type: 'date',
+        disableFuture: true,
+        disablePast: false,
         required: true,
         rules: [
           {
@@ -453,13 +461,14 @@ const defaultState = {
     {
       id: 'distance',
       type: 'number',
+      seedType: 'distance',
       default: 0,
       label: 'Distance / ',
       edit: {
         visible: false,
         editable: false,
       },
-      controlledBy: false,
+      controlledBy: null,
       validation: {
         type: 'number',
         required: false,
@@ -494,7 +503,7 @@ const defaultState = {
         visible: false,
         editable: false,
       },
-      controlledBy: false,
+      controlledBy: null,
       validation: {
         type: 'boolean',
         required: false,
@@ -521,7 +530,7 @@ const defaultState = {
         visible: true,
         editable: true,
       },
-      controlledBy: false,
+      controlledBy: null,
       validation: {
         type: 'string',
         required: false,
@@ -550,7 +559,7 @@ const defaultState = {
         visible: true,
         editable: true,
       },
-      controlledBy: false,
+      controlledBy: null,
       validation: {
         type: 'string',
         required: true,
@@ -589,7 +598,7 @@ const defaultState = {
         visible: true,
         editable: false,
       },
-      controlledBy: false,
+      controlledBy: null,
       selectOption: [],
       validation: {
         type: 'string',
@@ -615,13 +624,14 @@ const defaultState = {
     {
       id: 'distance',
       type: 'number',
+      seedType: 'distance',
       default: 1,
       label: 'Distance / ',
       edit: {
         visible: true,
         editable: true,
       },
-      controlledBy: false,
+      controlledBy: null,
       validation: {
         type: 'number',
         required: true,
@@ -656,7 +666,7 @@ const defaultState = {
         visible: true,
         editable: true,
       },
-      controlledBy: false,
+      controlledBy: null,
       validation: {
         type: 'string',
         required: false,
@@ -695,9 +705,11 @@ const defaultState = {
         visible: true,
         editable: false,
       },
-      controlledBy: false,
+      controlledBy: null,
       validation: {
         type: 'date',
+        disableFuture: true,
+        disablePast: false,
         required: true,
         rules: [
           {
@@ -718,6 +730,348 @@ const defaultState = {
         inputDesign: {
           margin: 'normal',
           variant: 'outlined',
+        },
+      },
+    },
+  ],
+  distanceAlert: [
+    {
+      id: 'name',
+      type: 'text',
+      default: '',
+      label: 'Alert name',
+      edit: {
+        visible: false,
+        editable: false,
+      },
+      controlledBy: null,
+      validation: {
+        type: 'string',
+        required: true,
+        rules: [
+          {
+            key: 'required',
+            params: ['This field is required'],
+          },
+          {
+            key: 'min',
+            params: [3, 'cannot be less than 3 characters'],
+          },
+          {
+            key: 'max',
+            params: [50, 'cannot be more than 50 characters'],
+          },
+        ],
+      },
+      uiStyle: {
+        width: {
+          xs: 12,
+          sm: 6,
+        },
+        inputDesign: {
+          margin: 'normal',
+          variant: 'outlined',
+        },
+      },
+    },
+    {
+      id: 'distance',
+      type: 'number',
+      seedType: 'distance',
+      default: 200,
+      label: 'Distance / ',
+      edit: {
+        visible: false,
+        editable: false,
+      },
+      controlledBy: null,
+      validation: {
+        type: 'number',
+        required: false,
+        rules: [
+          {
+            key: 'required',
+            params: ['This field is required'],
+          },
+          {
+            key: 'moreThan',
+            params: [50, 'Can\'t be less than 50!'],
+          },
+          {
+            key: 'max',
+            params: [50000, 'cannot be more than 50000'],
+          },
+        ],
+      },
+      uiStyle: {
+        width: {
+          xs: 12,
+          sm: 6,
+        },
+        inputDesign: {
+          margin: 'normal',
+          variant: 'outlined',
+        },
+      },
+    },
+    {
+      id: 'repeat',
+      type: 'checkbox',
+      default: false,
+      label: 'Repeat every ',
+      edit: {
+        visible: false,
+        editable: false,
+      },
+      controlledBy: null,
+      validation: {
+        type: 'boolean',
+        required: false,
+        rules: [
+        ],
+      },
+      uiStyle: {
+        width: {
+          xs: 12,
+          sm: 6,
+        },
+        inputDesign: {
+          labelPlacement: 'end',
+        },
+      },
+    },
+    {
+      id: 'repeatDistance',
+      type: 'number',
+      seedType: 'distance',
+      default: 200,
+      label: 'distance /',
+      edit: {
+        visible: true,
+        editable: true,
+      },
+      controlledBy: {
+        checkboxId: 'repeat',
+        default: 'disabled',
+      },
+      validation: {
+        type: 'number',
+        required: false,
+        rules: [
+          {
+            key: 'moreThan',
+            params: [50, 'Can\'t be less than 50!'],
+          },
+          {
+            key: 'max',
+            params: [10000, 'cannot be more than 10000'],
+          },
+        ],
+      },
+      uiStyle: {
+        width: {
+          xs: 12,
+          sm: 6,
+        },
+        inputDesign: {
+          margin: 'normal',
+          variant: 'outlined',
+        },
+      },
+    },
+    {
+      id: 'description',
+      type: 'text',
+      default: '',
+      label: 'Description',
+      edit: {
+        visible: true,
+        editable: true,
+      },
+      controlledBy: null,
+      validation: {
+        type: 'string',
+        required: false,
+        rules: [],
+      },
+      uiStyle: {
+        width: {
+          xs: 12,
+        },
+        inputDesign: {
+          margin: 'normal',
+          variant: 'outlined',
+          multiline: true,
+          rows: 4,
+        },
+      },
+    },
+  ],
+  dateAlert: [
+    {
+      id: 'name',
+      type: 'text',
+      default: '',
+      label: 'Alert name',
+      edit: {
+        visible: false,
+        editable: false,
+      },
+      controlledBy: null,
+      validation: {
+        type: 'string',
+        required: true,
+        rules: [
+          {
+            key: 'required',
+            params: ['This field is required'],
+          },
+          {
+            key: 'min',
+            params: [3, 'cannot be less than 3 characters'],
+          },
+          {
+            key: 'max',
+            params: [50, 'cannot be more than 50 characters'],
+          },
+        ],
+      },
+      uiStyle: {
+        width: {
+          xs: 12,
+          sm: 6,
+        },
+        inputDesign: {
+          margin: 'normal',
+          variant: 'outlined',
+        },
+      },
+    },
+    {
+      id: 'alertDate',
+      type: 'date',
+      default: () => new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      label: 'Alert date',
+      edit: {
+        visible: false,
+        editable: false,
+      },
+      controlledBy: null,
+      validation: {
+        type: 'date',
+        disableFuture: false,
+        disablePast: true,
+        required: true,
+        rules: [
+          {
+            key: 'min',
+            params: [() => new Date(), 'The date cannot be from the past!'],
+          },
+          {
+            key: 'max',
+            params: [() => new Date('01-01-2030'), 'Date cannot be greater than 01-01-2030'],
+          },
+        ],
+      },
+      uiStyle: {
+        width: {
+          xs: 12,
+          sm: 6,
+        },
+        inputDesign: {
+          margin: 'normal',
+          variant: 'outlined',
+        },
+      },
+    },
+    {
+      id: 'repeat',
+      type: 'checkbox',
+      default: false,
+      label: 'Repeat every',
+      edit: {
+        visible: false,
+        editable: false,
+      },
+      controlledBy: null,
+      validation: {
+        type: 'boolean',
+        required: false,
+        rules: [
+        ],
+      },
+      uiStyle: {
+        width: {
+          xs: 12,
+          sm: 6,
+        },
+        inputDesign: {
+          labelPlacement: 'end',
+        },
+      },
+    },
+    {
+      id: 'repeatTimes',
+      type: 'number',
+      default: 30,
+      label: 'days',
+      edit: {
+        visible: true,
+        editable: true,
+      },
+      controlledBy: {
+        checkboxId: 'repeat',
+        default: 'disabled',
+      },
+      validation: {
+        type: 'number',
+        required: false,
+        rules: [
+          {
+            key: 'moreThan',
+            params: [10, 'Minimum days is 10'],
+          },
+          {
+            key: 'max',
+            params: [365, 'cannot be more than 365 days'],
+          },
+        ],
+      },
+      uiStyle: {
+        width: {
+          xs: 12,
+          sm: 6,
+        },
+        inputDesign: {
+          margin: 'normal',
+          variant: 'outlined',
+        },
+      },
+    },
+    {
+      id: 'description',
+      type: 'text',
+      default: '',
+      label: 'Description',
+      edit: {
+        visible: true,
+        editable: true,
+      },
+      controlledBy: null,
+      validation: {
+        type: 'string',
+        required: false,
+        rules: [],
+      },
+      uiStyle: {
+        width: {
+          xs: 12,
+        },
+        inputDesign: {
+          margin: 'normal',
+          variant: 'outlined',
+          multiline: true,
+          rows: 4,
         },
       },
     },

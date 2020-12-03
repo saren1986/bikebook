@@ -4,18 +4,20 @@ import { withRouter } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import ProgressBar from './progressBar/ProgressBar';
-import SetAlert from '../Alert/SetAlert/SetAlert';
-import {
-  setDistanceAlert, disableAlert, retireComponent, deleteComponent, openConfirmDialog,
-} from '../../../../store/actions/index';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import { retireComponent, deleteComponent, openConfirmDialog } from '../../../../store/actions/index';
 import DrawerSmall from '../../../../UX/DrawerSmall/DrawerSmall';
-import { formatDistance, distanceLargeToSmall } from '../../../../utils/distanceFormatters';
+import { formatDistance } from '../../../../utils/distanceFormatters';
 import { timeFormatter } from '../../../../utils/timeFormatters';
 import { formatMassDisplay } from '../../../../utils/massUnitsFormatter';
 import { COMPONENT_TYPES } from '../../../../mock/constans';
 import SwitchToBike from '../SwitchToBike/SwitchToBike';
 import InfoHeader from '../../../../UX/InfoHeader/InfoHeader';
+import InfoBox from '../../../../UX/InfoBox/InfoBox';
+import { prepareAlertsData } from '../../../../utils/alerts';
+import AlertItem from '../Alert/AlertItem/AlertItem';
+import Retired from '../../../../UX/Info/Retired';
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -79,28 +81,37 @@ const useStyles = makeStyles((theme) => ({
       marginBottom: '0',
     },
   },
+  alertLabel: {
+    textAlign: 'center',
+    margin: '20px 0',
+  },
 
 }));
 
 const ComponentDetail = ({ components, history, location }) => {
   const [drawer, setDrawer] = useState(false);
   const [switchBikeMode, setSwitchBikeMode] = useState(false);
-  const [alertMode, setAlerteMode] = useState(false);
   const classes = useStyles();
   const dispatch = useDispatch();
   const { lengthUnit, massUnit } = useSelector((state) => state.options.units);
   const component = components.find((comp) => comp.id === location.state.id);
+  const bike = useSelector((state) => state.bikes.find((b) => b.id === component.bikeId));
+  const componentType = COMPONENT_TYPES.find((type) => type.id === component.type).label;
+  const alerts = prepareAlertsData(component.alerts, component.distance);
 
-  const setAlertHandler = (distance) => {
-    dispatch(setDistanceAlert({
-      componentId: component.id,
-      alertDistance: distanceLargeToSmall(distance, lengthUnit),
-    }));
-    setDrawer(false);
-    setAlerteMode(false);
-  };
+  const alertsList = alerts
+    .filter((alert) => !(alert.triggered && !alert.requireAction))
+    .map((alert) => (
+      <AlertItem
+        key={alert.id}
+        alert={alert}
+        lengthUnit={lengthUnit}
+        componentDistance={component.distance}
+        componentId={component.id}
+      />
+    ));
 
-  const SwitchBikeHandler = (elem) => {
+  const SwitchBikeHandler = () => {
     setSwitchBikeMode(true);
     setDrawer(true);
   };
@@ -134,8 +145,24 @@ const ComponentDetail = ({ components, history, location }) => {
       component,
     });
   };
+  const addAlertHandler = () => {
+    history.push({
+      pathname: '/bike/components/detail/add-alert',
+      component: {
+        id: component.id,
+        type: componentType,
+        brand: component.brand,
+        model: component.model,
+        bike: bike.name,
+        distance: component.distance,
+      },
+    });
+  };
   const menuItems = [];
+  let rightInfo = null;
+  let alertsSection = null;
   if (component.retired) {
+    rightInfo = <Retired />;
     menuItems.push({
       name: 'Delete',
       func: deleteComponentHandler,
@@ -143,8 +170,8 @@ const ComponentDetail = ({ components, history, location }) => {
   } else {
     menuItems.push(
       {
-        name: 'Manage Alerts',
-        func: () => {},
+        name: 'Add alert',
+        func: addAlertHandler,
       },
       {
         name: 'Edit',
@@ -159,31 +186,29 @@ const ComponentDetail = ({ components, history, location }) => {
         func: retireComponentHandler,
       },
     );
+    alertsSection = alerts.length ? (
+      <>
+        <hr />
+        <div>
+          <Typography variant="h3" component="h3" className={classes.alertLabel}>
+            Alerts
+          </Typography>
+          <div className={classes.alertsList}>
+            {alertsList}
+          </div>
+        </div>
+      </>
+    ) : (
+      <InfoBox
+        type="warning"
+        title="This component has not any alert yet."
+      >
+        <Button color="primary" onClick={addAlertHandler}>
+          Add alert
+        </Button>
+      </InfoBox>
+    );
   }
-  const componentType = COMPONENT_TYPES.find((type) => type.id === component.type).label;
-  const distanceAlert = component.alert.on ? (
-    <ProgressBar
-      startDistance={component.alert.startDistance}
-      currentDistance={component.distance}
-      endDistance={component.alert.endDistance}
-      lengthUnit={lengthUnit}
-    />
-  ) : null;
-  const switchBikeContent = switchBikeMode ? (
-    <SwitchToBike
-      bikeId={component.bikeId}
-      compId={component.id}
-      clb={() => setDrawer(false)}
-    />
-  ) : null;
-  const alertContent = alertMode ? (
-    <SetAlert
-      active={component.alert.on}
-      id={component.id}
-      setAlert={(distance) => setAlertHandler(distance)}
-      lengthUnit={lengthUnit}
-    />
-  ) : null;
   return (
     <>
       <div className={classes.wrapper}>
@@ -192,9 +217,14 @@ const ComponentDetail = ({ components, history, location }) => {
             <InfoHeader
               title={`${componentType}`}
               menuItems={menuItems}
-              rightPlaceholder={`Bike name`}
+              rightPlaceholder={rightInfo}
             />
             <div className={classes.itemWrapper}>
+              <div className={classes.compItem}>
+                Current bike:
+                {' '}
+                <strong>{bike.name}</strong>
+              </div>
               <div className={classes.compItem}>
                 Model:
                 {' '}
@@ -223,21 +253,28 @@ const ComponentDetail = ({ components, history, location }) => {
             </div>
           </Grid>
           <Grid item xs={12}>
-            {distanceAlert}
-          </Grid>
-          <Grid item xs={12}>
-            <hr />
             <p>
               <b>Notes: </b>
               {component.description}
             </p>
+          </Grid>
+          <Grid item xs={12}>
+            <div className={classes.alertsWrapper}>
+              {alertsSection}
+            </div>
           </Grid>
         </Grid>
         <DrawerSmall
           open={drawer}
           closeHandle={drawerOffHandler}
         >
-          {switchBikeContent}
+          {switchBikeMode ? (
+            <SwitchToBike
+              bikeId={component.bikeId}
+              compId={component.id}
+              clb={() => setDrawer(false)}
+            />
+          ) : null}
         </DrawerSmall>
       </div>
     </>

@@ -6,9 +6,10 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import BikeComponents from '../BikeComponents/BikeComponents';
-import * as actions from '../../../store/actions/index';
+import { setActiveBike } from '../../../store/actions/index';
 import ComponentDetail from '../BikeComponents/ComponentDetail/ComponentDetail';
 import BikeInfo from '../BikeInfo/BikeInfo';
+import AlertForm from '../BikeComponents/Alert/AlertForm/AlertForm';
 
 const useStyles = makeStyles((theme) => ({
   title: { textAlign: 'center' },
@@ -28,12 +29,15 @@ const BikeItem = ({ match }) => {
   const bike = useSelector((state) => state.bikes.find((elem) => elem.id === bikeId));
   const components = useSelector((state) => state.components
     .filter((comp) => comp.bikeId === bikeId));
-  useEffect(() => () => dispatch(actions.setActiveBike(null)), []);
+  useEffect(() => () => dispatch(setActiveBike(null)), []);
 
   const renderBikeItem = bikeId ? (
     <div className={classes.wrapper}>
       <div className={classes.bikeItemView}>
         <Switch>
+          <Route path={`${match.path}/components/detail/add-alert`}>
+            <AlertForm />
+          </Route>
           <Route path={`${match.path}/components/detail`}>
             <ComponentDetail
               components={components}

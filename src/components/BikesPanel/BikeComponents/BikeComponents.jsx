@@ -11,13 +11,15 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import InfoBox from '../../../UX/InfoBox/InfoBox';
 import { COMPONENT_TYPES } from '../../../mock/constans';
-import { formatDistance, remainDistance } from '../../../utils/distanceFormatters';
 import InfoHeader from '../../../UX/InfoHeader/InfoHeader';
 import ComponentItem from './ComponentItem/ComponentItem';
+import { prepareAlertsData } from '../../../utils/alerts';
 
 const useStyles = makeStyles((theme) => ({
   componentsList: {
-    marginTop: '20px',
+    [theme.breakpoints.up('sm')]: {
+      marginTop: '20px',
+    },
   },
   filters: {
     display: 'flex',
@@ -77,11 +79,10 @@ const BikeComponents = ({
         type={COMPONENT_TYPES.find((type) => type.id === c.type).label}
         brand={c.brand}
         model={c.model}
-        distance={formatDistance(c.distance, lengthUnit)}
+        distance={c.distance}
+        lengthUnit={lengthUnit}
         retired={c.retired}
-        alert={c.alert.on}
-        leftDistance={c.alert.on
-          ? remainDistance(c.alert.startDistance, c.distance, c.alert.endDistance) : null}
+        alerts={prepareAlertsData(c.alerts, c.distance)}
       />
     ));
   const mainRender = (

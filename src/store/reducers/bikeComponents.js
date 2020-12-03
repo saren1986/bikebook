@@ -20,12 +20,7 @@ const bikeComponentsSlice = createSlice({
             ...payload.component,
             id: Math.random().toString(36).substring(7),
             retired: false,
-            alert: {
-              on: false,
-              note: '',
-              startDistance: 0,
-              endDistance: 0,
-            },
+            alerts: [],
           },
         },
       }),
@@ -44,21 +39,69 @@ const bikeComponentsSlice = createSlice({
         compToEdit.description = description;
       }
     },
-    setDistanceAlert: (state, { payload }) => {
+    addAlert: {
+      reducer: (state, { payload }) => {
+        const compToEdit = state.find((component) => component.id === payload.componentId);
+        if (compToEdit) {
+          compToEdit.alerts.push(payload);
+        }
+      },
+      prepare: (payload) => {
+        const id = Math.random().toString(36).substring(7);
+        const sharedProperty = {
+          triggered: false,
+          requireAction: false,
+          serviced: false,
+        };
+        if (payload.type === 'distance') {
+          return {
+            payload: {
+              id,
+              ...payload,
+              distanceAlert: true,
+              startDistance: payload.componentDistance,
+              endDistance: payload.componentDistance + payload.distance,
+              dateAlert: false,
+              endDate: null,
+              repeatedPeriod: payload.repeatDistance,
+              ...sharedProperty,
+            },
+          };
+        } if (payload.type === 'date') {
+          return {
+            payload: {
+              id,
+              ...payload,
+              dateAlert: true,
+              endDate: payload.alertDate.toJSON(),
+              repeatedPeriod: payload.repeatTimes,
+              distanceAlert: false,
+              startDistance: null,
+              endDistance: null,
+              ...sharedProperty,
+            },
+          };
+        }
+        return payload;
+      },
+    },
+    deleteAlert: (state, { payload }) => {
       const compToEdit = state.find((component) => component.id === payload.componentId);
       if (compToEdit) {
-        compToEdit.alert.on = true;
-        compToEdit.alert.startDistance = compToEdit.distance;
-        compToEdit.alert.endDistance = compToEdit.distance
-        + payload.alertDistance;
+        const alertIndex = compToEdit.alerts.findIndex((alert) => alert.id === payload.alertId);
+        if (alertIndex !== -1) {
+          compToEdit.alerts.splice(alertIndex, 1);
+        }
       }
     },
-    disableAlert: (state, { payload }) => {
+    serviceComponent: (state, { payload }) => {
       const compToEdit = state.find((component) => component.id === payload.componentId);
       if (compToEdit) {
-        compToEdit.alert.on = false;
-        compToEdit.alert.startDistance = 0;
-        compToEdit.alert.endDistance = 0;
+        const alert = compToEdit.alerts.find((alert) => alert.id === payload.alertId);
+        if (alert) {
+          alert.serviced = true;
+          alert.requireAction = false;
+        }
       }
     },
     updateDistance: (state, { payload }) => {
@@ -79,9 +122,7 @@ const bikeComponentsSlice = createSlice({
       const compToEdit = state.find((component) => component.id === payload.componentId);
       if (compToEdit) {
         compToEdit.retired = true;
-        compToEdit.alert.on = false;
-        compToEdit.alert.startDistance = 0;
-        compToEdit.alert.endDistance = 0;
+        compToEdit.alerts = [];
       }
     },
     retireAllWithBike: (state, { payload }) => {
@@ -89,9 +130,7 @@ const bikeComponentsSlice = createSlice({
         if (component.bikeId === payload.bikeId) {
           const componentToEdit = component;
           componentToEdit.retired = true;
-          componentToEdit.alert.on = false;
-          componentToEdit.alert.startDistance = 0;
-          componentToEdit.alert.endDistance = 0;
+          componentToEdit.alerts = [];
         }
       });
     },
@@ -101,17 +140,16 @@ const bikeComponentsSlice = createSlice({
         state.splice(i, 1);
       }
     },
-    removeAllWithBike: (state, { payload }) => {
-      return state.filter((elem) => elem.bikeId !== payload.bikeId);
-    },
+    removeAllWithBike: (state, { payload }) => state.filter((elem) => elem.bikeId !== payload.bikeId),
   },
 });
 
 export const {
   create: addComponent,
   edit: editComponent,
-  setDistanceAlert,
-  disableAlert,
+  addAlert,
+  serviceComponent,
+  deleteAlert,
   switchToBike,
   retire: retireComponent,
   updateDistance: updateComponentsDistance,

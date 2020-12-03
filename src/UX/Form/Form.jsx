@@ -13,14 +13,22 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
+import { makeStyles } from '@material-ui/core/styles';
 import createYup from '../../utils/createYup';
-import {
-  Header, Input, BtnWrapper, Btn,
-} from '../../styled/styled';
+import { Header, BtnWrapper, Btn } from '../../styled/styled';
+import Input from './Input/Input';
+
+const useStyles = makeStyles((theme) => ({
+  formGroup: {
+    height: '100%',
+  },
+}));
 
 const Form = ({
   inputs, header, buttonName, onSubmitHandler, editMode,
 }) => {
+
+  const classes = useStyles();
   const initialValues = {};
   let validateSchema = null;
 
@@ -31,7 +39,7 @@ const Form = ({
   }
   return (
     <>
-      <Header>{header}</Header>
+      {header ? (<Header>{header}</Header>) : null}
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <Formik
           initialValues={initialValues}
@@ -50,6 +58,8 @@ const Form = ({
               handleSubmit,
               setFieldValue,
             } = props;
+            // console.log('formik render values', values);
+            // console.log('formik render inputs', initialValues);
             const renderedInputs = inputs.map((input) => {
               const { type } = input;
               let select = false;
@@ -65,7 +75,10 @@ const Form = ({
               let field = null;
               let off = false;
               if (input.controlledBy) {
-                off = values[input.controlledBy];
+                off = values[input.controlledBy.checkboxId];
+                if (input.controlledBy.default === 'disabled') {
+                  off = !off;
+                }
               }
               if (editMode && !input.edit.visible) {
                 return null;
@@ -74,11 +87,13 @@ const Form = ({
               if (input.type === 'date') {
                 const minDate = input.validation.rules.find((date) => date.key === 'min').params;
                 const maxDate = input.validation.rules.find((date) => date.key === 'max').params;
+                const { disableFuture, disablePast } = input.validation;
                 field = (
                   <KeyboardDatePicker
                     autoOk
                     inputVariant="outlined"
-                    disableFuture
+                    disableFuture={disableFuture}
+                    disablePast={disablePast}
                     format="dd/MM/yyyy"
                     margin="normal"
                     id="date-picker-inline"
@@ -102,7 +117,12 @@ const Form = ({
                   field = null;
                 } else {
                   field = (
-                    <FormGroup row>
+                    <FormGroup
+                      row
+                      classes={{
+                        root: classes.formGroup,
+                      }}
+                    >
                       <FormControlLabel
                         control={(
                           <Checkbox
@@ -114,6 +134,7 @@ const Form = ({
                     )}
                         label={input.label}
                         labelPlacement="start"
+                        {...input.uiStyle.inputDesign}
                       />
                     </FormGroup>
                   );
@@ -204,12 +225,13 @@ const Form = ({
 };
 Form.defaultProps = {
   editMode: false,
+  header: null,
 };
 Form.propTypes = {
   inputs: PropTypes.arrayOf(PropTypes.object).isRequired,
   editMode: PropTypes.bool,
   buttonName: PropTypes.string.isRequired,
-  header: PropTypes.string.isRequired,
+  header: PropTypes.string,
   onSubmitHandler: PropTypes.func.isRequired,
 };
 export default Form;

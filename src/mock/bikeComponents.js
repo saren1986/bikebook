@@ -7,16 +7,80 @@ const bikeComponents = [
     brand: 'KMC',
     model: 'XC10',
     weight: 1000,
-    startDate: '16-12-2019',
-    distance: 10000,
-    alert: {
-      on: true,
-      startDistance: 10000,
-      endDistance: 520000,
-      // note: '',
-      // alertType,
-      // alertName
-    },
+    startDate: '2019-11-16T13:40:29.089Z',
+    distance: 220000,
+    alerts: [
+      {
+        id: 1,
+        name: 'Wyczyść łańcuch',
+        description: 'Notatka',
+
+        distanceAlert: true,
+        startDistance: 10000,
+        endDistance: 200000,
+
+        dateAlert: false,
+        endDate: null,
+
+        triggered: true,
+        requireAction: true,
+        serviced: false,
+
+        repeat: true,
+        repeatedPeriod: 200 * 1000,
+      },
+      {
+        id: 2,
+        name: 'Zmiana opon',
+
+        distanceAlert: true,
+        startDistance: 10000,
+        endDistance: 320000,
+
+        dateAlert: false,
+        endDate: null,
+
+        triggered: false,
+        requireAction: false,
+        serviced: false,
+        description: 'Lorem Ipsum is simply dummy text of the Lorem Ipsum is simply dummy text of the Lorem Ipsum is simply dummy text of the.',
+      },
+      {
+        id: 3,
+        name: 'Ciśnienie w przednim kole do sprawdzenia stodole',
+        description: 'Lorem Ipsum is simply dummy text of the Lorem Ipsum is simply dummy text of the Lorem Ipsum is simply dummy text of the.',
+
+        distanceAlert: false,
+        startDistance: null,
+        endDistance: null,
+
+        dateAlert: true,
+        endDate: '2020-12-16',
+
+        triggered: false,
+        requireAction: false,
+        serviced: false,
+
+        repeat: true,
+        repeatedPeriod: 30,
+      },
+      {
+        id: 4,
+        name: 'Ciśnienie w tylnym kole',
+
+        distanceAlert: false,
+        startDistance: null,
+        endDistance: null,
+
+        dateAlert: true,
+        endDate: '2020-11-05',
+
+        triggered: false,
+        requireAction: false,
+        serviced: false,
+        description: 'Notatka',
+      },
+    ],
     logs: [],
     description: 'Lorem Ipsum is simply dummy text of the Lorem Ipsum is simply dummy text of the Lorem Ipsum is simply dummy text of the. Lorem Ipsum is simply dummy text of the Lorem Ipsum is simply dummy text of the Lorem Ipsum is simply dummy text of the',
   },
@@ -28,15 +92,74 @@ const bikeComponents = [
     brand: 'Shimano',
     model: '105',
     weight: 1200,
-    startDate: '16-12-2019',
+    startDate: '2020-10-16T13:40:29.089Z',
     distance: 30000,
-    alert: {
-      on: false,
-      startDistance: 0,
-      endDistance: 0,
-      note: '',
-      // alertType,
-    },
+    alerts: [
+      {
+        id: 1,
+        name: 'Wymiana opon',
+
+        distanceAlert: true,
+        startDistance: 10000,
+        endDistance: 520000,
+
+        dateAlert: false,
+        endDate: null,
+
+        triggered: true,
+        requireAction: true,
+        serviced: false,
+        description: 'Notatka',
+      },
+      {
+        id: 2,
+        name: 'Test 2',
+
+        distanceAlert: true,
+        startDistance: 10000,
+        endDistance: 320000,
+
+        dateAlert: false,
+        endDate: null,
+
+        triggered: false,
+        requireAction: false,
+        serviced: false,
+        description: 'Notatka',
+      },
+      {
+        id: 3,
+        name: 'Test 3',
+
+        distanceAlert: false,
+        startDistance: null,
+        endDistance: null,
+
+        dateAlert: true,
+        endDate: '2020-12-16',
+
+        triggered: false,
+        requireAction: false,
+        serviced: false,
+        description: 'Notatka',
+      },
+      {
+        id: 4,
+        name: 'Test 4',
+
+        distanceAlert: false,
+        startDistance: null,
+        endDistance: null,
+
+        dateAlert: true,
+        endDate: '2020-11-01',
+
+        triggered: false,
+        requireAction: false,
+        serviced: false,
+        description: 'Notatka',
+      },
+    ],
     logs: [],
     description: 'Lorem Ipsum is simply dummy text of the Lorem Ipsum is simply dummy text of the Lorem Ipsum is simply dummy text of the. Lorem Ipsum is simply dummy text of the Lorem Ipsum is simply dummy text of the Lorem Ipsum is simply dummy text of the',
   },
@@ -50,13 +173,7 @@ const bikeComponents = [
     weight: 2050,
     startDate: '2019-12-16T13:40:29.089Z',
     distance: 13000,
-    alert: {
-      on: true,
-      startDistance: 12000,
-      endDistance: 15000,
-      note: '',
-      // alertType,
-    },
+    alerts: [],
     logs: [],
     description: 'Lorem Ipsum is simply dummy text of the Lorem Ipsum is simply dummy text of the Lorem Ipsum is simply dummy text of the. Lorem Ipsum is simply dummy text of the Lorem Ipsum is simply dummy text of the Lorem Ipsum is simply dummy text of the',
   },
@@ -70,13 +187,7 @@ const bikeComponents = [
     weight: 3010,
     startDate: '2019-12-11T13:40:29.089Z',
     distance: 50000,
-    alert: {
-      on: false,
-      startDistance: 12000,
-      endDistance: 1500000,
-      note: '',
-      // alertType,
-    },
+    alerts: [],
     logs: [],
     description: 'Lorem Ipsum is simply dummy text of the Lorem Ipsum is simply dummy text of the Lorem Ipsum is simply dummy text of the. Lorem Ipsum is simply dummy text of the Lorem Ipsum is simply dummy text of the Lorem Ipsum is simply dummy text of the',
   },
@@ -90,13 +201,7 @@ const bikeComponents = [
     weight: 1010,
     startDate: '2017-12-11T13:40:29.089Z',
     distance: 2000,
-    alert: {
-      on: false,
-      startDistance: 12000,
-      endDistance: 15000,
-      note: '',
-      // alertType,
-    },
+    alerts: [],
     logs: [],
     description: 'Lorem Ipsum is simply dummy text of the Lorem Ipsum is simply dummy text of the Lorem Ipsum is simply dummy text of the. Lorem Ipsum is simply dummy text of the Lorem Ipsum is simply dummy text of the Lorem Ipsum is simply dummy text of the',
   },
@@ -110,13 +215,7 @@ const bikeComponents = [
     weight: 3201,
     startDate: '2016-12-11T13:40:29.089Z',
     distance: 2000,
-    alert: {
-      on: false,
-      startDistance: 12000,
-      endDistance: 15000,
-      note: '',
-      // alertType,
-    },
+    alerts: [],
     logs: [],
     description: 'Lorem Ipsum is simply dummy text of the Lorem Ipsum is simply dummy text of the Lorem Ipsum is simply dummy text of the. Lorem Ipsum is simply dummy text of the Lorem Ipsum is simply dummy text of the Lorem Ipsum is simply dummy text of the',
   },

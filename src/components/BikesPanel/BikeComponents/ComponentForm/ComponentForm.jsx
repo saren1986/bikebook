@@ -64,10 +64,6 @@ const ComponentForm = ({ history, edit }) => {
       dispatch(setActiveBike(values.bikeId));
       history.push({
         pathname: '/bike/components',
-        // pathname: '/bike/components/detail',
-        // state: {
-        //   id: component.id,
-        // },
       });
     }
   };

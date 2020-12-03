@@ -13,6 +13,9 @@ const useStyles = makeStyles((theme) => ({
     minHeight: '52px',
     marginTop: 10,
     border: (props) => props.border,
+    '& .MuiTypography-root': {
+      textAlign: 'center',
+    }
   },
 }));
 

@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withRouter, Redirect } from 'react-router-dom';
-// import {  } from '../../../../store/actions/index';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import { makeStyles } from '@material-ui/core/styles';
+import { addAlert } from '../../../../../store/actions/index';
 import Form from '../../../../../UX/Form/Form';
 import { distanceLargeToSmall } from '../../../../../utils/distanceFormatters';
-import { prepareFormData, formSelectSeeder } from '../../../../../utils/formData';
+import { prepareFormData } from '../../../../../utils/formData';
 import {
   Header,
 } from '../../../../../styled/styled';
@@ -42,23 +42,40 @@ const AlertForm = ({ history }) => {
   const dateAlertForm = useSelector((state) => state.forms.dateAlert);
   const { lengthUnit, massUnit } = useSelector((state) => state.options.units);
   const { component } = history.location;
-
   const handleChange = (event) => {
     setAlertType(event.target.value);
   };
   const onSubmitHandler = (values) => {
-    alert('submit')
+    let distance = null;
+    let repeatDistance = null;
+    if (alertType === 'distance') {
+      distance = distanceLargeToSmall(values.distance, lengthUnit);
+      repeatDistance = distanceLargeToSmall(values.repeatDistance, lengthUnit);
+    }
+    dispatch(addAlert({
+      type: alertType,
+      componentId: component.id,
+      componentDistance: component.distance,
+      ...values,
+      distance,
+      repeatDistance,
+    }));
+    history.push({
+      pathname: '/bike/components/detail',
+      state: {
+        id: component.id,
+      },
+    });
   };
 
   const headerLabel = 'Add new alert';
   const buttonLabel = 'Add';
-  const seeder = (typeof component !== 'undefined') ? { ...component, startDate: new Date(component.startDate) } : {};
 
   let alertInputs = null;
   if (alertType === 'date') {
-    alertInputs = prepareFormData(dateAlertForm, lengthUnit, massUnit, seeder);
+    alertInputs = prepareFormData(dateAlertForm, lengthUnit, massUnit);
   } else {
-    alertInputs = prepareFormData(distanceAlertForm, lengthUnit, massUnit, seeder);
+    alertInputs = prepareFormData(distanceAlertForm, lengthUnit, massUnit);
   }
 
   return (
@@ -100,13 +117,8 @@ const AlertForm = ({ history }) => {
   );
 };
 
-AlertForm.defaultProps = {
-  edit: false,
-};
-
 AlertForm.propTypes = {
   history: PropTypes.object.isRequired,
-  edit: PropTypes.bool,
 };
 
 export default withRouter(AlertForm);

@@ -1,5 +1,3 @@
-import { FormatListBulleted } from "@material-ui/icons";
-
 const defaultState = {
   addBike: [
     {
@@ -757,11 +755,11 @@ const defaultState = {
           },
           {
             key: 'min',
-            params: [2, 'cannot be less than 2 characters'],
+            params: [3, 'cannot be less than 3 characters'],
           },
           {
             key: 'max',
-            params: [25, 'cannot be more than 25 characters'],
+            params: [50, 'cannot be more than 50 characters'],
           },
         ],
       },
@@ -780,7 +778,7 @@ const defaultState = {
       id: 'distance',
       type: 'number',
       seedType: 'distance',
-      default: 10,
+      default: 200,
       label: 'Distance / ',
       edit: {
         visible: false,
@@ -797,7 +795,11 @@ const defaultState = {
           },
           {
             key: 'moreThan',
-            params: [-1, 'Can\'t be less than 0!'],
+            params: [50, 'Can\'t be less than 50!'],
+          },
+          {
+            key: 'max',
+            params: [50000, 'cannot be more than 50000'],
           },
         ],
       },
@@ -858,7 +860,11 @@ const defaultState = {
         rules: [
           {
             key: 'moreThan',
-            params: [0, 'Can\'t be less than 0!'],
+            params: [50, 'Can\'t be less than 50!'],
+          },
+          {
+            key: 'max',
+            params: [10000, 'cannot be more than 10000'],
           },
         ],
       },
@@ -870,6 +876,33 @@ const defaultState = {
         inputDesign: {
           margin: 'normal',
           variant: 'outlined',
+        },
+      },
+    },
+    {
+      id: 'description',
+      type: 'text',
+      default: '',
+      label: 'Description',
+      edit: {
+        visible: true,
+        editable: true,
+      },
+      controlledBy: null,
+      validation: {
+        type: 'string',
+        required: false,
+        rules: [],
+      },
+      uiStyle: {
+        width: {
+          xs: 12,
+        },
+        inputDesign: {
+          margin: 'normal',
+          variant: 'outlined',
+          multiline: true,
+          rows: 4,
         },
       },
     },
@@ -895,11 +928,11 @@ const defaultState = {
           },
           {
             key: 'min',
-            params: [2, 'cannot be less than 2 characters'],
+            params: [3, 'cannot be less than 3 characters'],
           },
           {
             key: 'max',
-            params: [25, 'cannot be more than 25 characters'],
+            params: [50, 'cannot be more than 50 characters'],
           },
         ],
       },
@@ -996,7 +1029,11 @@ const defaultState = {
         rules: [
           {
             key: 'moreThan',
-            params: [0, 'Can\'t be less than 0!'],
+            params: [10, 'Minimum days is 10'],
+          },
+          {
+            key: 'max',
+            params: [365, 'cannot be more than 365 days'],
           },
         ],
       },
@@ -1008,6 +1045,33 @@ const defaultState = {
         inputDesign: {
           margin: 'normal',
           variant: 'outlined',
+        },
+      },
+    },
+    {
+      id: 'description',
+      type: 'text',
+      default: '',
+      label: 'Description',
+      edit: {
+        visible: true,
+        editable: true,
+      },
+      controlledBy: null,
+      validation: {
+        type: 'string',
+        required: false,
+        rules: [],
+      },
+      uiStyle: {
+        width: {
+          xs: 12,
+        },
+        inputDesign: {
+          margin: 'normal',
+          variant: 'outlined',
+          multiline: true,
+          rows: 4,
         },
       },
     },

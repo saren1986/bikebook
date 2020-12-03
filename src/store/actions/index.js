@@ -9,8 +9,9 @@ export {
 export {
   addComponent,
   editComponent,
-  setDistanceAlert,
-  disableAlert,
+  addAlert,
+  deleteAlert,
+  serviceComponent,
   switchToBike,
   retireComponent,
   deleteComponent,

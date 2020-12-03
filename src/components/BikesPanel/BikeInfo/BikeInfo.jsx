@@ -1,16 +1,15 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import StravaLong from '../../../icons/Strava/StravaLong';
 import { formatDistance } from '../../../utils/distanceFormatters';
-import MiniMenu from '../../../UX/MiniMenu/MiniMenu';
 import {
   retireBike, deleteBike, setActiveBike, openConfirmDialog,
 } from '../../../store/actions/index';
 import InfoHeader from '../../../UX/InfoHeader/InfoHeader';
+import Retired from '../../../UX/Info/Retired';
 
 const useStyles = makeStyles((theme) => ({
   retiredWrapper: {
@@ -42,8 +41,10 @@ const BikeInfo = ({ bike, history }) => {
     });
   };
   const menuItems = [];
+  let rightInfo = null;
 
   if (!retired) {
+    rightInfo = bike.strava ? <StravaLong /> : null;
     menuItems.push({
       name: 'Retire',
       func: () => {
@@ -58,7 +59,8 @@ const BikeInfo = ({ bike, history }) => {
       name: 'Edit',
       func: onEditClickHandler,
     });
-  } else if (!bike.strava) {
+  } else {
+    rightInfo = <Retired />;
     menuItems.push({
       name: 'Delete',
       func: () => {
@@ -76,18 +78,15 @@ const BikeInfo = ({ bike, history }) => {
       },
     });
   }
+
   return (
     <>
       <InfoHeader
         title={bike.name}
-        rightPlaceholder={bike.strava ? <StravaLong /> : null}
+        rightPlaceholder={rightInfo}
         menuItems={menuItems}
       />
       <div className={classes.content}>
-        <div className={classes.retiredWrapper}>
-          {!retired ? null
-            : (<strong className={classes.retired}>RETIRED</strong>)}
-        </div>
         <div className={classes.infoItem}>
           <span className={classes.infolabel}>Distance: </span>
           <strong className={classes.infoData}>{formatDistance(distance, lengthUnit)}</strong>

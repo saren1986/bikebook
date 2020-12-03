@@ -8,7 +8,7 @@ const bikes = [
     model: 'Strada',
     type: '3',
     description: 'Lorem Ipsum is simply dummy text of the Lorem Ipsum is simply dummy text of the Lorem Ipsum is simply dummy text of the ',
-    retired: true,
+    retired: false,
     weight: 7500,
     startDate: null,
   },

@@ -90,7 +90,7 @@ export const stravaGetBike = (stravaBikesId, token, history) => async (dispatch)
     });
   if (responses) {
     for (const response of responses) {
-      dispatch(addBike(convertStravaBike(response), 'km'));
+      dispatch(addBike(convertStravaBike(response)));
     }
     dispatch(stravaGetActivities(token, stravaBikesId));
     history.push('/bike-list');

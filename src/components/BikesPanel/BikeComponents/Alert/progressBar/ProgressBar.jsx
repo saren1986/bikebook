@@ -1,20 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import useStyles from './progressBar.style';
+import { makeStyles } from '@material-ui/core/styles';
 import ProgressLine from '../../../../../UX/ProgressLine/ProgressLine';
-import { remainDistance } from '../../../../../utils/distanceFormatters';
-import AlertMessage from '../../Alert/Message/Message';
+
+const useStyles = makeStyles((theme) => ({
+  alertInfo: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '10px',
+    '& > *': {
+      padding: '0 2px',
+    },
+  },
+}));
 
 const ProgressBar = ({
-  startDistance, currentDistance, endDistance,
+  startDistance, currentDistance, endDistance, remainDistance,
 }) => {
   const classes = useStyles();
   const progress = ((currentDistance - startDistance) / (endDistance - startDistance)) * 100;
-  const leftDistance = remainDistance(startDistance, currentDistance, endDistance);
+
   return (
     <div className={classes.wrapper}>
       <div className={classes.alertInfo}>
-        <AlertMessage leftDistance={leftDistance} />
+        <span>Left: </span>
+        <strong>{remainDistance}</strong>
       </div>
       <ProgressLine progress={progress} />
     </div>
@@ -25,6 +36,7 @@ ProgressBar.propTypes = {
   startDistance: PropTypes.number.isRequired,
   currentDistance: PropTypes.number.isRequired,
   endDistance: PropTypes.number.isRequired,
+  remainDistance: PropTypes.string.isRequired,
 };
 
 export default ProgressBar;

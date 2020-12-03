@@ -15,7 +15,7 @@ const ComponentForm = ({ history, edit }) => {
   const components = useSelector((state) => state.components);
   const { lengthUnit } = useSelector((state) => state.options.units);
   const { activity } = history.location;
-  console.log('activity', activity);
+
   const onSubmitHandler = (values) => {
     const bikeComponents = components
       .filter((comp) => comp.bikeId === values.bikeId && !comp.retired
@@ -24,9 +24,6 @@ const ComponentForm = ({ history, edit }) => {
     const distance = distanceLargeToSmall(values.distance, lengthUnit);
     const movingTime = timeToSeconds(values.movingTime);
     const startDate = values.startDate.toJSON();
-    console.log('====================================');
-    console.log('activity values', values);
-    console.log('====================================');
     if (!edit) {
       dispatch(addActivity(
         {

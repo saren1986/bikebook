@@ -1,7 +1,7 @@
 const bikes = [
   {
     id: 'n1',
-    strava: false,
+    strava: '',
     name: 'rakieta',
     distance: 100000,
     brand: 'KTM',
@@ -14,7 +14,7 @@ const bikes = [
   },
   {
     id: 'n2',
-    strava: false,
+    strava: '',
     name: 'ROWEREK',
     distance: 0,
     brand: '',
@@ -27,7 +27,7 @@ const bikes = [
   },
   {
     id: 'n3',
-    strava: false,
+    strava: '',
     name: 'STRZAŁA',
     distance: 10000,
     brand: 'KTM',

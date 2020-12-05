@@ -48,9 +48,10 @@ const InfoBox = ({ title, children, type }) => {
 InfoBox.defaultProps = {
   children: null,
   type: 'normal',
+  title: '',
 };
 InfoBox.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   children: PropTypes.node,
   type: PropTypes.string,
 };

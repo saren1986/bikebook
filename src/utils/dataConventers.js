@@ -1,6 +1,4 @@
-export const convertStravaActivities = (activities, bikesId) => activities
-  .filter((act) => bikesId
-    .findIndex((id) => act.gear_id === id) !== -1)
+export const convertStravaActivities = (activities) => activities
   .map((act) => ({
     id: act.id,
     strava: !!act.id,
@@ -17,12 +15,12 @@ export const convertStravaActivities = (activities, bikesId) => activities
 
 export const convertStravaBike = (bike) => ({
   strava: bike.id,
-  name: bike.name,
-  distance: bike.distance,
-  brand: bike.brand_name,
-  model: bike.model_name,
+  name: bike.name || '',
+  distance: bike.distance || 0,
+  brand: bike.brand_name || '',
+  model: bike.model_name || '',
   type: `${bike.frame_type}`,
-  description: bike.description,
+  description: bike.description || '',
   retired: false,
-  weight: '',
+  weight: 0,
 });

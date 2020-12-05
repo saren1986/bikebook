@@ -18,7 +18,7 @@ const bikeSlice = createSlice({
           id: Math.random().toString(36).substring(7),
           ...payload,
           retired: false,
-          strava: payload.strava || null,
+          strava: payload.strava || '',
         },
       }),
     },

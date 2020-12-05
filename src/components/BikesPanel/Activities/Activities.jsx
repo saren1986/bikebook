@@ -59,7 +59,7 @@ const Activities = ({ history }) => {
         <ActivityTile
           key={activity.id}
           id={activity.id}
-          startDate={timeFormatter(activity.startDate)}
+          startDate={timeFormatter(activity.startDate, false)}
           strava={activity.strava}
           title={activity.title}
           bike={bike ? bike.name : 'unknown'}

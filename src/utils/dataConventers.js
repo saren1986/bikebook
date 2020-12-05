@@ -1,5 +1,3 @@
-import { deleteTimeFormJsonDate } from './timeFormatters';
-
 export const convertStravaActivities = (activities, bikesId) => activities
   .filter((act) => bikesId
     .findIndex((id) => act.gear_id === id) !== -1)
@@ -18,8 +16,7 @@ export const convertStravaActivities = (activities, bikesId) => activities
   }));
 
 export const convertStravaBike = (bike) => ({
-  id: bike.id,
-  strava: true,
+  strava: bike.id,
   name: bike.name,
   distance: bike.distance,
   brand: bike.brand_name,

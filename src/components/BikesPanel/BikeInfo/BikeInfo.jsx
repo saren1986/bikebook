@@ -10,6 +10,7 @@ import {
 } from '../../../store/actions/index';
 import InfoHeader from '../../../UX/InfoHeader/InfoHeader';
 import Retired from '../../../UX/Info/Retired';
+import { BIKE_TYPES } from '../../../mock/constans';
 
 const useStyles = makeStyles((theme) => ({
   retiredWrapper: {
@@ -78,7 +79,7 @@ const BikeInfo = ({ bike, history }) => {
       },
     });
   }
-
+  const bikeType = BIKE_TYPES.find((bikeType) => bikeType.id === type);
   return (
     <>
       <InfoHeader
@@ -95,10 +96,12 @@ const BikeInfo = ({ bike, history }) => {
           <span className={classes.infolabel}>Model: </span>
           <strong className={classes.infoData}>{model}</strong>
         </div>
-        <div className={classes.infoItem}>
-          <span className={classes.infolabel}>Type: </span>
-          <strong className={classes.infoData}>{type}</strong>
-        </div>
+        {bikeType ? (
+          <div className={classes.infoItem}>
+            <span className={classes.infolabel}>Type: </span>
+            <strong className={classes.infoData}>{bikeType.label}</strong>
+          </div>
+        ) : null}
         <div className={classes.infoItem}>
           <span className={classes.infolabel}>Description: </span>
           <span className={classes.infoData}>{description}</span>

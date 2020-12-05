@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, MenuItem } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
+import AutorenewIcon from '@material-ui/icons/Autorenew';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { SmallForm, Header } from '../../../../styled/styled';
@@ -37,7 +37,7 @@ const SwitchToBike = ({ compId, bikeId, clb }) => {
         onChange={onChangeHandler}
         required
       >
-        {bikes.filter((bike) => bike.id !== bikeId).map((bike) => (
+        {bikes.filter((bike) => bike.id !== bikeId && !bike.retired).map((bike) => (
           <MenuItem key={bike.id} value={bike.id}>
             {bike.name}
           </MenuItem>
@@ -46,10 +46,10 @@ const SwitchToBike = ({ compId, bikeId, clb }) => {
       <Button
         variant="contained"
         color="primary"
-        startIcon={<AddIcon />}
+        startIcon={<AutorenewIcon />}
         onClick={clickHandler}
       >
-        Add
+        Switch
       </Button>
     </SmallForm>
   );

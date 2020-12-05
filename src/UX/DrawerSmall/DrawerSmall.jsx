@@ -8,7 +8,7 @@ import Backdrop from '../Backdrop/Backdrop';
 const useStyles = makeStyles((theme) => ({
   sidebar: {
     width: '100%',
-    minHeight: '100%',
+    minHeight: '200px',
     position: 'absolute',
     background: 'rgba(255, 255, 255, 1)',
     top: '0',

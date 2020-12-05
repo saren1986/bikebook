@@ -76,7 +76,10 @@ BikeTile.propTypes = {
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     distance: PropTypes.number.isRequired,
-    strava: PropTypes.bool.isRequired,
+    strava: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.oneOf([null]),
+    ]),
     retired: PropTypes.bool.isRequired,
   }).isRequired,
   click: PropTypes.func.isRequired,

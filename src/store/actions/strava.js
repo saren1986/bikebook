@@ -121,7 +121,7 @@ export const stravaSync = (code) => async (dispatch) => {
   };
   const authResponse = await axios.post('https://www.strava.com/oauth/token', queryData)
     .catch((error) => {
-      dispatch(stravaSyncFailed(`Something went wrong... ${error.response.data.message}`));
+      dispatch(stravaSyncFailed(`Something went wrong... ${error.response.data.message || ''}`));
     });
   if (authResponse) {
     try {
@@ -132,7 +132,8 @@ export const stravaSync = (code) => async (dispatch) => {
       const activities = await fetchActivities(strava);
       dispatch(addFromStrava(convertStravaActivities(activities)));
     } catch (error) {
-      dispatch(stravaSyncFailed(`Something went wrong... ${error.response.body.message}`));
+      console.log('Error ocured during sync with strava: ', error);
+      dispatch(stravaSyncFailed('Something went wrong...'));
     }
   }
   dispatch(stravaSyncEnd());
@@ -145,7 +146,7 @@ export const stravaCheckForUpdate = (token) => async (dispatch) => {
     const athlete = await fetchAthlete(strava);
     dispatch(stravaUpdateAthlete(athlete));
   } catch (error) {
-    dispatch(stravaSyncFailed(`Something went wrong... ${error.response.body.message}`));
+    dispatch(stravaSyncFailed(`Something went wrong... ${error.response.body.message || ''}`));
   }
   dispatch(stravaSyncEnd());
 };

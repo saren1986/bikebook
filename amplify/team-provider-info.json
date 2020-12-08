@@ -10,6 +10,17 @@
       "StackName": "amplify-bikebook-dev-171234",
       "StackId": "arn:aws:cloudformation:eu-central-1:843717206487:stack/amplify-bikebook-dev-171234/062d5460-38a7-11eb-ad21-06c7af6bdb56",
       "AmplifyAppId": "d2bqmsnbwfw8d8"
+    },
+    "categories": {
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d2bqmsnbwfw8d8",
+          "type": "cicd"
+        }
+      },
+      "auth": {
+        "bikebookcdba48fb": {}
+      }
     }
   }
 }

@@ -1,10 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import Amplify from 'aws-amplify';
 import store from './store/store';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import awsconfig from './aws-exports';
 
+Amplify.configure(awsconfig);
 require('dotenv').config();
 
 const BikeBookApp = (

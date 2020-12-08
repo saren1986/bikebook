@@ -12,8 +12,18 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import { Container } from '@material-ui/core';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { Auth } from 'aws-amplify';
 import MobileDrawer from '../MobileDrawer/MobileDrawer';
 import Logo from '../Logo/Logo';
+
+const signOut = async () => {
+  try {
+    await Auth.signOut({ global: true });
+    window.location.replace('/');
+  } catch (error) {
+    console.log('error signing out: ', error);
+  }
+};
 
 const useStyles = makeStyles((theme) => ({
   TopBar: {
@@ -55,6 +65,11 @@ const TopBar = () => {
   const handleUserMenuClose = () => {
     setAnchorEl(null);
   };
+  const logoutHandler = () => {
+    console.log('start logout');
+    handleUserMenuClose();
+    signOut();
+  };
 
   const userMenu = (
     <Menu
@@ -67,7 +82,7 @@ const TopBar = () => {
       onClose={handleUserMenuClose}
     >
       <MenuItem onClick={handleUserMenuClose}><Link to="/settings">Settings</Link></MenuItem>
-      <MenuItem onClick={handleUserMenuClose}><Link to="/logout">Logout</Link></MenuItem>
+      <MenuItem onClick={logoutHandler}>Logout</MenuItem>
     </Menu>
   );
   const sectionDesktop = (

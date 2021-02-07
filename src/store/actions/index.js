@@ -5,6 +5,7 @@ export {
 export {
   retireBike,
   deleteBike,
+  initState,
 } from './bikes';
 export {
   addComponent,

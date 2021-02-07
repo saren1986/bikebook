@@ -1,26 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
-import bikes from '../../mock/bikes';
+// import bikes from '../../mock/bikes';
 
 const initialState = [
-  ...bikes,
+  // ...bikes,
 ];
 
 const bikeSlice = createSlice({
   name: 'bike',
   initialState,
   reducers: {
-    create: {
-      reducer: (state, { payload }) => {
-        state.push(payload);
-      },
-      prepare: (payload) => ({
-        payload: {
-          id: Math.random().toString(36).substring(7),
-          ...payload,
-          retired: false,
-          strava: payload.strava || '',
-        },
-      }),
+    init: (state, { payload }) => {
+      state.push(...payload);
+    },
+    create: (state, { payload }) => {
+      state.push(payload);
     },
     edit: (state, { payload }) => {
       const bikeToEdit = state.find((stateBike) => stateBike.id === payload.id);
@@ -58,6 +51,7 @@ const bikeSlice = createSlice({
 });
 
 export const {
+  init,
   create: addBike,
   edit: editBike,
   updateDistance: updateBikeDistance,

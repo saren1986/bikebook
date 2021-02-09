@@ -40,6 +40,16 @@ module.exports = {
       res.send(error)
     }
   },
+  resendConfirmationCode: async (req, res) => {
+    try {
+      const confirm = await authService.resendConfirmationCode(req.body.username);
+      res.send({
+        message: "Success"
+      })
+    } catch (error) {
+      res.send(error)
+    }
+  },
 
   login: function(req, res){
     authService.login(req.body)
@@ -50,14 +60,5 @@ module.exports = {
       res.send(error)
     })
   },
-
-  validate_token: function(req, res){
-    authService.Validate(req.body.token,function(err, result){
-      if(err){
-        res.send(err);
-      }    
-      res.send(result);
-    })
-  }
 
 }

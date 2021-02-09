@@ -49,7 +49,6 @@ module.exports = {
     return new Promise((resolve, reject) => {
       cognitoUser.confirmRegistration(verificationCode, true, (err, result) => {
         if (err) {
-          console.log('err', err);
           reject(err);
           return;
         }
@@ -58,6 +57,23 @@ module.exports = {
           username,
         })
       });
+    });
+  },
+
+  resendConfirmationCode: (username) => {
+    const  userData = {
+      Username: username,
+      Pool: userPool,
+    };
+    const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
+    return new Promise((resolve, reject) => {
+    cognitoUser.resendConfirmationCode(function(err, result) {
+      if (err) {
+        reject(err);
+        return;
+      }
+      resolve(result)
+    });
     });
   },
 
@@ -147,52 +163,6 @@ module.exports = {
       });
   },
 
-  Validate: (token, callback) => {
-    fetch(`https://cognito-idp.${process.env.AWS_COGNITO_REGION}.amazonaws.com/${process.env.AWS_COGNITO_USER_POOL_ID}/.well-known/jwks.json`)
-      .then(res => {
-        if (res.status >= 400) {
-          throw new Error("Bad response from server");
-        }
-        return res.json();
-      })
-      .then(res => {
-        pems = {};
-        res.keys.forEach((key) => {
-          const key_id = key.kid;
-          const modulus = key.n;
-          const exponent = key.e;
-          const key_type = key.kty;
-          const jwk = { kty: key_type, n: modulus, e: exponent};
-          const pem = jwkToPem(jwk);
-          pems[key_id] = pem;
-        });
-        const decodedJwt = jwt.decode(token, {complete: true});
-        console.log(decodedJwt);
-        if (!decodedJwt) {
-          console.log("Not a valid JWT token");
-          callback(new Error('Not a valid JWT token'));
-        }
-          const kid = decodedJwt.header.kid;
-          const pem = pems[kid];
-          if (!pem) {
-              console.log('Invalid token');
-              callback(new Error('Invalid token'));
-          }
-          jwt.verify(token, pem, function(err, payload) {
-            if(err) {
-                console.log("Invalid Token.");
-                callback(new Error('Invalid token'));
-            } else {
-                console.log("Valid Token.");
-                callback(null, "Valid token");
-            }
-          });
-      })
-      .catch((err) => {
-        console.log("Error! Unable to download JWKs");
-        callback(err.message || JSON.stringify(err));
-      });
-  }
 }
 
 

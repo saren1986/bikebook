@@ -23,7 +23,6 @@ module.exports = {
   } catch (err) {
       res.send(err)
   }
-
 },
 
   confirmRegister: async (req, res) => {
@@ -51,7 +50,7 @@ module.exports = {
     }
   },
 
-  login: function(req, res){
+  login: (req, res) => {
     authService.login(req.body)
     .then((token) => {
       res.send(token)
@@ -61,4 +60,14 @@ module.exports = {
     })
   },
 
+  logout: (req, res) => {
+    authService.logout()
+    .then((result) => {
+      console.log('result', result);
+      res.send(result)
+    })
+    .catch((error) => {
+      res.send(error.message || JSON.stringify(error))
+    })
+  },
 }

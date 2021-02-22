@@ -50,24 +50,24 @@ module.exports = {
     }
   },
 
-  login: (req, res) => {
-    authService.login(req.body)
-    .then((token) => {
-      res.send(token)
-    })
-    .catch((error) => {
-      res.send(error)
-    })
-  },
+  // login: (req, res) => {
+  //   authService.login(req.body)
+  //   .then((token) => {
+  //     res.send(token)
+  //   })
+  //   .catch((error) => {
+  //     res.send(error)
+  //   })
+  // },
 
-  logout: (req, res) => {
-    authService.logout()
-    .then((result) => {
-      console.log('result', result);
-      res.send(result)
-    })
-    .catch((error) => {
-      res.send(error.message || JSON.stringify(error))
-    })
-  },
+  // logout: (req, res) => {
+  //   authService.logout()
+  //   .then((result) => {
+  //     console.log('result', result);
+  //     res.send(result)
+  //   })
+  //   .catch((error) => {
+  //     res.send(error.message || JSON.stringify(error))
+  //   })
+  // },
 }

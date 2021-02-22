@@ -11,17 +11,6 @@ const  poolData = {
 };
 let userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
-const getSession = (cognitoUser) => {
-  return new Promise((resolve, reject) => {
-  cognitoUser.getSession(function(err, session) {
-    if (err) {
-      reject(err);
-    }
-    resolve(session)
-  });
-})
-};
-
 module.exports = {
   register: (body) => {
     const username = body.username;
@@ -88,54 +77,6 @@ module.exports = {
     });
     });
   },
-
-  login: (body) => {
-    const userName = body.name;
-    const password = body.password;
-    const authenticationDetails = new AmazonCognitoIdentity.AuthenticationDetails({
-         Username: userName,
-         Password: password
-     });
-     const userData = {
-         Username: userName,
-         Pool: userPool
-     };
-     const cognitoUser = new AmazonCognitoIdentity.CognitoUser(userData);
-     return new Promise((resolve, reject) => {
-      cognitoUser.authenticateUser(authenticationDetails, {
-        onSuccess: function (result) {
-          const accesstoken = result.getAccessToken().getJwtToken(); 
-           resolve(accesstoken)   
-        },
-        onFailure: (function (err) {
-          reject(err);
-       }),
-      });
-    });
-  },
-
-  logout: async () => {
-    const cognitoUser = userPool.getCurrentUser();
-    if(cognitoUser !== null){
-      try {
-        await getSession(cognitoUser);
-      } catch (error) {
-        Promise.reject(error);  
-      }
-      return new Promise((resolve, reject) => {
-          cognitoUser.globalSignOut({
-            onSuccess: function (result) {
-              resolve(result) 
-            },
-            onFailure: (function (err) {
-              reject(err);
-            }),
-          });
-      });
-    }
-    return Promise.reject(new Error('cognito user error'));  
-  },
-
   checkAuth: (req, res, next) => {
     const token = req.headers['authorization'];
     if(!token){

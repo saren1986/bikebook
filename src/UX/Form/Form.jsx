@@ -27,7 +27,6 @@ const useStyles = makeStyles((theme) => ({
 const Form = ({
   inputs, header, buttonName, onSubmitHandler, editMode,
 }) => {
-
   const classes = useStyles();
   const initialValues = {};
   let validateSchema = null;
@@ -43,7 +42,7 @@ const Form = ({
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <Formik
           initialValues={initialValues}
-          onSubmit={(values) => onSubmitHandler(values)}
+          onSubmit={(values, actions) => onSubmitHandler(values, actions)}
           validationSchema={validateSchema}
           enableReinitialize
         >

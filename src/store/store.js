@@ -11,22 +11,28 @@ import strava from './reducers/strava';
 import activities from './reducers/activities';
 import forms from './reducers/forms';
 import options from './reducers/options';
+import auth from './reducers/auth';
+import { resetReducer } from './reducers/root';
+import cognito from '../services/cognito';
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:8080/graphql',
+  uri: `${process.env.REACT_APP_ENDPOINT_URL}/graphql`,
 });
 
-const authLink = setContext((_, { headers }) => {
-  // get the authentication token from local storage if it exists
-  // const token = localStorage.getItem('token');
-  const token = 'eyJraWQiOiJwUXhMN3ozTHI3blRmRm0yRHJyM3JteDVuakRHQmRDVmF6aitLb0JoaWs4PSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiI4OWZjOWE0NS1lNTM4LTRjM2ItOThhMS1kYWExZjZlYTE0Y2MiLCJldmVudF9pZCI6ImYwYzMzN2VhLTVkNTgtNDBjNS04NWJlLWRhMmYzZGM4NGM4MyIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoiYXdzLmNvZ25pdG8uc2lnbmluLnVzZXIuYWRtaW4iLCJhdXRoX3RpbWUiOjE2MTI3MjM1NzAsImlzcyI6Imh0dHBzOlwvXC9jb2duaXRvLWlkcC5ldS13ZXN0LTIuYW1hem9uYXdzLmNvbVwvZXUtd2VzdC0yX2VhcHpRNkRadyIsImV4cCI6MTYxMjcyNzE3MCwiaWF0IjoxNjEyNzIzNTcwLCJqdGkiOiIwMTRhZDlkMS0wZmI4LTRkNGEtOTY3MC0wNmM1MDY2M2IzYzQiLCJjbGllbnRfaWQiOiJsNzg5Zzl0MzlzOGhxMHJtMm5lMWRidDk4IiwidXNlcm5hbWUiOiJzYXJtYXQ4NiJ9.TTH5Pijos-A952T9cu8DjOpOELbBy96U-YK0WZr7FULjA7FtIFLvLJa9xNgn7rZGV07KiStiUcu1KYJCViAJls_oGWBnExWD86K07lVGTIBD7TzfhXroW2_YqshWl8mnSuQCvEY51D-2nl0Mqy-XzGQseZ7r48onwnUJeVpyMCJ1PwhClGWCIi4Yy_gB57BkGJZPBt16AqRJhEu_UL6TLLCyjUAkPZH-jWna189S8B9texPOZ_GNRmmvwY1mcb2jmkhsqgdmJ5oRZYcTarWFLxG18__htaI9TejtzrZwpDD9lP--xfkGR65lDiAVnVcfYYrAgLR5EqOp_KkvEVG7bA';
-  // return the headers to the context so httpLink can read them
-  return {
-    headers: {
-      ...headers,
-      authorization: token ? `${token}` : '',
-    },
-  };
+const authLink = setContext(async (_, { headers }) => {
+  try {
+    const session = await cognito.getSession();
+    const token = session.accessToken;
+    return {
+      headers: {
+        ...headers,
+        authorization: token ? `${token}` : '',
+      },
+    };
+  } catch (error) {
+    console.log('Set context error: ', error);
+    return null;
+  }
 });
 
 const client = new ApolloClient({
@@ -45,7 +51,7 @@ const enhancer = composeEnhancers(
   // other store enhancers if any
 );
 
-const reducer = combineReducers({
+const appReducer = combineReducers({
   options,
   bikes,
   components,
@@ -53,8 +59,9 @@ const reducer = combineReducers({
   strava,
   activities,
   forms,
+  auth,
 });
 
-const store = createStore(reducer, enhancer);
+const store = createStore(resetReducer(appReducer), enhancer);
 
 export default store;

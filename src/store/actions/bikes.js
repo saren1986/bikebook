@@ -34,7 +34,6 @@ export const initState = () => (dispatch, getState, client) => {
       query: GET_BIKES,
     })
     .then((res) => {
-      console.log('dupa', res);
       dispatch(init(res.data.bikes));
     })
     .catch((err) => {

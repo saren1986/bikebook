@@ -1,4 +1,10 @@
 export {
+  signIn,
+  signOut,
+  initAuth,
+  getLocalStorageToken,
+} from './auth';
+export {
   addBike,
   editBike,
 } from '../reducers/bikes';

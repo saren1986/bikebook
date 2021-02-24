@@ -3,6 +3,9 @@ export {
   signOut,
   initAuth,
   getLocalStorageToken,
+  register,
+  confirmRegister,
+  resendConfirmationCode,
 } from './auth';
 export {
   addBike,

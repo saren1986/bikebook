@@ -39,8 +39,6 @@ export const initState = () => (dispatch, getState, client) => {
     .catch((err) => {
       console.log('err', err);
     });
-
-  
 };
 
 export const deleteBike = (bikeId) => (dispatch) => {

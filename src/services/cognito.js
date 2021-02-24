@@ -14,8 +14,9 @@ const userPool = new CognitoUserPool(poolData);
 
 const getCognitoUser = () => userPool.getCurrentUser();
 
-const checkSession = () => new Promise((resolve, reject) => {
-  const cognitoUser = getCognitoUser();
+const checkSession = (cognitoUsr = null) => new Promise((resolve, reject) => {
+  const cognitoUser = cognitoUsr || getCognitoUser();
+  console.log('check session cognitoUser > ', cognitoUser);
   if (!cognitoUser) {
     resolve(null);
   }
@@ -23,6 +24,7 @@ const checkSession = () => new Promise((resolve, reject) => {
     if (err) {
       reject(err);
     }
+    console.log('check session > ', session);
     const { payload: { exp, sub, username }, jwtToken, refreshToken } = session.accessToken;
     resolve({
       userId: sub,
@@ -87,5 +89,20 @@ export default {
       reject(err);
     });
   }),
-
+  resendConfirmationCode: (username) => {
+    const userData = {
+      Username: username,
+      Pool: userPool,
+    };
+    const cognitoUser = new CognitoUser(userData);
+    return new Promise((resolve, reject) => {
+      cognitoUser.resendConfirmationCode((err, result) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve(result);
+      });
+    });
+  },
 };

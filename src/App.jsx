@@ -28,6 +28,7 @@ const App = () => {
       <CssBaseline />
       <Router>
         <Layout>
+          {/* TODO: USE ROUTER REDIRECT TO AUTH PAGE */}
           {isAuth
             ? (<BikesPanel />)
             : (<AuthPage />)}

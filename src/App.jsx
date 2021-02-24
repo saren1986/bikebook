@@ -3,24 +3,35 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import 'typeface-roboto';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Layout from './components/Layouts/MainLayout/Layout';
 import BikesPanel from './components/BikesPanel/BikesPanel';
-import { checkStravaAuth, initState } from './store/actions/index';
+import { checkStravaAuth, initState, initAuth } from './store/actions/index';
+import AuthPage from './pages/AuthPage';
 import theme from './theme';
 
 const App = () => {
   const dispatch = useDispatch();
-  dispatch(checkStravaAuth());
+  const isAuth = useSelector((state) => state.auth.accessToken);
+
   useEffect(() => {
-    dispatch(initState());
-  }, []);
+    if (isAuth) {
+      dispatch(initState());
+      dispatch(checkStravaAuth());
+    } else {
+      dispatch(initAuth(isAuth));
+    }
+  }, [isAuth]);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
         <Layout>
-          <BikesPanel />
+          {/* TODO: USE ROUTER REDIRECT TO AUTH PAGE */}
+          {isAuth
+            ? (<BikesPanel />)
+            : (<AuthPage />)}
         </Layout>
       </Router>
     </ThemeProvider>

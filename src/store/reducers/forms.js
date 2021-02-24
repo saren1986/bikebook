@@ -1,4 +1,279 @@
 const defaultState = {
+  confirm: [
+    {
+      id: 'username',
+      type: 'text',
+      default: '',
+      label: 'Username',
+      edit: {
+        visible: false,
+        editable: false,
+      },
+      controlledBy: null,
+      validation: {
+        type: 'string',
+        required: true,
+        rules: [
+          {
+            key: 'required',
+            params: ['This field is required'],
+          },
+          {
+            key: 'min',
+            params: [2, 'cannot be less than 2 characters'],
+          },
+          {
+            key: 'max',
+            params: [25, 'cannot be more than 25 characters'],
+          },
+        ],
+      },
+      uiStyle: {
+        width: {
+          xs: 12,
+          sm: 12,
+        },
+        inputDesign: {
+          margin: 'normal',
+          variant: 'outlined',
+        },
+      },
+    },
+    {
+      id: 'code',
+      type: 'text',
+      default: '',
+      label: 'Code',
+      edit: {
+        visible: false,
+        editable: false,
+      },
+      controlledBy: null,
+      validation: {
+        type: 'string',
+        required: true,
+        rules: [
+          {
+            key: 'required',
+            params: ['This field is required'],
+          },
+          {
+            key: 'min',
+            params: [2, 'cannot be less than 2 characters'],
+          },
+          {
+            key: 'max',
+            params: [25, 'cannot be more than 25 characters'],
+          },
+        ],
+      },
+      uiStyle: {
+        width: {
+          xs: 12,
+          sm: 12,
+        },
+        inputDesign: {
+          margin: 'normal',
+          variant: 'outlined',
+        },
+      },
+    },
+  ],
+  register: [
+    {
+      id: 'username',
+      type: 'text',
+      default: '',
+      label: 'Username',
+      edit: {
+        visible: false,
+        editable: false,
+      },
+      controlledBy: null,
+      validation: {
+        type: 'string',
+        required: true,
+        rules: [
+          {
+            key: 'required',
+            params: ['This field is required'],
+          },
+          {
+            key: 'min',
+            params: [2, 'cannot be less than 2 characters'],
+          },
+          {
+            key: 'max',
+            params: [25, 'cannot be more than 25 characters'],
+          },
+        ],
+      },
+      uiStyle: {
+        width: {
+          xs: 12,
+          sm: 12,
+        },
+        inputDesign: {
+          margin: 'normal',
+          variant: 'outlined',
+        },
+      },
+    },
+    {
+      id: 'email',
+      type: 'email',
+      default: '',
+      label: 'Email',
+      edit: {
+        visible: false,
+        editable: false,
+      },
+      controlledBy: null,
+      validation: {
+        type: 'string',
+        required: true,
+        rules: [
+          {
+            key: 'required',
+            params: ['This field is required'],
+          },
+          {
+            key: 'min',
+            params: [2, 'cannot be less than 2 characters'],
+          },
+          {
+            key: 'max',
+            params: [50, 'cannot be more than 50 characters'],
+          },
+        ],
+      },
+      uiStyle: {
+        width: {
+          xs: 12,
+          sm: 12,
+        },
+        inputDesign: {
+          margin: 'normal',
+          variant: 'outlined',
+        },
+      },
+    },
+    {
+      id: 'password',
+      type: 'password',
+      default: '',
+      label: 'Password',
+      edit: {
+        visible: false,
+        editable: false,
+      },
+      controlledBy: null,
+      validation: {
+        type: 'string',
+        required: true,
+        rules: [
+          {
+            key: 'required',
+            params: ['This field is required'],
+          },
+          {
+            key: 'min',
+            params: [6, 'cannot be less than 6 characters'],
+          },
+        ],
+      },
+      uiStyle: {
+        width: {
+          xs: 12,
+          sm: 12,
+        },
+        inputDesign: {
+          margin: 'normal',
+          variant: 'outlined',
+        },
+      },
+    },
+  ],
+  login: [
+    {
+      id: 'username',
+      type: 'text',
+      default: '',
+      label: 'Username',
+      edit: {
+        visible: false,
+        editable: false,
+      },
+      controlledBy: null,
+      validation: {
+        type: 'string',
+        required: true,
+        rules: [
+          {
+            key: 'required',
+            params: ['This field is required'],
+          },
+          {
+            key: 'min',
+            params: [2, 'cannot be less than 2 characters'],
+          },
+          {
+            key: 'max',
+            params: [25, 'cannot be more than 25 characters'],
+          },
+        ],
+      },
+      uiStyle: {
+        width: {
+          xs: 12,
+          sm: 12,
+        },
+        inputDesign: {
+          margin: 'normal',
+          variant: 'outlined',
+        },
+      },
+    },
+    {
+      id: 'password',
+      type: 'password',
+      default: '',
+      label: 'Password',
+      edit: {
+        visible: false,
+        editable: false,
+      },
+      controlledBy: null,
+      validation: {
+        type: 'string',
+        required: true,
+        rules: [
+          {
+            key: 'required',
+            params: ['This field is required'],
+          },
+          {
+            key: 'min',
+            params: [2, 'cannot be less than 2 characters'],
+          },
+          {
+            key: 'max',
+            params: [25, 'cannot be more than 25 characters'],
+          },
+        ],
+      },
+      uiStyle: {
+        width: {
+          xs: 12,
+          sm: 12,
+        },
+        inputDesign: {
+          margin: 'normal',
+          variant: 'outlined',
+        },
+      },
+    },
+  ],
   addBike: [
     {
       id: 'name',

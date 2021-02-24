@@ -2,7 +2,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  activeBike: 'n1',
+  activeBike: null,
   units: {
     lengthUnit: 'km',
     massUnit: 'kg',

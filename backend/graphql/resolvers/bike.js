@@ -4,6 +4,7 @@ const { checkAuth } = require('../../utils/auth');
 module.exports = {
 
   bikes: async (args, req) => {
+    const { strava } = args;
     checkAuth(req.user);
     const bikes = await Bike.find({ user: req.user.id })
     .populate('user')
@@ -11,12 +12,22 @@ module.exports = {
     if (!bikes) {
       throwError('No bikes found!', 404);
     }
-    return bikes.map((bike) => ({
-      ...bike._doc,
-      id: bike._doc._id,
-      createdAt: bike.createdAt.toISOString(),
-      updatedAt: bike.updatedAt.toISOString(),
-    }));
+    return bikes
+      .filter((bike) => {
+        if (strava === 0 && bike.stravaSync) { // all non strava bikes and sync strava bikes
+          return true;
+        }else if(strava === 1 && bike.stravaId && !bike.stravaSync){// only non sync strava bikes
+          return true;
+        }else if(strava === 2){ // all bikes
+          return true;
+        }
+      })
+      .map((bike) => ({
+        ...bike._doc,
+        id: bike._doc._id,
+        createdAt: bike.createdAt.toISOString(),
+        updatedAt: bike.updatedAt.toISOString(),
+      }));
   },
   createBike: async (args, req) => {
     checkAuth(req.user);
@@ -28,7 +39,7 @@ module.exports = {
       model, 
       description, 
       weight,
-      strava: false,
+      stravaId: false,
       retired: false, 
       user: req.user.id,
       type,

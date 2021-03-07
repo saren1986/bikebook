@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import activities from '../../mock/activities';
 
 const initialState = [
-  ...activities,
+  // ...activities,
 ];
 
 const activitySlice = createSlice({

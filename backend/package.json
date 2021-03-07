@@ -41,6 +41,7 @@
     "nodemailer": "^6.4.17",
     "nodemailer-sendgrid": "^1.0.3",
     "paypal-rest-sdk": "^1.8.1",
+    "strava-v3": "^2.0.9",
     "stripe": "^8.134.0",
     "validator": "^13.5.2"
   },

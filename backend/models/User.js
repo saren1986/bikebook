@@ -13,9 +13,16 @@ const userSchema = new mongoose.Schema({
     type: String,
     unique: true,
     required: true,
-  },
-  email: { type: String, unique: true },
-  emailVerified: { type: Boolean },
+  }, //TODO: DELETE
+  email: { type: String, unique: true,  required: true },
+  emailVerified: { type: Boolean,  required: true },
+
+  stravaId: { type: Number },
+  stravaAccessToken: { type: String },
+  stravaRefresToken: { type: String },
+  stravaExpiresAt: { type: Number },
+  stravaExpiresIn: { type: Number },
+  stravaAthlete: { type: Object },
 
 }, { timestamps: true });
 

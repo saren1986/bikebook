@@ -11,8 +11,6 @@ import { resetAppStore } from '../reducers/root';
 
 // TODO: updating session
 
-export const getLocalStorageToken = () => cognito.getCognitoAccessToken();
-
 export const register = (userDetails, clb) => (dispatch) => {
   axios
     .post(`${process.env.REACT_APP_ENDPOINT_URL}/user/register`, userDetails)

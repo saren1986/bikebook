@@ -4,12 +4,12 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   startSync: false,
   sync: false,
+  stravaId: null,
   auth: {
     accessToken: null,
     expiresAt: null,
     expiresIn: null,
     refreshToken: null,
-    tokenType: 'Bearer',
   },
   athlete: {
     id: null,
@@ -25,7 +25,7 @@ const initialState = {
     weight: null,
     measurementPreference: null,
   },
-  bikes: null,
+  bikes: [],
   error: null,
 };
 
@@ -34,7 +34,19 @@ const stravaSlice = createSlice({
   initialState,
   reducers: {
     updateBikes: (state, { payload }) => {
-      state.bikes = payload;
+      state.bikes = state.bikes.map((stateBike) => {
+        const foundPayloadBike = payload.find((payloadBike) => stateBike.id === payloadBike.id);
+        if (foundPayloadBike) {
+          return {
+            ...stateBike,
+            ...foundPayloadBike,
+          };
+        }
+        return stateBike;
+      }); // TODO: TEST IT
+      state.bikes.push(...payload
+        .filter((payloadBike) => state.bikes
+          .findIndex((stateBike) => stateBike.id === payloadBike.id) === -1));
     },
     updateAthlete: (state, { payload }) => {
       const {
@@ -57,20 +69,20 @@ const stravaSlice = createSlice({
         weight,
         measurementPreference: measurement_preference,
       };
-      state.bikes = payload.bikes;
     },
-    updateAuth: (state, { payload }) => { // git
+    updateAuth: (state, { payload }) => {
       const {
-        accessToken, expiresAt, expiresIn, refreshToken, tokenType,
+        stravaId, stravaAccessToken, stravaExpiresAt, stravaExpiresIn, stravaRefresToken, tokenType,
       } = payload;
       const { auth } = state;
-      auth.accessToken = accessToken;
-      auth.expiresAt = expiresAt;
-      auth.expiresIn = expiresIn;
-      auth.refreshToken = refreshToken;
+      auth.accessToken = stravaAccessToken;
+      auth.expiresAt = stravaExpiresAt;
+      auth.expiresIn = stravaExpiresIn;
+      auth.refreshToken = stravaRefresToken;
       auth.tokenType = tokenType;
+      state.stravaId = stravaId || state.stravaId;
     },
-    syncStart: (state) => { // git
+    syncStart: (state) => { 
       state.startSync = true;
     },
     syncEnd: (state) => {

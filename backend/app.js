@@ -72,10 +72,8 @@ app.use((req, res, next) => {
 /**
  * Primary app routes.
  */
+app.use(checkAuth);
 app.use(require('./routes'));
-app.get('/test', checkAuth, function(req, res, next){
-  res.send(`<h1>Hello ${req.user.username}!</h1>`);
-});
 
 
 /**
@@ -91,7 +89,7 @@ if (process.env.NODE_ENV === 'dev') {
   });
 }
 
-app.use(checkAuth);
+
 app.use('/graphql', graphqlHTTP.graphqlHTTP({
   schema,
   rootValue: resolvers,

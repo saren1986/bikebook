@@ -1,9 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-// import bikes from '../../mock/bikes';
 
-const initialState = [
-  // ...bikes,
-];
+const initialState = [];
 
 const bikeSlice = createSlice({
   name: 'bike',
@@ -11,6 +8,21 @@ const bikeSlice = createSlice({
   reducers: {
     init: (state, { payload }) => {
       state.push(...payload);
+    },
+    addBikes: (state, { payload }) => {
+      state.map((stateBike) => {
+        const foundPayloadBike = payload.find((payloadBike) => stateBike.id === payloadBike.id);
+        if (foundPayloadBike) {
+          return {
+            ...stateBike,
+            ...foundPayloadBike,
+          };
+        }
+        return stateBike;
+      }); // TODO: TEST IT
+      state.push(...payload
+        .filter((payloadBike) => state
+          .findIndex((stateBike) => stateBike.id === payloadBike.id) === -1));
     },
     create: (state, { payload }) => {
       state.push(payload);
@@ -57,6 +69,7 @@ export const {
   updateDistance: updateBikeDistance,
   retire,
   remove,
+  addBikes,
 } = bikeSlice.actions;
 
 export default bikeSlice.reducer;

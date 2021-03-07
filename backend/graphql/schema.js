@@ -4,6 +4,12 @@ module.exports = buildSchema(`
   type User {
     id: ID!,
     email: String!, 
+    username: String!,
+    stravaId: Int,
+    stravaAccessToken: String,
+    stravaRefresToken: String,
+    stravaExpiresAt: Int,
+    stravaExpiresIn: Int,
   }
   input BikeTypeInput {
     type: String!
@@ -18,7 +24,8 @@ module.exports = buildSchema(`
   }
   type Bike {
     id: ID!
-    strava: String
+    stravaId: String
+    stravaSync: Boolean
     name: String
     distance: Int
     type: BikeType
@@ -47,8 +54,9 @@ module.exports = buildSchema(`
     createBikeType(data: BikeTypeInput!): BikeType!
   }
   type Query{
-    bikes: [Bike]!
-    bikeTypes: [BikeType]
+    bikes(strava: Int!): [Bike]!
+    bikeTypes: [BikeType],
+    user: User!,
   }
   schema {
     query: Query

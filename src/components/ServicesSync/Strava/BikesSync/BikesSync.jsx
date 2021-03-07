@@ -13,7 +13,7 @@ import { withRouter } from 'react-router-dom';
 import CheckIcon from '@material-ui/icons/Check';
 import { formatDistance } from '../../../../utils/distanceFormatters';
 import { BtnWrapper, Btn } from '../../../../styled/styled';
-import { stravaGetBike, stravaSyncStart } from '../../../../store/actions/index';
+import { fetchBikes } from '../../../../store/actions/index';
 import InfoBox from '../../../../UX/InfoBox/InfoBox';
 
 const useStyles = makeStyles((theme) => ({
@@ -27,19 +27,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const BikesSync = ({ bikes, history }) => {
+const BikesSync = ({ history }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const lengthUnit = useSelector((state) => state.options.units.lengthUnit);
-  const token = useSelector((state) => state.strava.auth.accessToken);
-  const bikesList = useSelector((state) => state.bikes);
+  const bikes = useSelector((state) => state.strava.bikes);
   const [checked, setChecked] = React.useState([]);
   const [isValidate, setIsValidate] = React.useState(true);
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
-
     if (currentIndex === -1) {
       newChecked.push(value);
     } else {
@@ -49,18 +47,17 @@ const BikesSync = ({ bikes, history }) => {
     setChecked(newChecked);
   };
 
-  const clickHandler = () => {
+  const submitHandler = () => {
     if (!checked.length) {
       setIsValidate(false);
       return false;
     }
-    dispatch(stravaSyncStart());
-    dispatch(stravaGetBike(checked, token, history));
+    return dispatch(fetchBikes({ bikes: checked }));
   };
+  const unsync = bikes.filter((b) => !b.stravaSync && b.stravaId).length > 0;
   const stravaBikeList = bikes.map((bike) => {
     const labelId = `checkbox-list-label-${bike.name}`;
-    const isBike = bikesList.findIndex((appBike) => appBike.id === bike.id);
-    if (isBike !== -1) {
+    if (bike.stravaSync) {
       return (
         <ListItem key={bike.id} role={undefined}>
           <ListItemIcon>
@@ -72,11 +69,11 @@ const BikesSync = ({ bikes, history }) => {
       );
     }
     return (
-      <ListItem key={bike.id} role={undefined} dense button onClick={handleToggle(bike.id)}>
+      <ListItem key={bike.id} role={undefined} dense button onClick={handleToggle(bike.stravaId)}>
         <ListItemIcon>
           <Checkbox
             edge="start"
-            checked={checked.indexOf(bike.id) !== -1}
+            checked={checked.indexOf(bike.stravaId) !== -1}
             tabIndex={-1}
             disableRipple
             inputProps={{ 'aria-labelledby': labelId }}
@@ -95,7 +92,7 @@ const BikesSync = ({ bikes, history }) => {
         className={classes.root}
         subheader={(
           <ListSubheader component="div" id="nested-list-subheader">
-            Select bikes you want to sync:
+            {unsync ? 'Select bikes you want to sync:' : 'Bikes already sync with Strava:'}
           </ListSubheader>
     )}
       >
@@ -105,15 +102,16 @@ const BikesSync = ({ bikes, history }) => {
         type={isValidate ? 'normal' : 'error'}
         title={isValidate ? null : 'You have to select at least one bike!'}
       />
-      <BtnWrapper>
-        <Btn variant="outlined" color="primary" onClick={clickHandler}>
-          Import
-        </Btn>
-      </BtnWrapper>
+      {unsync ? (
+        <BtnWrapper>
+          <Btn variant="outlined" color="primary" onClick={submitHandler}>
+            Sync selected bikes
+          </Btn>
+        </BtnWrapper>
+      ) : null}
+
     </>
   );
 };
-BikesSync.propTypes = {
-  bikes: PropTypes.arrayOf(PropTypes.object).isRequired,
-};
+
 export default withRouter(BikesSync);

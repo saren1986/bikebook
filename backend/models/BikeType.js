@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const bikeTypeSchema = new mongoose.Schema({
   type: {
-    type: String,
+    type: Number,
     required: true,
   },
   label: {

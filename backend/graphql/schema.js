@@ -12,12 +12,12 @@ module.exports = buildSchema(`
     stravaExpiresIn: Int,
   }
   input BikeTypeInput {
-    type: String!
+    type: Int!
     label: String!
   }
   type BikeType {
     id: ID!
-    type: String!
+    type: Int!
     label: String!
     createdAt: String
     updatedAt: String

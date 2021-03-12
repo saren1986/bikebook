@@ -40,11 +40,7 @@ export {
 } from '../reducers/ux';
 export {
   stravaSync,
-  checkStravaAuth,
-  // stravaGetAthlete,
-  // stravaGetActivities,
   fetchBikes,
-  // stravaCheckForUpdate,
 } from './strava';
 export {
   stravaSyncStart,

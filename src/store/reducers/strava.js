@@ -43,7 +43,7 @@ const stravaSlice = createSlice({
           };
         }
         return stateBike;
-      }); // TODO: TEST IT
+      });
       state.bikes.push(...payload
         .filter((payloadBike) => state.bikes
           .findIndex((stateBike) => stateBike.id === payloadBike.id) === -1));

@@ -17,7 +17,8 @@ const GET_USER = gql`
 }
 `;
 
-export const getUser = () => (dispatch, getState, client) => {
+// eslint-disable-next-line import/prefer-default-export
+export const getUser = () => (dispatch, _getState, client) => {
   client
     .query({
       query: GET_USER,
@@ -30,5 +31,3 @@ export const getUser = () => (dispatch, getState, client) => {
       console.log('err', err);
     });
 };
-
-export const xxx = () => () => {};

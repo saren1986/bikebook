@@ -9,7 +9,9 @@ const bikeTypeSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-}, { timestamps: true });
+}, {
+  timestamps: true
+});
 
 const BikeType = mongoose.model('BikeType', bikeTypeSchema);
 

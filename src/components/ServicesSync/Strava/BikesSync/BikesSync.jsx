@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -8,7 +8,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Checkbox from '@material-ui/core/Checkbox';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import { useSelector, useDispatch } from 'react-redux';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import CheckIcon from '@material-ui/icons/Check';
 import { formatDistance } from '../../../../utils/distanceFormatters';
@@ -32,8 +32,9 @@ const BikesSync = ({ history }) => {
   const dispatch = useDispatch();
   const lengthUnit = useSelector((state) => state.options.units.lengthUnit);
   const bikes = useSelector((state) => state.strava.bikes);
-  const [checked, setChecked] = React.useState([]);
-  const [isValidate, setIsValidate] = React.useState(true);
+  const [checked, setChecked] = useState([]);
+  const [isValidate, setIsValidate] = useState(true);
+  const [btnDisabled, setBtnDisabled] = useState(false);
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -52,7 +53,11 @@ const BikesSync = ({ history }) => {
       setIsValidate(false);
       return false;
     }
-    return dispatch(fetchBikes({ bikes: checked }));
+    setBtnDisabled(true);
+    return dispatch(fetchBikes({
+      bikes: checked,
+      clb: () => { setBtnDisabled(false); },
+    }));
   };
   const unsync = bikes.filter((b) => !b.stravaSync && b.stravaId).length > 0;
   const stravaBikeList = bikes.map((bike) => {
@@ -104,7 +109,7 @@ const BikesSync = ({ history }) => {
       />
       {unsync ? (
         <BtnWrapper>
-          <Btn variant="outlined" color="primary" onClick={submitHandler}>
+          <Btn variant="outlined" color="primary" onClick={submitHandler} disabled={btnDisabled}>
             Sync selected bikes
           </Btn>
         </BtnWrapper>

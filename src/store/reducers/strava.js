@@ -82,13 +82,13 @@ const stravaSlice = createSlice({
       auth.tokenType = tokenType;
       state.stravaId = stravaId || state.stravaId;
     },
-    syncStart: (state) => { 
+    syncStart: (state) => {
       state.startSync = true;
     },
     syncEnd: (state) => {
       state.startSync = false;
     },
-    syncFailed: (state, payload) => {
+    syncFailed: (state, { payload }) => {
       state.startSync = false;
       state.error = payload.error;
     },

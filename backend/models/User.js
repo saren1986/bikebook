@@ -18,6 +18,7 @@ const userSchema = new mongoose.Schema({
   stravaExpiresAt: { type: Number },
   stravaExpiresIn: { type: Number },
   stravaAthlete: { type: Object },
+  lastStravaSync: { type: String },
 
 }, { timestamps: true });
 

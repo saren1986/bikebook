@@ -18,7 +18,6 @@ module.exports = {
         })
         .then((response) => response.json())
         .then((data) => {
-          console.log('data', data);
           if (data.errors) {
             reject({
               message: data.message,
@@ -80,21 +79,35 @@ module.exports = {
     })
 
   },
-  fetchAthlete: async (token) => {
+  fetchAthlete: (token) => {
     const strava = new stravaAPI.client(token);
-    try {
-      return strava.athlete.get({});
-    } catch (error) {
-      return error; //TODO: error handler
-    }
+    return new Promise((resolve, reject) => {
+      strava.athlete.get({}, (err, payload) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(payload);
+      });
+    });
   },
-  fetchActivities: async (token) => {
+  fetchActivities: (token, params) => {
+    const {
+      before,
+      after,
+      page,
+      per_page
+    } = params;
     const strava = new stravaAPI.client(token);
-    strava.athlete.listActivities({
-      after: 1336756835,
-      // per_page: 300,
-      // page: 10,
-
+    return new Promise((resolve, reject) => {
+      strava.athlete.listActivities({
+        page,
+        per_page
+      }, (err, payload) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(payload);
+      });
     });
   }
 };

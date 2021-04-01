@@ -20,6 +20,7 @@ const StravaInfo = () => {
 
   const updateClickHandler = () => {
     // dispatch(stravaCheckForUpdate(token, activities)); // TODO: checking Strava update
+    window.location = STRAVA_SYNC_URL;
   };
 
   const menuItems = [];

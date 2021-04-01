@@ -13,7 +13,6 @@ let userPool = new AmazonCognitoIdentity.CognitoUserPool(poolData);
 
 module.exports = {
   register: (body) => {
-    console.log('body', body);
     const username = body.username;
     const password = body.password;
     const email = body.email;
@@ -73,6 +72,11 @@ module.exports = {
 
   checkAuth: (req, res, next) => {
     const token = req.headers['authorization'];
+    const url = req.url;
+    const allowedUrl = ['/strava/devtest']; //TODO: move to auth utils
+    if(allowedUrl.includes(url)){
+      return next();
+    }
     if (!token) {
       res.status(401);
       return res.send({

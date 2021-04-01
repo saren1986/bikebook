@@ -1,14 +1,30 @@
 const strava = require('../services/Strava');
-const User = require('../models/User');
 const Bike = require('../models/Bike');
 const BikeType = require('../models/BikeType');
+const Activity = require('../models/Activity');
 const {
   checkAuth,
   isTokenExpired
 } = require('../utils/auth');
+const {
+  getStravaIdBikeIdPairs,
+  convertStravaActivities,
+  filterActivities,
+} = require('../utils/strava');
+const {
+  getUser
+} = require('../utils/user.js');
+const {
+  throwError,
+  nextError
+} = require('../utils/errorHandler');
+const { hasTimePassed } = require('../utils/utlis');
 
 
 const checkAndRefreshToken = async (refreshToken, expiresAt) => {
+  if (!refreshToken || !expiresAt) {
+    throwError(500, 'Strava refresh token or expiresAt not found');
+  }
   try {
     if (expiresAt && !isTokenExpired(expiresAt)) {
       return false;
@@ -26,7 +42,8 @@ const checkAndRefreshToken = async (refreshToken, expiresAt) => {
       stravaExpiresIn: expires_in,
     }
   } catch (error) {
-    console.log('error in checkAndRefreshToken', error); //TODO: error handler
+    const errMessage = error.message ? `Strava checkAndRefreshToken: ${error.message}` : JSON.stringify(error);
+    throwError(500, errMessage);
   }
 }
 
@@ -35,21 +52,18 @@ const updateUserTokens = async (user, tokens) => {
   user.stravaRefresToken = tokens.stravaRefresToken;
   user.stravaExpiresAt = tokens.stravaExpiresAt;
   user.stravaExpiresIn = tokens.stravaExpiresIn;
-  return await user.save();
+  try {
+    return await user.save()
+  } catch (_) {
+    //TODO: make log for that
+  }
 }
 
 const fetchBikes = async (req, res) => {
   checkAuth(req.user);
   try {
-    const user = await User.findOne({
-      _id: req.user.id
-    });
-    if (!user) {
-      res.status(400);
-      return res.send({
-        message: 'No user found', //TODO: Handling error
-      });
-    }
+    const user = await getUser(req.user.id, res);
+    if (!user) return false;
 
     //checking if token is still valid, if not, refresh token and save it to db
     const newTokens = await checkAndRefreshToken(user.stravaRefresToken, user.stravaExpiresAt);
@@ -104,11 +118,52 @@ const fetchBikes = async (req, res) => {
     });
 
   } catch (error) {
-    console.log('fetchBikes error', error); //TODO: Handling error
+    throwError(500, error.message || JSON.stringify(error));
   }
 };
+const fetchActivities = async (user, all = false, bikes) => {
+  //checking if token is still valid, if not, refresh token and save it to db
+  try {
+    const newTokens = await checkAndRefreshToken(user.stravaRefresToken, user.stravaExpiresAt);
+    let token = user.stravaAccessToken;
+    if (newTokens) {
+      token = newTokens.stravaAccessToken;
+      await updateUserTokens(user, newTokens);
+    }
+    const resultActivities = [];
+    let isFetching = all;
+    let pageCounter = 1;
+    const perPage = all ? 200 : 100; //TODO: SET TO 100
+    do {
+      // console.log('fetching loop page: ', pageCounter);
+      const newActivities = await strava.fetchActivities(token, {
+        page: pageCounter,
+        per_page: perPage
+      })
+      if (newActivities.length) {
+        pageCounter += 1;
+        resultActivities.push(...newActivities);
+      } else {
+        isFetching = false;
+      }
+    } while (isFetching);
+
+    if (resultActivities.length > 1) {
+      const userBikes = bikes || await Bike.find({
+        user: user.id,
+      });
+      const bikeIdStravaId = getStravaIdBikeIdPairs(userBikes);
+      return convertStravaActivities(resultActivities, user.id, bikeIdStravaId);
+    }
+    return false;
+  } catch (error) {
+    throwError(500, error.message || JSON.stringify(error));
+  }
+}
+
 const sync = async (req, res) => {
   checkAuth(req.user);
+  const syncErrors = [];
   try {
     const response = await strava.auth(req.body.code);
     const {
@@ -118,31 +173,36 @@ const sync = async (req, res) => {
       access_token,
       athlete
     } = response;
-    const user = await User.findOne({
-      _id: req.user.id
-    });
-    if (!user) {
-      res.status(400);
-      return res.send({
-        message: 'No user found' //TODO: Handling error
-      });
-    }
+
+    const user = await getUser(req.user.id, res);
+    if (!user) return false;
+
+    // if (user.stravaId) { //TODO: uncomment if build special function for updates
+    //   syncErrors.push({status: 'failed', message: 'Accont is already sync with Strava.'});
+    //   return res.send({errors: syncErrors})
+    // }
+    if (user.stravaId && user.lastStravaSync && !hasTimePassed(user.lastStravaSync)) {
+      syncErrors.push({status: 'failed', message: 'You can only synchronize your Strava account one a day.'});
+      return res.send({errors: syncErrors})
+    } 
+
     user.stravaId = athlete ? athlete.id : null;
     user.stravaAccessToken = access_token;
     user.stravaRefresToken = refresh_token;
     user.stravaExpiresAt = expires_at;
     user.stravaExpiresIn = expires_in;
     user.stravaAthlete = athlete;
+    user.lastStravaSync = null;
+    let updatedUser = await user.save();
 
-    const athleteMore = await strava.fetchAthlete(access_token);
-    const updatedUser = await user.save();
+    const athleteDetails = await strava.fetchAthlete(access_token);
     const userBikes = await Bike.find({
       user: req.user.id
     }); //get user's current bike from database to compare with those fetch from strava
-    let updatedBike = null;
+    let updatedBike = [];
 
-    if (athleteMore && athleteMore.bikes) {
-      const bikesDraft = athleteMore.bikes
+    if (athleteDetails && athleteDetails.bikes) {
+      const bikesDraft = athleteDetails.bikes
         .filter((b) => userBikes.findIndex((userBike) => userBike.stravaId === b.id) === -1) //filter bike from strava already exists in db
         .map((b) => {
           return {
@@ -160,6 +220,30 @@ const sync = async (req, res) => {
           }
         });
       updatedBike = await Bike.insertMany(bikesDraft);
+    }
+    const stravaActivities = await fetchActivities(user, false) //TODO: set to true if download all
+      .catch((err) => {
+        syncErrors.push({
+          status: 'activities sync failed',
+          message: err.message || JSON.stringify(err)
+        });
+      })
+    if (stravaActivities) {
+      const userActivities = await Activity.find({
+        user: req.user.id, stravaId: { $ne: null }
+      });
+      const filteredSavedActivities = filterActivities(stravaActivities, userActivities);
+      await Activity.insertMany(filteredSavedActivities)
+        .catch((err) => {
+          syncErrors.push({
+            status: 'activities sync failed',
+            message: err.message || JSON.stringify(err)
+          });
+        })
+    }
+    if(!syncErrors.length) {
+      user.lastStravaSync = new Date().toISOString();
+      updatedUser = await user.save();
     }
     res.send({
       stravaId: updatedUser.stravaId,
@@ -179,18 +263,34 @@ const sync = async (req, res) => {
           updatedAt: b.updatedAt.toISOString(),
         }
       }),
+      errors: syncErrors,
     });
   } catch (err) {
-    res.status(401);
+    console.log('err', err);
     return res.send({
       message: err.message,
-      errors: err.errors
+    });
+  };
+}
+
+const devtest = async (req, res, next) => {
+
+  const user = await getUser('31905871-4a29-4b05-b9c3-c72ff0b5773e', res);
+  if (!user) return false;
+  try {
+    const response = await fetchActivities(user, false);
+    res.send(response);
+  } catch (error) {
+    res.status(500);
+    return res.send({
+      message: error.message,
+      errors: error.errors
     });
   }
-};
-const devtest = () => {
+
 }; //TODO: DELETE
 
+//TODO: REVOKE STRAVA ACCESS
 module.exports = {
   sync,
   fetchBikes,

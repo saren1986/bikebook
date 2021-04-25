@@ -1,8 +1,14 @@
 export {
+  setUser,
+}
+  from '../reducers/user';
+export {
+  getUser,
+} from './user';
+export {
   signIn,
   signOut,
   initAuth,
-  getLocalStorageToken,
   register,
   confirmRegister,
   resendConfirmationCode,
@@ -15,6 +21,7 @@ export {
   retireBike,
   deleteBike,
   initState,
+  // getUnsyncBikes,
 } from './bikes';
 export {
   addComponent,
@@ -33,10 +40,7 @@ export {
 } from '../reducers/ux';
 export {
   stravaSync,
-  stravaGetBike,
-  checkStravaAuth,
-  stravaGetAthlete,
-  stravaGetActivities,
+  fetchBikes,
   stravaCheckForUpdate,
 } from './strava';
 export {

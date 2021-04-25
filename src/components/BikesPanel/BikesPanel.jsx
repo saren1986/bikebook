@@ -11,7 +11,8 @@ import BikeItem from './BikeItem/BikeItem';
 import ControlLayout from '../Layouts/ControlLayout/ControlLayout';
 import BikeList from './BikeList/BikeList';
 import Spinner from '../../UX/Spinner/Spinner';
-import Strava from '../ServicesSync/Strava/Strava';
+import StravaInfo from '../ServicesSync/Strava/StravaInfo';
+import StravaSync from '../ServicesSync/Strava/StravaSync';
 import Activities from './Activities/Activities';
 import ComponentForm from './BikeComponents/ComponentForm/ComponentForm';
 import ActivityForm from './Activities/ActivityForm/ActivityForm';
@@ -51,7 +52,10 @@ const BikesPanel = () => {
             <BikeItem />
           </Route>
           <Route path="/strava">
-            <Strava />
+            <StravaInfo />
+          </Route>
+          <Route path="/strava-sync">
+            <StravaSync />
           </Route>
           <Redirect exact from="/" to="/bike-list" />
         </Switch>

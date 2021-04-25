@@ -53,7 +53,7 @@ const BikeTile = ({ bike, click }) => {
                 {!bike.retired ? null
                   : (<strong className={classes.retired}>RETIRED</strong>)}
               </div>
-              <div className={classes.topRight}>{bike.strava ? <StravaLong /> : 'Bikebook'}</div>
+              <div className={classes.topRight}>{bike.stravaId ? <StravaLong /> : 'Bikebook'}</div>
 
             </div>
             <Typography variant="h5" component="h2">
@@ -76,7 +76,7 @@ BikeTile.propTypes = {
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     distance: PropTypes.number.isRequired,
-    strava: PropTypes.oneOfType([
+    stravaId: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.oneOf([null]),
     ]),

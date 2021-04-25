@@ -41,6 +41,7 @@ export {
 export {
   stravaSync,
   fetchBikes,
+  stravaCheckForUpdate,
 } from './strava';
 export {
   stravaSyncStart,

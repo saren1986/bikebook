@@ -7,6 +7,13 @@ const getStravaIdBikeIdPairs = (bikes) => bikes
   }
 }, {});
 
+const checkIsBikeInUserBikes = (userBikes, bikeId) => {
+  if (!userBikes){
+    return false;
+  } 
+  return `${bikeId}` in userBikes;
+};
+
 const convertStravaActivities = (activities, user, bikeIdPairs) => activities
 .filter((act) => act.type === 'Ride')
 .map((act) => ({
@@ -16,7 +23,7 @@ const convertStravaActivities = (activities, user, bikeIdPairs) => activities
   elapsedTime: act.elapsed_time,
   startDate: act.start_date,
   utcOffset: act.utc_offset,
-  bikeId: bikeIdPairs[act.gear_id] || null,
+  bikeId: bikeIdPairs ? bikeIdPairs[act.gear_id] : null,
   stravaId: `${act.id}`,
   stravaType: act.type,
   components: [],
@@ -31,5 +38,6 @@ const convertStravaActivities = (activities, user, bikeIdPairs) => activities
   module.exports = {
     convertStravaActivities,
     getStravaIdBikeIdPairs,
-    filterActivities
+    filterActivities,
+    checkIsBikeInUserBikes
   }

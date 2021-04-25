@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import SyncIcon from '@material-ui/icons/Sync';
 
@@ -8,19 +8,20 @@ import { BtnWrapper, Btn } from '../../../styled/styled';
 import BikeSync from './BikesSync/BikesSync';
 import InfoHeader from '../../../UX/InfoHeader/InfoHeader';
 import { STRAVA_SYNC_URL } from '../../../CONST';
+import { stravaCheckForUpdate } from '../../../store/actions/index';
 
 const StravaInfo = () => {
   const token = useSelector((state) => state.strava.auth.accessToken);
   const stravaId = useSelector((state) => state.strava.stravaId);
   const userId = useSelector((state) => state.user.id);
-
+  const dispatch = useDispatch();
   const stravaSyncHandler = () => {
     window.location = STRAVA_SYNC_URL;
   };
 
   const updateClickHandler = () => {
-    // dispatch(stravaCheckForUpdate(token, activities)); // TODO: checking Strava update
-    window.location = STRAVA_SYNC_URL;
+    dispatch(stravaCheckForUpdate()); // TODO: checking Strava update
+    // window.location = STRAVA_SYNC_URL;
   };
 
   const menuItems = [];

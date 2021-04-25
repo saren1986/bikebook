@@ -73,8 +73,8 @@ module.exports = {
   checkAuth: (req, res, next) => {
     const token = req.headers['authorization'];
     const url = req.url;
-    const allowedUrl = ['/strava/devtest']; //TODO: move to auth utils
-    if(allowedUrl.includes(url)){
+    const allowedUrl = ['/strava/devtest', '/strava/webhooks']; //TODO: move to auth utils
+    if(allowedUrl.includes(url.split('?')[0])){
       return next();
     }
     if (!token) {

@@ -65,7 +65,28 @@ export const stravaSync = ({ code, clb }) => async (dispatch) => {
   dispatch(stravaUpdateBikes(response.data.bikesDraft));
   clb();
   dispatch(stravaSyncEnd());
-
 };
 
-export const stravaCheckForUpdate = (token) => async (dispatch) => {};
+export const stravaCheckForUpdate = () => async (dispatch) => {
+  dispatch(stravaSyncStart());
+  const session = await cognito.getSession();
+  const token = session.accessToken;
+  axios.defaults.headers.post.Authorization = token;
+  // TODO: AUTH: move this to the global / external
+  const response = await axios
+    .post(`${process.env.REACT_APP_ENDPOINT_URL}/strava/sync-update`)
+    .catch((error) => {
+      dispatch(stravaSyncFailed(`Something went wrong... ${error.response.data.message || ''}`));
+    });
+  const { errors } = response.data;
+  if (errors.length) {
+    const errorFailed = errors.find((err) => err.status === 'failed');
+    if (errorFailed) {
+      dispatch(stravaSyncFailed({ error: errorFailed.message }));
+      dispatch(stravaSyncEnd());
+      return false;
+    }
+  }
+  dispatch(stravaUpdateBikes(response.data.bikesDraft));
+  console.log('stravaCheckForUpdate', response);
+};

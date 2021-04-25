@@ -109,5 +109,18 @@ module.exports = {
         resolve(payload);
       });
     });
+  },
+  fetchActivity: (token, id) => {
+    const strava = new stravaAPI.client(token);
+    return new Promise((resolve, reject) => {
+      strava.activities.get({
+        id
+      }, (err, payload) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(payload);
+      });
+    });
   }
 };

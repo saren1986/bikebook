@@ -98,13 +98,13 @@ const defaultState = {
             key: 'required',
             params: ['This field is required'],
           },
-          {
-            key: 'min',
-            params: [2, 'cannot be less than 2 characters'],
-          },
+          // {
+          //   key: 'min',
+          //   params: [4, 'cannot be less than 4 characters'],
+          // },
           {
             key: 'max',
-            params: [25, 'cannot be more than 25 characters'],
+            params: [20, 'cannot be more than 20 characters'],
           },
         ],
       },
@@ -139,7 +139,7 @@ const defaultState = {
           },
           {
             key: 'min',
-            params: [2, 'cannot be less than 2 characters'],
+            params: [5, 'cannot be less than 5 characters'],
           },
           {
             key: 'max',
@@ -178,8 +178,9 @@ const defaultState = {
           },
           {
             key: 'min',
-            params: [6, 'cannot be less than 6 characters'],
+            params: [8, 'cannot be less than 8 characters'],
           },
+          //TODO: REQUIRES numbers, uppercase, lowercase
         ],
       },
       uiStyle: {
@@ -213,14 +214,6 @@ const defaultState = {
             key: 'required',
             params: ['This field is required'],
           },
-          {
-            key: 'min',
-            params: [2, 'cannot be less than 2 characters'],
-          },
-          {
-            key: 'max',
-            params: [25, 'cannot be more than 25 characters'],
-          },
         ],
       },
       uiStyle: {
@@ -251,14 +244,6 @@ const defaultState = {
           {
             key: 'required',
             params: ['This field is required'],
-          },
-          {
-            key: 'min',
-            params: [2, 'cannot be less than 2 characters'],
-          },
-          {
-            key: 'max',
-            params: [25, 'cannot be more than 25 characters'],
           },
         ],
       },

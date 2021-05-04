@@ -10,27 +10,34 @@ import cognito from '../../services/cognito';
 import { resetAppStore } from '../reducers/root';
 
 // TODO: updating session
+export const getLocalStorageToken = () => cognito.getCognitoAccessToken();
 
-export const register = (userDetails, clb) => (dispatch) => {
+export const register = ({ userDetails, onSuccess, onFailure }) => (dispatch) => {
+  dispatch(setError({ message: null }));
   axios
     .post(`${process.env.REACT_APP_ENDPOINT_URL}/user/register`, userDetails)
     .then((result) => {
       const { cognitoUserSub, email, username } = result.data;
       dispatch(setInitUser({ cognitoUserSub, email, username }));
       dispatch(setInfo({ message: 'Veryfication code was sent on your email address.' })); // TODO: export to literals
+      onSuccess();
     })
     .catch((err) => {
-      const { data } = err.response;
-      console.log('data', data);
-      const errorMessage = data.message || err;
+      console.log('err...', err);
+      let errorMessage = null;
+      if (err.response) {
+        const { data } = err.response;
+        errorMessage = data.message || err;
+      } else {
+        errorMessage = err.message || err;
+      }
       dispatch(setError({ message: errorMessage }));
-    })
-    .finally(() => {
-      clb();
+      onFailure();
     });
 };
 
 export const confirmRegister = (userDetails, clb) => (dispatch) => {
+  dispatch(setError({ message: null }));
   axios
     .post(`${process.env.REACT_APP_ENDPOINT_URL}/user/confirm`, userDetails)
     .then((result) => {
@@ -45,7 +52,8 @@ export const confirmRegister = (userDetails, clb) => (dispatch) => {
     });
 };
 
-export const resendConfirmationCode = (username) => (dispatch) => {
+export const resendConfirmationCode = (username = '') => (dispatch) => {
+  dispatch(setError({ message: null }));
   cognito
     .resendConfirmationCode(username)
     .then((result) => {
@@ -72,16 +80,17 @@ export const initAuth = (isAuth) => (dispatch) => {
   return null;
 };
 
-export const signIn = (userDetails, clb) => (dispatch) => {
+export const signIn = ({ userDetails, onSuccess, onFailure }) => (dispatch) => {
+  dispatch(setError({ message: null }));
   cognito
     .signIn(userDetails)
     .then((sessionDetails) => {
-      // updateLocalStorageAuth(sessionDetails);
       dispatch(setAccessToken(sessionDetails));
+      onSuccess();
     })
     .catch((err) => {
       dispatch(setError({ message: err.message }));
-      clb();
+      onFailure();
     });
 };
 

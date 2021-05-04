@@ -6,7 +6,7 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import Layout from './components/Layouts/MainLayout/Layout';
 
-import { checkStravaAuth, initState, initAuth } from './store/actions/index';
+import { initState, initAuth, getUser } from './store/actions/index';
 import Pages from './pages/Pages';
 import theme from './theme';
 

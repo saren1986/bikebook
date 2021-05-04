@@ -1,10 +1,6 @@
 const mongoose = require('mongoose');
 
 const bikeSchema = new mongoose.Schema({
-  strava: {
-    type: String,
-    required: true,
-  },
   name: {
     type: String,
     required: true,
@@ -20,7 +16,6 @@ const bikeSchema = new mongoose.Schema({
   type: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'BikeType',
-    required: true,
   },
   model: {
     type: String,
@@ -36,11 +31,18 @@ const bikeSchema = new mongoose.Schema({
   },
   weight: {
     type: Number,
-    required: true,
+    required: false,
   },
   startDate: {
     type: String,
     required: false,
+  },
+  stravaId: {
+    type: String,
+    required: true,
+  },
+  stravaSync: {
+    type: Boolean,
   },
   user: {
     type: String,

@@ -1,152 +1,92 @@
 /* eslint-disable new-cap */
 /* eslint-disable no-restricted-syntax */
 import axios from 'axios';
-import stravaApi from 'strava-v3';
-import { addFromStrava } from '../reducers/activities';
-import { addBike } from '../reducers/bikes';
-import { convertStravaActivities, convertStravaBike } from '../../utils/dataConventers';
+import { addBikes } from '../reducers/bikes';
 import {
   stravaSyncStart,
   stravaSyncEnd,
   stravaUpdateAthlete,
   stravaUpdateAuth,
   stravaSyncFailed,
+  stravaUpdateBikes,
 } from '../reducers/strava';
+import cognito from '../../services/cognito';
 
-export const updateStravaAuthData = (response, dispatch) => {
-  const {
-    // eslint-disable-next-line camelcase
-    access_token, expires_at, expires_in, refresh_token, token_type,
-  } = response.data;
-  const auth = {
-    accessToken: access_token,
-    // eslint-disable-next-line camelcase
-    expiresAt: expires_at * 1000,
-    expiresIn: expires_in,
-    refreshToken: refresh_token,
-    tokenType: token_type,
-  };
-  localStorage.setItem('s-auth', JSON.stringify(auth));
-  dispatch(stravaUpdateAuth(auth));
-  return auth;
-};
+export const fetchBikes = ({ bikes, clb }) => async (dispatch) => {
+  dispatch(stravaSyncStart());
 
-export const checkStravaAuth = () => (dispatch) => {
-  const storageAuth = localStorage.getItem('s-auth');
-  if (storageAuth) {
-    const sAuth = JSON.parse(storageAuth);
-    const { expiresAt, refreshToken } = sAuth;
-    if (new Date().getTime() > expiresAt) {
-      const queryData = {
-        client_id: process.env.REACT_APP_STRAVA_CLIENT_ID,
-        client_secret: process.env.REACT_APP_STRAVA_CLIENT_SECRET,
-        refresh_token: refreshToken,
-        grant_type: 'refresh_token',
-      };
-      axios.post('https://www.strava.com/oauth/token', queryData)
-        .then((response) => {
-          updateStravaAuthData(response, dispatch);
-        })
-        .catch((error) => {
-          dispatch(stravaSyncFailed(error.response.data.message));
-        });
-    } else {
-      dispatch(stravaUpdateAuth(sAuth));
-    }
-  }
-};
+  const session = await cognito.getSession();
+  const token = session.accessToken;
+  axios.defaults.headers.post.Authorization = token;
+  // TODO: AUTH: move this to the global / external
 
-const fetchAthlete = async (strava) => strava.athlete.get({});
-const fetchBike = async (strava, id) => strava.gear.get({ id });
-const fetchActivities = async (strava) => strava.athlete.listActivities({
-  after: 1336756835,
-  // per_page: 300,
-  // page: 10,
-
-  // TODO:  Get Athlete Stats (getStats)
-});
-
-export const stravaGetActivities = (token, bikesId) => (dispatch) => {
-  const strava = new stravaApi.client(token);
-  fetchActivities(strava).then((response) => {
-    dispatch(addFromStrava(convertStravaActivities(response, bikesId)));
-    dispatch(stravaSyncEnd());
-  })
-    .catch((err) => {
-      dispatch(stravaSyncFailed(err.error.message));
-      dispatch(stravaSyncEnd());
+  const response = await axios
+    .post(`${process.env.REACT_APP_ENDPOINT_URL}/strava/fetchBikes`, { bikes })
+    .catch((error) => {
+      dispatch(stravaSyncFailed({ error: `Something went wrong... ${error.response.data.message || ''}` }));
     });
-};
-
-export const stravaGetBike = (stravaBikesId, token, history) => async (dispatch) => {
-  const strava = new stravaApi.client(token);
-  const results = [];
-  for (const id of stravaBikesId) {
-    results.push(fetchBike(strava, id));
-  }
-  const responses = await Promise.all(results)
-    .catch((err) => {
-      dispatch(stravaSyncFailed(err.error.message));
-    });
-  if (responses) {
-    for (const response of responses) {
-      dispatch(addBike(convertStravaBike(response)));
-    }
-    dispatch(stravaGetActivities(token, stravaBikesId));
-    history.push('/bike-list');
+  if (response) {
+    dispatch(addBikes(response.data.bikes));
+    dispatch(stravaUpdateBikes(response.data.bikes));
   }
   dispatch(stravaSyncEnd());
+  if (clb) {
+    clb();
+  }
 };
 
-export const stravaGetAthlete = (token) => async (dispatch) => {
+export const stravaSync = ({ code, clb }) => async (dispatch) => {
   dispatch(stravaSyncStart());
-  const strava = new stravaApi.client(token);
-  fetchAthlete(strava)
-    .then((response) => {
-      dispatch(stravaUpdateAthlete(response));
-      dispatch(stravaSyncEnd());
-    }).catch((err) => {
-      dispatch(stravaSyncFailed(err.error.message));
-      dispatch(stravaSyncEnd());
-    });
-};
 
-export const stravaSync = (code) => async (dispatch) => {
-  dispatch(stravaSyncStart());
-  const queryData = {
-    client_id: process.env.REACT_APP_STRAVA_CLIENT_ID,
-    client_secret: process.env.REACT_APP_STRAVA_CLIENT_SECRET,
-    code,
-    grant_type: 'authorization_code',
-  };
-  const authResponse = await axios.post('https://www.strava.com/oauth/token', queryData)
+  const session = await cognito.getSession();
+  const token = session.accessToken;
+  axios.defaults.headers.post.Authorization = token;
+  // TODO: AUTH: move this to the global / external
+
+  const response = await axios
+    .post(`${process.env.REACT_APP_ENDPOINT_URL}/strava/sync`, { code })
     .catch((error) => {
       dispatch(stravaSyncFailed(`Something went wrong... ${error.response.data.message || ''}`));
     });
-  if (authResponse) {
-    try {
-      const auth = updateStravaAuthData(authResponse, dispatch);
-      const strava = new stravaApi.client(auth.accessToken);
-      const athlete = await fetchAthlete(strava);
-      dispatch(stravaUpdateAthlete(athlete));
-      const activities = await fetchActivities(strava);
-      dispatch(addFromStrava(convertStravaActivities(activities)));
-    } catch (error) {
-      console.log('Error ocured during sync with strava: ', error);
-      dispatch(stravaSyncFailed('Something went wrong...'));
+  // console.log('stravaSync response', response);
+  const { errors } = response.data;
+  if (errors.length) {
+    const errorFailed = errors.find((err) => err.status === 'failed');
+    if (errorFailed) {
+      dispatch(stravaSyncFailed({ error: errorFailed.message }));
+      clb();
+      dispatch(stravaSyncEnd());
+      return false;
     }
   }
+
+  dispatch(stravaUpdateAuth(response.data.stravaAuth));
+  dispatch(stravaUpdateAthlete(response.data.stravaAthlete));
+  dispatch(stravaUpdateBikes(response.data.bikesDraft));
+  clb();
   dispatch(stravaSyncEnd());
 };
 
-export const stravaCheckForUpdate = (token) => async (dispatch) => {
+export const stravaCheckForUpdate = () => async (dispatch) => {
   dispatch(stravaSyncStart());
-  const strava = new stravaApi.client(token);
-  try {
-    const athlete = await fetchAthlete(strava);
-    dispatch(stravaUpdateAthlete(athlete));
-  } catch (error) {
-    dispatch(stravaSyncFailed(`Something went wrong... ${error.response.body.message || ''}`));
+  const session = await cognito.getSession();
+  const token = session.accessToken;
+  axios.defaults.headers.post.Authorization = token;
+  // TODO: AUTH: move this to the global / external
+  const response = await axios
+    .post(`${process.env.REACT_APP_ENDPOINT_URL}/strava/sync-update`)
+    .catch((error) => {
+      dispatch(stravaSyncFailed(`Something went wrong... ${error.response.data.message || ''}`));
+    });
+  const { errors } = response.data;
+  if (errors.length) {
+    const errorFailed = errors.find((err) => err.status === 'failed');
+    if (errorFailed) {
+      dispatch(stravaSyncFailed({ error: errorFailed.message }));
+      dispatch(stravaSyncEnd());
+      return false;
+    }
   }
-  dispatch(stravaSyncEnd());
+  dispatch(stravaUpdateBikes(response.data.bikesDraft));
+  console.log('stravaCheckForUpdate', response);
 };

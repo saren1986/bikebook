@@ -2,14 +2,16 @@ const mongoose = require('mongoose');
 
 const bikeTypeSchema = new mongoose.Schema({
   type: {
-    type: String,
+    type: Number,
     required: true,
   },
   label: {
     type: String,
     required: true,
   },
-}, { timestamps: true });
+}, {
+  timestamps: true
+});
 
 const BikeType = mongoose.model('BikeType', bikeTypeSchema);
 

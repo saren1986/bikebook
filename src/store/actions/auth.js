@@ -10,7 +10,6 @@ import cognito from '../../services/cognito';
 import { resetAppStore } from '../reducers/root';
 
 // TODO: updating session
-
 export const getLocalStorageToken = () => cognito.getCognitoAccessToken();
 
 export const register = ({ userDetails, onSuccess, onFailure }) => (dispatch) => {

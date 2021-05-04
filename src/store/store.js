@@ -12,6 +12,7 @@ import activities from './reducers/activities';
 import forms from './reducers/forms';
 import options from './reducers/options';
 import auth from './reducers/auth';
+import user from './reducers/user';
 import { resetReducer } from './reducers/root';
 import cognito from '../services/cognito';
 
@@ -60,6 +61,7 @@ const appReducer = combineReducers({
   activities,
   forms,
   auth,
+  user,
 });
 
 const store = createStore(resetReducer(appReducer), enhancer);

@@ -6,8 +6,6 @@ const compression = require('compression');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
 const chalk = require('chalk');
-const errorHandler = require('errorhandler');
-
 const dotenv = require('dotenv');
 
 const path = require('path');
@@ -72,26 +70,18 @@ app.use((req, res, next) => {
 /**
  * Primary app routes.
  */
+app.use(checkAuth);
 app.use(require('./routes'));
-app.get('/test', checkAuth, function(req, res, next){
-  res.send(`<h1>Hello ${req.user.username}!</h1>`);
-});
 
 
 /**
  * Error Handler.
  */
-if (process.env.NODE_ENV === 'dev') {
-  // only use in development
-  app.use(errorHandler());
-} else {
-  app.use((err, req, res, next) => {
-    console.error(err);
-    res.status(500).send('Server Error');
-  });
-}
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(err.code).send(err.message);
+});
 
-app.use(checkAuth);
 app.use('/graphql', graphqlHTTP.graphqlHTTP({
   schema,
   rootValue: resolvers,

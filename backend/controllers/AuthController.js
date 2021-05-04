@@ -14,7 +14,6 @@ module.exports = {
         emailVerified: false,
       });
       const createdUser = await user.save();
-      console.log();
       res.send({
         ...createdUser._doc,
         cognitoUser,

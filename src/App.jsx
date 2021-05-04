@@ -13,13 +13,14 @@ import theme from './theme';
 const App = () => {
   const dispatch = useDispatch();
   const isAuth = useSelector((state) => state.auth.accessToken);
+  if (!isAuth) {
+    dispatch(initAuth(isAuth));
+  }
 
   useEffect(() => {
     if (isAuth) {
+      dispatch(getUser());
       dispatch(initState());
-      dispatch(checkStravaAuth());
-    } else {
-      dispatch(initAuth(isAuth));
     }
   }, [isAuth]);
 

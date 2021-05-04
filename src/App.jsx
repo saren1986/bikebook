@@ -5,9 +5,9 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { ThemeProvider } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import Layout from './components/Layouts/MainLayout/Layout';
-import BikesPanel from './components/BikesPanel/BikesPanel';
+
 import { checkStravaAuth, initState, initAuth } from './store/actions/index';
-import AuthPage from './pages/AuthPage';
+import Pages from './pages/Pages';
 import theme from './theme';
 
 const App = () => {
@@ -28,10 +28,7 @@ const App = () => {
       <CssBaseline />
       <Router>
         <Layout>
-          {/* TODO: USE ROUTER REDIRECT TO AUTH PAGE */}
-          {isAuth
-            ? (<BikesPanel />)
-            : (<AuthPage />)}
+          <Pages />
         </Layout>
       </Router>
     </ThemeProvider>

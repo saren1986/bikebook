@@ -18,7 +18,15 @@ import ActivityForm from './Activities/ActivityForm/ActivityForm';
 
 const BikesPanel = () => {
   const bikeList = useSelector((state) => state.bikes);
-  return (
+  const isAuth = useSelector((state) => state.auth.accessToken);
+
+  return !isAuth ? (
+    <Redirect
+      to={{
+        pathname: '/auth',
+      }}
+    />
+  ) : (
     <ControlLayout>
       <BikesNav />
       {bikeList ? (
